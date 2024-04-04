@@ -1,0 +1,152 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 55px;
+  width: 100%;
+  /* box-shadow: 5px  0 5px 5px #ccc; */
+  /* border-bottom: 1px solid #ccc; */
+  justify-content: space-between;
+  background-color: #fff;
+  position: sticky;
+  z-index: 199;
+  top: 0px;
+}
+
+.header__icon {
+  margin-left: 20px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 30px;
+  align-items: center;
+  min-width: 465px;
+  height: 100%;
+}
+
+.noti-badge {
+  background-color: var(--color-primary-1);
+  position: absolute;
+  right: 69px;
+  top: 5px;
+  display: block;
+  border-radius: 50px;
+  height: 15px;
+  width: 15px;
+  color: #fff;
+  font-size: 11px;
+  text-align: center;
+}
+
+.icon_box {
+  height: 35px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.icon-logo {
+  object-fit: fill;
+  height: 100%;
+  width: 100%;
+  border-radius: 12px;
+}
+
+.header__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0px 20px;
+}
+
+.header__room {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 50px;
+}
+.avata {
+  caret-color: transparent;
+}
+
+.avata:hover {
+  cursor: pointer;
+}
+
+.room-guest {
+  height: 100%;
+  display: flex;
+  list-style: none;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+}
+
+.icon-room-guest {
+  border-radius: 50px;
+}
+
+.icon-room-guest button {
+  width: 45px;
+  height: 45px;
+  border-radius: 50px;
+  display: block;
+  background-color: #eff5f7;
+  position: relative;
+  border: none;
+}
+.icon-room-guest a {
+  width: 45px;
+  height: 45px;
+  border-radius: 50px;
+  display: block;
+  background-color: #eff5f7;
+  position: relative;
+}
+.icon-room-guest:hover {
+  cursor: pointer;
+}
+
+.icon-room-guest a.active,
+.icon-room-guest a:hover {
+  background-color: #fff;
+  box-shadow: 0px 0 3px 3px #ccc;
+}
+
+.icon-room-guest a.active img,
+.icon-room-guest a:hover img {
+  filter: invert(50%) sepia(56%) saturate(2382%) hue-rotate(328deg)
+    brightness(92%) contrast(105%);
+  -webkit-filter: invert(50%) sepia(56%) saturate(2382%) hue-rotate(328deg);
+}
+
+.icon-room-guest a img {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.icon-label {
+  display: none;
+  position: absolute;
+  top: 50px;
+  left: -20px;
+  width: 85px;
+  line-height: 30px;
+  background-color: #fff;
+  color: #000;
+  border-radius: 5px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+.icon-room-guest a:hover .icon-label {
+  display: block;
+}
+.dropdownProfile {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}

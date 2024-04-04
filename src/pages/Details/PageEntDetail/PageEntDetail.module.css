@@ -1,0 +1,29 @@
+.mainCT{
+    width: 100%;
+    height: calc(100vh - 55px);
+}
+.mainContainer{
+    display: flex;
+    gap: 10px;
+    height: 100%;
+    width: 100%;
+}
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    .titleTable{
+      color: #302d43;    
+      font-size: 20px;
+      font-family: merriweather sans,sans-serif;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+  }
+  .btn-logout {
+    width: calc(100% - 20px);
+    position: absolute;
+    bottom: 10px;
+    margin: 0 10px;
+  }
+  

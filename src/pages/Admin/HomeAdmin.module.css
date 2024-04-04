@@ -1,0 +1,35 @@
+html, body {
+  height: 100%;
+}
+.header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  .titleTable{
+    color: #302d43;    
+    font-size: 20px;
+    font-family: merriweather sans,sans-serif;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+}
+.admin-menu {
+  height: 100vh;
+  width: 15%;
+  position: fixed;
+}
+.container{
+
+}
+.btn-logout {
+  width: calc(100% - 20px);
+  position: absolute;
+  bottom: 10px;
+  margin: 0 10px;
+}
+.AdminName{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+}

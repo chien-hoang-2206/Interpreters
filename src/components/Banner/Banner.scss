@@ -1,0 +1,23 @@
+/* Banner.css */
+.banner-container {
+  overflow: hidden;
+  position: relative;
+  height: 200px; /* Chiều cao của banner */
+  border-radius: 20px;
+}
+.banner-slide {
+  display: flex;
+  transition: transform 1s ease-in-out; /* Hiệu ứng chuyển động mượt mà */
+  height: 100%; /* Chiều cao tối đa của các slide */
+}
+.slide-image {
+  flex: 0 0 100%; /* Kích thước mỗi slide bằng với container */
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+/* Ẩn (hide) thanh cuộn ngang */
+.banner-container::-webkit-scrollbar {
+  display: none;
+}

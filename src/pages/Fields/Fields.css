@@ -1,0 +1,20 @@
+.fields {
+    margin-left: 250px;
+    padding: 67px 50px;
+    width: calc(100% - 250px);
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.page-field {
+    background-color: #fff;
+}
+
+.content-page {
+    margin: 40px 0;
+    text-align: center;
+}
+
+.content-pagination .ant-pagination {
+    text-align: center;
+  }

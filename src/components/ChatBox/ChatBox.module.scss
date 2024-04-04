@@ -1,0 +1,169 @@
+.userName {
+    color: var(--neutral-900-text, #141414);
+    text-align: center;
+    font-family: Inter;
+    margin-top: 10px;
+    font-size: 27px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px;
+}
+
+.header {
+    min-height: 60px;
+    padding: 10px 20px;
+    background: var(--base-on-background, #FFF);
+
+    box-shadow: 3px 12px 17px -16px rgba(0, 0, 0, 0.69);
+    -webkit-box-shadow: 3px 12px 17px -16px rgba(0, 0, 0, 0.69);
+    -moz-box-shadow: 3px 12px 17px -16px rgba(0, 0, 0, 0.69);
+}
+
+.mainMessage {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100vh - 118px);
+    justify-content: space-evenly;
+}
+
+.messageBox {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    height: calc(100% - 60px);
+    overflow-y: scroll;
+    padding: 5px 10px;
+}
+
+.welcomeMes {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+
+    .textMes {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        span {
+            font-size: 20;
+            font-weight: 600;
+        }
+
+        img {
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+        }
+    }
+}
+
+.alignMessage {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+
+    &.mesReciver {
+        justify-content: flex-start;
+    }
+
+    .messageItem {
+        height: fit-content;
+        padding: 7px 9px;
+        width: fit-content;
+        max-width: 60%;
+        text-align: justify;
+        background-color: #186ADE;
+        color: #fff;
+        border-radius: 20px;
+        border-bottom-right-radius: 2px;
+
+        &.Kol {
+            border-radius: 20px;
+            border-bottom-left-radius: 2px;
+            background-color: #E4E6EB;
+            color: #111111;
+        }
+    }
+
+    .chat-bubble {
+        background-color: #E4E6EB;
+        padding: 7px 16px;
+        -webkit-border-radius: 20px;
+        -webkit-border-bottom-left-radius: 2px;
+        -moz-border-radius: 20px;
+        -moz-border-radius-bottomleft: 2px;
+        border-radius: 20px;
+        border-bottom-left-radius: 2px;
+        display: inline-block;
+    }
+
+    .typing {
+        align-items: center;
+        display: flex;
+        height: 17px;
+    }
+
+    .typing .dot {
+        animation: mercuryTypingAnimation 1.8s infinite ease-in-out;
+        background-color: #6CAD96; //rgba(20,105,69,.7);
+        border-radius: 50%;
+        height: 7px;
+        margin-right: 4px;
+        vertical-align: middle;
+        width: 7px;
+        display: inline-block;
+    }
+
+    .typing .dot:nth-child(1) {
+        animation-delay: 200ms;
+    }
+
+    .typing .dot:nth-child(2) {
+        animation-delay: 300ms;
+    }
+
+    .typing .dot:nth-child(3) {
+        animation-delay: 400ms;
+    }
+
+    .typing .dot:last-child {
+        margin-right: 0;
+    }
+
+    @keyframes mercuryTypingAnimation {
+        0% {
+            transform: translateY(0px);
+            background-color: #6CAD96; // rgba(20,105,69,.7);
+        }
+
+        28% {
+            transform: translateY(-7px);
+            background-color: #9ECAB9; //rgba(20,105,69,.4);
+        }
+
+        44% {
+            transform: translateY(0px);
+            background-color: #B5D9CB; //rgba(20,105,69,.2);
+        }
+    }
+}
+
+
+
+.sendBox {
+    height: 44px;
+    padding: 4px 10px;
+}
+
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+}

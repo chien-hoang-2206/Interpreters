@@ -1,0 +1,70 @@
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+
+
+  .boxContainer {
+    width: 90%;
+    // display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-self: center;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid var(--base-line-light, #EDEEF3);
+    background: var(--base-on-background, #FFF);
+    box-shadow: 8px 7px 19px -2px rgba(247, 213, 213, 0.91);
+    -webkit-box-shadow: 8px 7px 19px -2px rgba(247, 213, 213, 0.91);
+    -moz-box-shadow: 8px 7px 19px -2px rgba(247, 213, 213, 0.91);
+
+    transition-property: transform, width, wrap-flex;
+    transition-duration: 350ms;
+    transition-timing-function: ease;
+
+    gap: 20px;
+    min-width: 1000px;
+
+    &.Collapse {
+      @media(min-width: 1365px) {
+        width: 95%;
+      }
+
+      @media(min-width: 1920px) {
+        width: 87.8%;
+      }
+    }
+  }
+}
+
+.boxContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-left: calc(100% - 99%);
+}
+
+.search-content {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 30px;
+  column-gap: 10px;
+  justify-content: flex-start;
+  /* Để các phần tử cuối cùng bắt đầu từ bên trái */
+  align-items: center;
+  /* Để căn giữa dọc */
+  .item {
+    max-width: 16%;
+  }
+}
+
+.search-result{
+  padding-bottom: 20px;
+}

@@ -1,0 +1,65 @@
+.footer {
+  padding: 30px 100px 30px 150px;
+  background-color: #f0ffff;
+  position: relative;
+}
+
+.logo-wrap {
+  display: flex;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: 80px;
+  width: 250px;
+  height: 100px;
+}
+
+.logo {
+  height: 60px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.logo-text {
+  left: 100%;
+  color: #111;
+  font-size: 25px;
+  margin-left: -60px;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.address {
+  color: #111;
+  font-size: 14px;
+}
+
+.header {
+  color: #111;
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.content {
+  color: #111;
+  margin-top: 10px;
+  line-height: 25px;
+}
+
+.footer-info {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  color: #111;
+  justify-content: space-between;
+}
+
+.footer-info img {
+  width: 50px;
+  margin-right: 10px;
+}
+
+.footer-info p {
+  margin: 10px 0;
+}

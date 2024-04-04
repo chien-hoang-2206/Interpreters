@@ -1,0 +1,95 @@
+.titleModal {
+    text-align: center;
+}
+
+.tab-content {}
+
+.top-info-section {
+    text-align: center;
+    border-bottom: 5px solid #f4f3f3;
+    margin-top: 15px;
+    position: relative;
+
+    .top-1-frame {
+        height: 120px;
+
+        .imgTop1 {
+            width: 80px;
+            height: 80px;
+            border-radius: 100%;
+        }
+
+        .imgTop1Frame {
+            position: absolute;
+            top: -34px;
+            left: 37%;
+            height: 149px;
+            width: 190px;
+        }
+
+
+    }
+
+    .moneyTop1 {
+        margin-top: 20px;
+        color: orange;
+        font-size: 1.1rem;
+        line-height: 25px;
+    }
+}
+.noti-badge-mes{
+    background-color: var(--color-primary-1);
+    position: absolute;
+    right: -4px;
+    top: 5px;
+    display: block;
+    border-radius: 50px;
+    height: 15px;
+    width: 15px;
+    color: #fff;
+    font-size: 11px;
+    text-align: center;
+  }
+  
+.pull-left {
+    float: left !important;
+    gap: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .avt-rank {
+        img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            padding-top: 4px;}
+    }
+
+    .name-player {
+        font-size: 1.4rem;
+        font-weight: 700;
+        line-height: 40px;
+        color: #b44fc9 !important;
+    }
+
+    .rank-stt {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        color: #333;
+    }
+}
+
+.pull-right {
+    float: right !important;
+    padding-right: 30px;
+    font-weight: 600;
+}
+.rank-list{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

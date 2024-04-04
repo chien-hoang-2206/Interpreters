@@ -1,0 +1,105 @@
+.selectOptions {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 44px;
+    padding: var(--8px, 8px);
+    align-items: flex-start;
+    gap: var(--4px, 4px);
+    align-self: stretch;
+
+    border-radius: 8px;
+    background: #FFF;
+    box-shadow: 0px 0px 4px -2px rgba(0, 0, 0, 0.06), 0px 0px 8px -2px rgba(0, 0, 0, 0.10);
+    z-index: 20;
+
+    .option {
+        display: flex;
+        min-width: 70px;
+        padding: var(--10px, 10px) var(--8px, 10px);
+        align-items: center;
+        gap: var(--8px, 8px);
+        align-self: stretch;
+        border-radius: var(--8px, 8px);
+        border: none;
+
+        &:hover {
+            background-color: #F2F2F2;
+            cursor: pointer;
+            color: #4096ff;
+        }
+    }
+}
+
+.formInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px;
+}
+
+.admin-modal-view {
+    margin-top: 10px;
+}
+
+
+.infoContainer {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    width: calc((100% - 20px) / 2);
+
+    &.fullRow {
+        width: 100%;
+    }
+
+    .label {
+        color: var(--neutral-500-icon, #8A8A8A);
+    }
+
+    .content {
+        margin-top: 8px;
+        min-height: 20px;
+        width: 350px;
+        color: var(--neutral-900-text, #141414);
+    }
+
+    .imgIdentity {
+        width: 100%;
+        margin-top: 8px;
+        display: flex;
+        padding: var(--16px, 16px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        align-self: stretch;
+        border-radius: var(--8px, 8px);
+        background: var(--opacity-primary, #F1F3FE);
+
+        img {
+            width: 214px;
+            height: 124px;
+        }
+    }
+}
+
+.modal-update-col-input {
+    width: 100%;
+    padding: 5px 11px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    box-sizing: border-box;
+    outline: none;
+    color: rgba(0, 0, 0, 0.88);
+    font-size: 14px;
+    outline: none;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.modal-update-col-input:focus {
+    border: 1px solid rgb(0, 170, 255);
+    box-shadow: 0 0 3px rgb(0, 170, 255);
+}

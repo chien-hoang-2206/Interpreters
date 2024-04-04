@@ -1,0 +1,29 @@
+
+/* BookingCreate */
+
+.modal-booking-create {
+    margin-top: 20px;
+}
+
+/* BookingCreate */
+
+/* BookingDetails */
+
+.modal-booking-detail {
+    width: 70%;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 100px 50px;
+    box-sizing: border-box;
+}
+
+.textarea-feedback {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+/* BookingDetails */

@@ -1,0 +1,173 @@
+.notiContainer{
+}
+.noti-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  background-color: #eff5f7;
+  text-align: center;
+  cursor: pointer;
+}
+
+.notiList {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+  height: 340px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-top: 80px;
+}
+
+.noti-button:hover,
+.noti-button.active {
+  background-color: #fff;
+  box-shadow: 0px 0 3px 3px #ccc;
+}
+
+.noti-button:hover .icon-noti,
+.noti-button.active .icon-noti {
+  color: var(--color-primary-1);
+}
+
+.icon-noti {
+  font-size: 25px;
+  line-height: 45px;
+  margin-top: 5px;
+}
+
+.noti-list {
+  position: absolute;
+  top: 95%;
+  width: 436px;
+  height: 800px;
+  right: 4%;
+  border-radius: 2px;
+  background-color: #fff;
+  box-shadow: 0 1px 3.125rem 0 rgb(0 0 0 / 20%);
+  animation: FadeIn ease 0.4s;
+  cursor: default;
+  z-index: 100;
+  max-height: 500px;
+  text-align: center;
+  border-radius: 7px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.noti-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 8px;
+  gap: 10px;
+}
+
+.noti-list h4 {
+  text-align: left;
+  margin: 8px 0 8px 12px;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.noti-list ul {
+  list-style: none;
+}
+
+.noti-mgs {
+  margin: 40px auto;
+  font-size: 20px;
+}
+
+.noti-tab {
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 2rem;
+}
+
+.noti-tab:hover,
+.noti-tab.active {
+  background-color: var(--color-primary-2);
+  border-radius: 25px;
+  cursor: pointer;
+  color: var(--color-primary-1);
+  font-size: 1.1rem;
+  line-height: 2rem;
+  font-weight: 400;
+}
+
+.titleNoti {
+  font-size: 15px;
+  font-weight: 600;
+}
+.body{
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.item-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5px 10px;
+  width: 95%;
+  border-radius: 8px;
+  cursor: pointer;
+  &:hover {
+    background-color: aliceblue;
+  }
+}
+
+.avatar {
+  margin-left: 10px;
+  margin-top: 6px;
+}
+
+.item-content {
+  text-align: left;
+  width: 100%;
+  display: flex;
+  border-radius: 10px;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.item-btn {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  padding-bottom: 5px;
+}
+
+.read {
+  background-color: #eff5f7;
+  padding: 10px;
+}
+
+.noti-list::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.noti-list::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.noti-list::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.noti-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.noti-list::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 0, 0, 0.9);
+}

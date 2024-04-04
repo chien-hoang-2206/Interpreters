@@ -1,0 +1,202 @@
+.card {
+  --rounded: 12px;
+  --size: 270px;
+  min-width: 205px;
+  min-height: 326px;
+  max-width: 210px;
+  border-radius: var(--rounded);
+  background: #fff;
+  margin-top: 10px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition-property: box-shadow, transform;
+  transition-duration: 350ms;
+  transition-timing-function: ease;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.24);
+  &:hover,
+  &:focus {
+    transform: translateY(-8px);
+    filter: grayscale(0%) drop-shadow(0 8px 8px rgba(0, 0, 0, 0.5));
+    transition-delay: 0.2s;
+  }
+}
+
+/* With the before property assigns the gradient that will be used as background for the chart. */
+.card::before {
+  --size: 100%;
+  --blur: 20px;
+  content: "";
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  filter: blur(var(--blur));
+  background-color: #fff;
+}
+
+/* Cover the chart with a light white tone, this helps the gradient colors to be less aggressive. */
+.card::after {
+  --size: 100%;
+  content: "";
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* 
+  In this section you define where the video cover will be displayed.
+  Modify the background-image with the address of the cover to use. */
+.card__view {
+  position: absolute;
+  height: 72%;
+  left: 0;
+  top: 0;
+  right: 0;
+  margin: auto;
+  z-index: 1;
+  background-image: linear-gradient(to right bottom, #fff, #e2e2e2);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.card:hover .preview__video {
+  opacity: 100;
+}
+
+.preview__video {
+  transition: opacity 300ms;
+  opacity: 0;
+}
+
+.card__content {
+  position: absolute;
+  z-index: 2;
+  gap: 6px;
+  width: 90%;
+  padding: 0px 5%;
+  height: 30%;
+  left: 0;
+  right: 0;
+  bottom: -5px;
+  width: 100%;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.channel__video__name {
+  font-size: 15px;
+  text-overflow: ellipsis;
+  font-weight: bold;
+  color: #000;
+  margin-top: 4px;
+}
+.channel__text_short {
+  font-size: 13px;
+}
+.channel__data {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 30px;
+  font-size: 12px;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.channel__img {
+  --size-channel: 35px;
+  --rounded: 50%;
+  --duration: 300ms;
+  min-width: var(--size-channel);
+  min-height: var(--size-channel);
+  border-radius: var(--rounded);
+  transition: transform var(--duration);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #99cfff;
+}
+
+.channel__img:hover {
+  transform: scale(1.08);
+}
+
+.channel__data__text {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 5px;
+  width: 100%;
+  .channel__star {
+    display: flex;
+    font-size: 1.2em;
+    font-weight: bold;
+    .channel__cmt {
+      font-weight: 500;
+      font-size: 1em;
+    }
+  }
+}
+
+.channel__subdata {
+  display: flex;
+  width: 80%;
+}
+
+.channel__name {
+  font-size: 0.8em;
+  transition: color 400ms;
+}
+
+.channel__views {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.card__view__data {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  box-sizing: border-box;
+  pointer-events: none;
+  .card_imgage {
+    width: 250px;
+    height: 270px;
+  }
+}
+.imageBorder {
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  contain: content;
+}
+.imageChannel {
+  width: 20px;
+  height: 20px;
+}
+
+.card__play__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 30px;
+}
+
+.card__view__preview {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 900ms, transform 900ms;
+}
+
+.card:hover .card__view__preview {
+  opacity: 100;
+  transform: translateY(0px);
+}
