@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { BookingStatus } from "../../utils/Enums";
-import { Descriptions, Button, TextArea, Rate, message } from "antd";
+import { Descriptions, Button, Rate, message } from "antd";
 import classes from "./Booking.module.css";
 import { displayDateTime, formatDate } from "../../services/DateTimeUtil";
 import BookingCreate from "./BookingCreate";
@@ -68,32 +68,32 @@ const BookingDetails = () => {
   const handleRejectOrCancel = () => {
     // send request update booking status to cancel
     if (validateUser()) {
-      updateBookingStatus(booking.id, BookingStatus.CANCELED).then((res) => {
-        noti.timestamp = formatDate(new Date());
-        noti.content = `${user.firstName} đã hủy yêu cầu hợp tác`;
-        noti.userId = res.kol.id;
-        sendPrivateNotification(noti);
-        setBooking(res);
-      });
+      // updateBookingStatus(booking.id, BookingStatus.CANCELED).then((res) => {
+      //   noti.timestamp = formatDate(new Date());
+      //   noti.content = `${user.firstName} đã hủy yêu cầu hợp tác`;
+      //   noti.userId = res.kol.id;
+      //   sendPrivateNotification(noti);
+      //   setBooking(res);
+      // });
     } else {
-      updateBookingStatus(booking.id, BookingStatus.REJECTED).then((res) => {
-        noti.timestamp = formatDate(new Date());
-        noti.content = `${res.kol.firstName} đã từ chối yêu cầu hợp tác`;
-        noti.userId = res.user.id;
-        sendPrivateNotification(noti);
-        setBooking(res);
-      });
+      // updateBookingStatus(booking.id, BookingStatus.REJECTED).then((res) => {
+      //   noti.timestamp = formatDate(new Date());
+      //   noti.content = `${res.kol.firstName} đã từ chối yêu cầu hợp tác`;
+      //   noti.userId = res.user.id;
+      //   sendPrivateNotification(noti);
+      //   setBooking(res);
+      // });
     }
   };
 
   const handleAccept = () => {
-    updateBookingStatus(booking.id, BookingStatus.ACCEPTED).then((res) => {
-      noti.timestamp = formatDate(new Date());
-      noti.content = `${res.kol.firstName} đã chấp nhận yêu cầu hợp tác`;
-      noti.userId = res.user.id;
-      sendPrivateNotification(noti);
-      setBooking(res);
-    });
+    // updateBookingStatus(booking.id, BookingStatus.ACCEPTED).then((res) => {
+    //   noti.timestamp = formatDate(new Date());
+    //   noti.content = `${res.kol.firstName} đã chấp nhận yêu cầu hợp tác`;
+    //   noti.userId = res.user.id;
+    //   sendPrivateNotification(noti);
+    //   setBooking(res);
+    // });
   };
 
   const validateUser = () => {
