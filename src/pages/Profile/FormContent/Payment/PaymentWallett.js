@@ -94,18 +94,23 @@ const PaymentWallett = () => {
         setIsModalOpen(false);
     };
 
+    function handleChangeMoney(value) {
+        const newValue = parseInt(value) > 10000000 ? 1000000 : value
+        setValue(newValue)
+    }
     return (
         <main className={'booking-container'} >
             <Modal title="Nhập số tiền cần nạp" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                 <InputNumber
-                placeholder="Nhập số tiền"
-                addonAfter="VND"
-                style={{ width: '100%' }}
-                value={value}
-                onChange={(value) => setValue(value)}
-                formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                parser={value => value.replace(/\$\s?|(,*)/g, '')}
-              />
+                    placeholder="Nhập số tiền"
+                    addonAfter="VND"
+                    style={{ width: '100%' }}
+                    value={value}
+                    max={10000000}
+                    onChange={(value) => handleChangeMoney(value)}
+                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                />
             </Modal>
             <div className={styles.formInfo}>
                 <Title level={1}>Ví & Lịch sử thanh toán</Title>
@@ -115,7 +120,7 @@ const PaymentWallett = () => {
                             Số dư hiện tại
                         </span>
                         <span className={styles.textCoinValue}                            >
-                        {money ? convertStringToNumber(money) : '0 VND'}
+                            {money ? convertStringToNumber(money) : '0 VND'}
                         </span>
                     </Space>
                     <Space direction="vertical">

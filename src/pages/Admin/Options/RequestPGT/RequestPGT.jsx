@@ -88,7 +88,7 @@ const RequestPGT = ({ onReload = () => { } }) => {
     },
 
     {
-      title: "Gía thuê cá nhân",
+      title: "Giá thuê cá nhân",
       dataIndex: "price",
       key: "price",
       width: 200,
@@ -117,7 +117,7 @@ const RequestPGT = ({ onReload = () => { } }) => {
         </div>,
     },
     {
-      title: `Gía thuê theo nhóm (mỗi người)`,
+      title: `Giá thuê theo nhóm (mỗi người)`,
       dataIndex: "price",
       key: "price",
       width: 190,

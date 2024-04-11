@@ -25,7 +25,7 @@ const SearchModal = () => {
   }
 
   const onSearch = () => {
-    navigate(`/pgt?keyword=${value}`)
+    navigate(`/hint?keyword=${value}`)
     setValue('')
   }
 
