@@ -19,7 +19,8 @@ html, body {
   position: fixed;
 }
 .container{
-
+  overflow-y: scroll;
+  height: 100vh;  
 }
 .btn-logout {
   width: calc(100% - 20px);

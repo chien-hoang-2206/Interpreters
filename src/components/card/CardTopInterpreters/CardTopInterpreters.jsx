@@ -7,7 +7,7 @@ const CardTopInterpreters = ({data}) => {
     const [isScale, setIsScale] = useState()
     const navigator = useNavigate()
     function handleClickCard(){
-        navigator(`/pgt/${data?.id}`);
+        navigator(`/hint/${data?.id}`);
     }
 
     return (

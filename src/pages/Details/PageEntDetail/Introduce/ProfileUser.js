@@ -398,7 +398,7 @@ const ProfileUser = () => {
                                     <div className={styles.dropzone} >
                                         <div {...getRootProps()} >
                                             <input {...getInputProps()} />
-                                            <Button >Kéo và thả ảnh hoặc nhấn để chọn ảnh</Button>
+                                            <Button style={{ background: '#fff', color: 'blue' }}>Chọn ảnh</Button>
                                         </div>
                                         <div className={styles.imageList}  >
                                             {fileList.map((image, index) => (
@@ -415,7 +415,7 @@ const ProfileUser = () => {
                                         <Button
                                             style={{
                                                 marginLeft: 70, marginTop: 70,
-                                            }} 
+                                            }}
                                             type='default'
                                             onClick={handleSaveImage}>Lưu</Button>
                                     </div>
@@ -427,10 +427,8 @@ const ProfileUser = () => {
                                         avatar={userInfo?.avatar ?? ''}
                                         photoList={userInfo?.listImage ?? ''}
                                     />
-                                    <Button type='primary'
-                                        style={{
-                                            backgroundColor: 'transparent'
-                                        }}
+                                    <Button
+                                        type='primary'
                                         onClick={handleEditFieldListImage}>Chỉnh sửa</Button>
                                 </div>
                             }

@@ -45,7 +45,7 @@ export default function NotiItem({ noti, onClickBookingId = () => { } }) {
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    navigate("../login");
+    navigate("/");
   }
   return (
     <div className={`${classes["item-wrap"]}  ${!noti?.read && classes["read"]} `}>

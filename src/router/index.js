@@ -39,7 +39,7 @@ const Router = () => {
             </LayoutHeader>}
         />
         <Route
-          path="/pgt" element={
+          path="/hint" element={
             <LayoutHeader>
               <SearchPgt />
             </LayoutHeader>}
@@ -51,7 +51,7 @@ const Router = () => {
             </LayoutHeader>}
         />
         <Route
-          path="pgt/:id"
+          path="/hint/:id"
           element={
             <LayoutHeader>
               <PageInterpreterDetail />

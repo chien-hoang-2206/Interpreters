@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import classes from "./Booking.module.css";
 import { Modal, DatePicker, Form, Select, Input, TimePicker, Space, Button, Radio } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { ToastNotiError, convertStringToNumber } from './../../utils/Utils';
+import { ToastNoti, ToastNotiError, convertStringToNumber } from './../../utils/Utils';
 import { toast } from "react-toastify";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -26,7 +26,6 @@ const BookingCreate = (props) => {
   const [timeBooking, setTimeBooking] = useState(1);
   const [dateBooking, setDateBooking] = useState();
   const [rangeTimeBooking, setRangeTimeBooking] = useState();
-  console.log("🚀 ~ BookingCreate ~ rangeTimeBooking:", rangeTimeBooking)
 
   const [note, setNote] = useState();
   const [priceTotalShow, setPriceShow] = useState(convertStringToNumber(parseInt(pgt?.price)));
@@ -34,7 +33,6 @@ const BookingCreate = (props) => {
   useEffect(() => {
     const newTime = dayjs().startOf('day').add(7, 'hour');
     const newTimeTo = dayjs().startOf('day').add(22, 'hour');
-    console.log("🚀 ~ useEffect ~ newTime :", newTime)
     if (typeTime === 1) {
       const rangeTimeBooking = [
         newTime,
@@ -59,7 +57,7 @@ const BookingCreate = (props) => {
       const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
       if (daysDiff >= 15) {
         setErrorDate(true)
-        return Promise.reject(new Error('Ngày đặt phải nằm trong 15 ngày kể từ ngày hiện tại'));
+        // return Promise.reject(new Error('Ngày đặt phải nằm trong 15 ngày kể từ ngày hiện tại'));
 
       } else if (daysDiff < -1) {
         setErrorDate(true)
@@ -141,23 +139,23 @@ const BookingCreate = (props) => {
   };
   const navigator = useNavigate();
   const onSubmit = (value) => {
-    console.log("🚀 ~ onSubmit ~ value:", value)
-    if (user?.id === pgt?.id) {
-      ToastNotiError('Không thể tự tạo booking cho bản thân')
-      return;
-    }
-    else {
-      const data = {
-        userId: user?.id,
-        pgtId: pgt?.id,
-        price: parseInt(priceTotal),
-        date: dateBooking,
-        timeStart: rangeTimeBooking[0]?.$d,
-        timeEnd: rangeTimeBooking[1]?.$d,
-        note: note,
-      }
-      requestBooking(data);
-    }
+    ToastNoti()
+    // if (user?.id === pgt?.id) {
+    //   ToastNotiError('Không thể tự tạo booking cho bản thân')
+    //   return;
+    // }
+    // else {
+    //   const data = {
+    //     userId: user?.id,
+    //     pgtId: pgt?.id,
+    //     price: parseInt(priceTotal),
+    //     date: dateBooking,
+    //     timeStart: rangeTimeBooking[0]?.$d,
+    //     timeEnd: rangeTimeBooking[1]?.$d,
+    //     note: note,
+    //   }
+    //   requestBooking(data);
+    // }
   };
 
 
@@ -200,6 +198,15 @@ const BookingCreate = (props) => {
             />
           </Form.Item>
 
+          <Form.Item label="Dạng Thuê" name='typeTravel'>
+            <Radio.Group onChange={(value) => setTypeTime(value?.target?.value)} value={typeTime}>
+              <Radio value={1}>Thuê buổi sáng </Radio>
+              <Radio value={2}>Thuê buổi chiều </Radio>
+              <Radio value={2}>Thuê cả ngày</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+
           <Form.Item label="Ngày" name='dateBooking'
             rules={[
               { required: true, message: 'Bắt buộc chọn ngày' },
@@ -213,12 +220,6 @@ const BookingCreate = (props) => {
               style={{ width: '100%' }} />
           </Form.Item>
 
-          <Form.Item label="Dạng Thuê" name='typeTravel'>
-            <Radio.Group onChange={(value) => setTypeTime(value?.target?.value)} value={typeTime}>
-              <Radio value={1}>Thuê theo ngày</Radio>
-              <Radio value={2}>Thuê theo giờ</Radio>
-            </Radio.Group>
-          </Form.Item>
 
           <Form.Item label="Thời gian" name="timefrom"
           // rules={[{ required: true, message: 'Bắt buộc chọn giờ' }]}
@@ -255,7 +256,9 @@ const BookingCreate = (props) => {
               <Button type="link" htmlType="button" onClick={onCloseModal}>
                 Hủy
               </Button>
-              <Button type="primary" htmlType="submit" disabled={((errorMessage || errorDate) ? true : false)}>
+              <Button type="primary" htmlType="submit"
+              // disabled={((errorMessage || errorDate) ? true : false)}
+              >
                 Submit
               </Button>
             </div>

@@ -111,6 +111,10 @@ const AccountInterpreters = () => {
       width: 70,
       align: 'center',
       sorter: (a, b) => a.age - b.age,
+      render: (text) =>
+        <div>
+          {text ?? 19}
+        </div>,
     },
     {
       title: 'SĐT',

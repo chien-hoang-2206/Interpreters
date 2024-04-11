@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Table, Input, Button } from "antd";
+import { Image, Table, Input, Button } from "antd";
 import "./Booking.css";
 import AvatarGroup from "../../../../components/image-group/AvatarGroup";
 import { ToastNoti, ToastNotiError, convertStringToNumber } from "../../../../utils/Utils";
 import AccountFactories from "../../../../services/AccountFactories";
 import { createNotification } from "../../../../services/ChatService";
-const RequestPGT = ({onReload= ()=> {}}) => {
+const RequestPGT = ({ onReload = () => { } }) => {
   const [dataList, setDataList] = useState([]);
   const [namePgt, setNamePgt] = useState("");
   const [typeSearch, setTypeSearch] = useState("");
@@ -28,15 +28,15 @@ const RequestPGT = ({onReload= ()=> {}}) => {
   }, []);
 
   const columns = [
-    {
-      title: '#',
-      dataIndex: 'id',
-      key: 'id',
-      width: 50,
-      align: 'center',
-      render: (id, record, index) => { ++index; return index; },
-      showSorterTooltip: false,
-    },
+    // {
+    //   title: '#',
+    //   dataIndex: 'id',
+    //   key: 'id',
+    //   width: 50,
+    //   align: 'center',
+    //   render: (id, record, index) => { ++index; return index; },
+    //   showSorterTooltip: false,
+    // },
     {
       title: 'Tên tài khoản',
       width: 140,
@@ -77,19 +77,72 @@ const RequestPGT = ({onReload= ()=> {}}) => {
       width: 70,
       align: 'center',
       sorter: (a, b) => a.age - b.age,
+      render: (text) => <div className="text-data">{text ? text : 20}</div>,
     },
     {
       title: 'SĐT',
       dataIndex: 'phone',
       width: 130,
       key: 'phone',
+      render: (text) => <div className="text-data">{text ? text : '0923232222'}</div>,
     },
+
     {
-      title: "Giá thuê",
+      title: "Gía thuê cá nhân",
       dataIndex: "price",
       key: "price",
-      width: 140,
-      render: (text) => <div className="text-data">{convertStringToNumber(text)}</div>,
+      width: 200,
+      render: (text) =>
+        <div className="text-data flex justify-between flex-col gap-1">
+          <span>
+            <div className="flex flex-row justify-between">
+              <span>
+                Buổi:
+              </span>
+              <span>
+                {text ? convertStringToNumber(140000) : 20}
+              </span>
+            </div>
+          </span>
+          <span>
+            <div className="flex flex-row justify-between">
+              <span>
+                Ngày:
+              </span>
+              <span>
+                {text ? convertStringToNumber(190000) : 20}
+              </span>
+            </div>
+          </span>
+        </div>,
+    },
+    {
+      title: `Gía thuê theo nhóm (mỗi người)`,
+      dataIndex: "price",
+      key: "price",
+      width: 190,
+      render: (text) =>
+        <div className="text-data flex justify-between flex-col gap-1">
+          <span>
+            <div className="flex flex-row justify-between">
+              <span>
+                Buổi:
+              </span>
+              <span>
+                {text ? convertStringToNumber(100000) : 20}
+              </span>
+            </div>
+          </span>
+          <span> <div className="flex flex-row justify-between">
+            <span>
+              Ngày:
+            </span>
+            <span>
+              {text ? convertStringToNumber(170000) : 20}
+            </span>
+          </div>
+          </span>
+        </div>,
     },
     {
       title: "Lĩnh Vực",
@@ -102,11 +155,25 @@ const RequestPGT = ({onReload= ()=> {}}) => {
       ),
     },
     {
+      title: 'Chứng chỉ',
+      dataIndex: 'age',
+      key: 'age',
+      width: 170,
+      align: 'center',
+      sorter: (a, b) => a.age - b.age,
+      render: (text) =>
+        <div className="text-data flex flex-col gap-2 ">
+          <Image src={'https://duhocaumyuc.edu.vn/wp-content/uploads/2021/01/bang_diem_toeic.jpg'} />
+          <Image src={'https://pasal.edu.vn/upload_images/images/2023/tim_hieu_ve_bang_ielts-1.png'} />
+          <Image src={'https://gdvnedu.com/wp-content/uploads/2018/05/CC-HDV-1.jpg'} />
+        </div>,
+    },
+    {
       title: "Tác vụ",
       key: "action",
       render: (_, record) => (
-        <div className="btn-action-group" >
-          <Button  style={{ marginRight: 10 }}
+        <div className="btn-action-group flex flex-col gap-3" >
+          <Button style={{ marginRight: 10 }}
             type='primary'
             onClick={() => onAcceptRequest(record?.id)}
           >
@@ -127,23 +194,23 @@ const RequestPGT = ({onReload= ()=> {}}) => {
   ];
 
   const onDeleteRequest = async (id) => {
-      try {
-        const resp = AccountFactories.updateStatusRequestPgt(id,10);
-        if (resp){
-          ToastNoti();
-          createNotification(id, 4, 0, "Đăng ký làm Interpreters thất bại", "Admin đã từ chối yêu cầu đăng ký làm Interpreters của bạn.");
-          onReload()
-          fetchApiList();
-        }
-      } catch (error) {
-        ToastNotiError();
+    try {
+      const resp = AccountFactories.updateStatusRequestPgt(id, 10);
+      if (resp) {
+        ToastNoti();
+        createNotification(id, 4, 0, "Đăng ký làm Interpreters thất bại", "Admin đã từ chối yêu cầu đăng ký làm Interpreters của bạn.");
+        onReload()
         fetchApiList();
       }
+    } catch (error) {
+      ToastNotiError();
+      fetchApiList();
+    }
   };
   const onAcceptRequest = async (id) => {
     try {
-      const resp = AccountFactories.updateStatusRequestPgt(id,20);
-      if (resp){
+      const resp = AccountFactories.updateStatusRequestPgt(id, 20);
+      if (resp) {
         ToastNoti();
         fetchApiList();
         onReload()
@@ -154,7 +221,7 @@ const RequestPGT = ({onReload= ()=> {}}) => {
       fetchApiList();
     }
   };
-  
+
   const handleOnChangeInput = e => {
     setNamePgt(e.target.value);
   };
@@ -174,7 +241,10 @@ const RequestPGT = ({onReload= ()=> {}}) => {
   };
   return (
     <div className="booking-container">
-      <div className="booking-title"><span>Yêu cầu làm Interpreters</span></div>
+      <div className="booking-title">
+        <span className="font-bold text-blue">
+          Yêu cầu làm Interpreters
+        </span></div>
       <div className="booking-search">
         <Input
           placeholder="Tìm kiếm theo mã, tên người thuê, ..."

@@ -27,13 +27,13 @@ const DropDownBookingRequest = ({ status, booking, icon, options, id, onFetchDat
 
     const [userBookingAvatar, setUserBookingAvatar] = useState();
     useEffect(() => {
-      async function fetchdata() {
-        const resp = await PgtFactories.getPGTDetail(booking?.user_id);
-        setUserBookingAvatar(resp[0]?.avatar);
-      }
-      if (booking?.user_id) {
-        fetchdata();
-      }
+        async function fetchdata() {
+            const resp = await PgtFactories.getPGTDetail(booking?.user_id);
+            setUserBookingAvatar(resp[0]?.avatar);
+        }
+        if (booking?.user_id) {
+            fetchdata();
+        }
     }, [booking?.user_id])
     const fetchDataUpdateBooking = async (id, type) => {
         try {
@@ -71,7 +71,7 @@ const DropDownBookingRequest = ({ status, booking, icon, options, id, onFetchDat
                         booking?.user_id,
                         booking?.pgt_id,
                     );
-                    const resp = await PaymentFactories.updateMoneyToAccId(10,user_id,booking?.price);
+                    const resp = await PaymentFactories.updateMoneyToAccId(10, user_id, booking?.price);
                 }
                 else if (type === 4) {
                     createNotification(user_id, 5, id, "Lượt booking đã hoàn thành", "Vui lòng đánh giá cho Interpreters.");
@@ -135,13 +135,13 @@ const DropDownBookingRequest = ({ status, booking, icon, options, id, onFetchDat
             <SettingOutlined style={{ fontSize: '25px' }} onClick={handleOpen} />
             {isOpen &&
                 <div className={styles.selectOptions} ref={dropRef} >
-                    {status === 1 &&
+                    {status === '1' &&
                         <>
                             <div className={styles.option} onClick={showConfirm}>Chấp nhận</div>
                             <div className={styles.option} onClick={showConfirmDenied} >Không chấp nhận</div>
                         </>
                     }
-                    {status === 2 && <>
+                    {status === '2' && <>
                         <div className={styles.option} onClick={showConfirmDone}>Hoàn thành</div>
                     </>}
                 </div>

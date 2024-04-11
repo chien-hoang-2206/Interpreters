@@ -5,6 +5,7 @@ import BookingFactories from "../../../services/BookingFactories";
 import { getDate, getTime } from "../../../utils/Utils";
 import PaymentFactories from "../../../services/PaymentFactories";
 import { WalletTwoTone } from "@ant-design/icons";
+import Temp from "../../../utils/temp";
 export default function FormActivity() {
   const user = JSON.parse(localStorage.getItem("user"));
   const [dateTable, setDataTable] = useState();
@@ -13,7 +14,8 @@ export default function FormActivity() {
     const fetchData = async () => {
       try {
         // const response = await BookingFactories.getListBookingForUser(user?.id);
-        // setDataTable(response?.data);
+        const response = Temp.bookingRequest
+        setDataTable(response);
       } catch (error) {
         // Handle errors here
       }
@@ -27,44 +29,62 @@ export default function FormActivity() {
       dataIndex: "id",
       key: "id",
       width: 80,
-      align: "center",
+      align: "left",
     },
     {
-      title: "Interpreters",
-      dataIndex: "pgt_name",
-      key: "pgt_name",
-      align: "left",
-      render: (text, data) => <div> {text} </div>,
+      title: "Phiên dịch viên",
+      dataIndex: "hint_name",
+      width: 140,
+      align: 'left',
+      render: (text) => <div className="text-data">{text}</div>,
+    },
+    {
+      title: "Địa điểm",
+      dataIndex: "destination",
+      width: 300,
+      align: 'left',
+      render: (text) => <div className="text-data">{text}</div>,
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "booking_date",
+      key: "created_at",
+      width: 160,
+      render: (text, data) => <div>{getDate(text, 1)}</div>,
     },
     {
       title: "Ngày booking",
       key: "date",
-      dataIndex: "date",
+      dataIndex: "booking_date",
       align: "left",
-      render: (text, data) => <div>{getDate(data?.date)}</div>,
+      width: 200,
+      render: (text, data) => <div>{getDate(text, 1)}</div>,
     },
     {
       title: "Thời gian",
       key: "time_from",
-      dataIndex: "time_from",
+      dataIndex: "timestamp",
       align: "left",
-      render: (text, data) => <div>{getTime(data?.time_from)} - {getTime(data.time_to)}</div>,
+      width: 200,
+      // render: (text, data) => <div><span style={{ width: 160 }}>{getTime(data?.time_from)}</span> - {getTime(data.time_to)}</div>,
+      render: (text, data) => <div><span style={{ width: 160 }}>{text}</span></div>,
     },
     {
       title: "Tình trạng",
       key: "status",
       align: "left",
+      width: 200,
       render: (text, data) =>
         data.status === 5 ? (
           <Badge status="success" text="Interpreters và User xác nhận hoàn thành" />
         )
-          : data.status === 4 ? (
+          : data.status === '4' ? (
             <Badge status="success" text="Interpreters xác nhận hoàn thành" />
-          ) : data.status === 3 ? (
+          ) : data.status === '3' ? (
             <Badge status="error" text="Interpreters Đã từ chối" />
-          ) : data.status === 2 ? (
+          ) : data.status === '2' ? (
             <Badge status="processing" text="Interpreters Đã xác nhận" />
-          ) : data.status === 1 ? (
+          ) : data.status === '1' ? (
             <Badge status="warning" text="Chờ xác nhận" />
           ) : null,
     },
@@ -90,7 +110,11 @@ export default function FormActivity() {
         defaultPageSize: 8,
         showSizeChanger: false,
         pageSizeOptions: ["10", "20", "30"]
+
       }}
+        scroll={{
+          y: 380
+        }}
       />
     </div>
   );

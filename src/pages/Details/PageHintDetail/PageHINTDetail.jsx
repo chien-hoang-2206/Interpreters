@@ -13,6 +13,7 @@ import BookingCreate from "../../Booking/BookingCreate";
 import PgtFactories from "../../../services/PgtFatories";
 import { toast } from "react-toastify";
 import { convertStringToNumber, getDate } from "../../../utils/Utils";
+import Temp from "../../../utils/temp";
 
 const PageInterpreterDetail = () => {
   const { user } = useContext(AuthContext);
@@ -27,7 +28,11 @@ const PageInterpreterDetail = () => {
 
   async function fetchFeedbackData(id) {
     try {
-      const resp = await PgtFactories.getPGTFeedbackList(id);
+      // const resp = await PgtFactories.getPGTFeedbackList(id);
+      const resp = {
+        status: 200,
+        data: Temp.feedbackData
+      }
       if (resp.status === 200) {
         setDataFeedback(resp.data);
         setRate(resp.rate)

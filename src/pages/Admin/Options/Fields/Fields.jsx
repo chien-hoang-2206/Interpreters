@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Input, Modal, Typography, Button, Avatar } from "antd";
+import { Table, Image, Input, Modal, Typography, Button, Avatar } from "antd";
 import classes from './Fields.module.css'
 import CategoriesFactories from "../../../../services/CategoriesFatories";
 import { ToastNoti, ToastNotiError } from "../../../../utils/Utils";
@@ -47,12 +47,18 @@ const Fields = () => {
             render: (text, data) => <div className="name-title-table">{text}</div>,
         },
         {
+            title: "Ảnh đại diện",
+            dataIndex: "image",
+            key: "image",
+            render: (text, data) => <Image src={text} className="name-title-table" style={{ width: 100, height: 100 }} />,
+        },
+        {
             title: "Tác vụ",
             key: "action",
             render: (_, record) => (
                 <div className="btn-action-group" >
                     <Button
-                        style={{ marginRight: 10, background: 'transparent' }}
+                        style={{ marginRight: 10, background: '#81c8f7' }}
                         onClick={() => onDeleteFiledHandler(record?.id)}
                     >
                         Xóa
@@ -60,7 +66,8 @@ const Fields = () => {
                     <Button
                         type='default'
                         style={{
-                            color: '#fff'
+                            color: 'red',
+                            background: 'transparent',
                         }}
                         onClick={() => onUpdateCategory(record)}
                     >
@@ -212,7 +219,7 @@ const Fields = () => {
                 <Button
                     type='default'
                     style={{
-                        backgroundColor: 'transparent'
+                        background: '#81c8f7'
                     }}
                     onClick={handleReset}
                 >
@@ -226,7 +233,7 @@ const Fields = () => {
                 </Button>
                 <Button type='primary'
                     style={{
-                        backgroundColor: 'transparent'
+                        background: '#81c8f7'
                     }} onClick={onOpenModalAddField} >Thêm lĩnh vực</Button>
             </div>
             <div className="booking-table">

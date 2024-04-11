@@ -1,64 +1,64 @@
 .main-details {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 96%;
-    height: 90vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 96%;
+  height: 90vh;
+  margin: auto;
 }
 
 .container {
-    min-width: 1000px;
-    height: 600px;
-    width: 100%;
-    padding: 30px 10px;
-    background: var(--base-on-background, #FFF);
-    gap: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column;
-    border-radius: 20px;
-    border: 1px solid var(--base-line-light, #EDEEF3);
+  min-width: 1300px;
+  height: 87vh;
+  width: 100%;
+  padding: 30px 10px;
+  background: var(--base-on-background, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  border-radius: 20px;
+  border: 1px solid var(--base-line-light, #edeef3);
 }
-.step{
-    width: 90%;
+.step {
+  width: 90%;
 }
-.price{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    padding: 0px 100px;
-    width: 100%;
-    height: 100%;
+.price {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0px 45px;
+  width: 100%;
+  height: 100%;
 }
-.listCard{
-    width: 940px;
-    /* background: #F4EAE0; */
-    border-radius: 20px;
-    padding-left: 10px;
-    padding-bottom:20px;
+.listCard {
+  width: 940px;
+  /* background: #F4EAE0; */
+  border-radius: 20px;
+  padding-left: 10px;
+  padding-bottom: 20px;
 }
-.addCategory{
-    display: flex;
-    width: 490px;
-    flex-direction: column;
-    gap: 20px;
+.addCategory {
+  display: flex;
+  width: 490px;
+  flex-direction: column;
+  gap: 20px;
 }
-.btnSubmit{
-    padding: 8px 23px;
-    font-size: 22px;
-    margin-top: 20px;
-    height:50px;
+.btnSubmit {
+  padding: 8px 23px;
+  font-size: 22px;
+  margin-top: 20px;
+  height: 50px;
 }
-.btnFooter{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    width: 100%;
-    padding-bottom: 20px;
-    padding-right: 50px;
-    gap: 15px;
+.btnFooter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  padding-bottom: 20px;
+  padding-right: 50px;
+  gap: 15px;
 }

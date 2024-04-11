@@ -15,7 +15,7 @@ const RequestBooking = () => {
   const fetchData = async () => {
     try {
       // const response = await BookingFactories.getListRequestBookingForPGT(user?.id);
-      // setBookingList(response?.data);
+      setBookingList(Temp.bookingRequest);
     } catch (error) {
       // Handle errors here
     }
@@ -48,24 +48,37 @@ const RequestBooking = () => {
     },
     {
       title: "Ngày tạo",
-      key: "date",
-      dataIndex: "date",
-      align: "left",
-      render: (text, data) => <div>{getDate(data?.created_at, 1)}</div>,
+      dataIndex: "booking_date",
+      width: 150,
+      render: (text) => <div className="text-data">{text}</div>,
     },
     {
       title: "Ngày booking",
-      key: "date",
-      dataIndex: "date",
-      align: "left",
-      render: (text, data) => <div>{getDate(data?.date, 1)}</div>,
+      dataIndex: "booking_date",
+      width: 140,
+      render: (text) => <div className="text-data">{text}</div>,
     },
     {
-      title: "Thời gian",
-      key: "time_from",
-      dataIndex: "time_from",
-      align: "left",
-      render: (text, data) => <div>{getTime(data?.time_from)} - {getTime(data.time_to)}</div>,
+      title: "Thời Gian",
+      dataIndex: "timestamp",
+      width: 200,
+      render: (text, data) => <div className="text-data">{data?.timestamp} - {data?.timeEnd}</div>,
+    },
+    {
+      title: "Số tiền",
+      dataIndex: "money",
+      align: 'right',
+      width: 140,
+      render: (text) => <div className="text-data">{text}</div>,
+    },
+    {
+      title: "Lĩnh Vực",
+      dataIndex: "categoryName",
+      align: 'center',
+      width: 120,
+      render: (text, data) => (
+        <Avatar alt={text} src={data?.categoryImage} width={20} height={20} />
+      ),
     },
     {
       title: "Tình trạng",
@@ -73,13 +86,13 @@ const RequestBooking = () => {
       align: "left",
       width: 150,
       render: (text, data) =>
-        (data.status === 4 || data.status === 5  )? (
+        (data.status === '4' || data.status === '5') ? (
           <Badge status="success" text="Hoàn thành" />
-        ) : data.status === 3 ? (
+        ) : data.status === '3' ? (
           <Badge status="error" text="Interpreters Đã từ chối" />
-        ) : data.status === 2 ? (
+        ) : data.status === '2' ? (
           <Badge status="processing" text="Interpreters Đã xác nhận" />
-        ) : data.status === 1 ? (
+        ) : data.status === '1' ? (
           <Badge status="warning" text="Chờ xác nhận" />
         ) : null,
     },
@@ -97,7 +110,7 @@ const RequestBooking = () => {
       width: 90,
       align: 'center',
       render: (_, data) => (
-        <DropDownBookingRequest booking={data} status={data?.status}id={data?.id} onFetchData={fetchData} />
+        <DropDownBookingRequest booking={data} status={data?.status} id={data?.id} onFetchData={fetchData} />
       )
     },
   ];
@@ -136,6 +149,9 @@ const RequestBooking = () => {
             pageSizeOptions: ["10", "20", "30"]
           }}
           dataSource={bookingList ?? []}
+          scroll={{
+            y: 370
+          }}
         />
       </div>
 

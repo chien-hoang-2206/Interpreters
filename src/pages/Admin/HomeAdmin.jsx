@@ -27,10 +27,10 @@ const HomeAdmin = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    navigate("../login");
+    navigate('/');
   }
 
-  const [countBooking,setDataCountBooking] = useState([]);
+  const [countBooking, setDataCountBooking] = useState([]);
   const fetchApiList = async (value) => {
     try {
       const response = await AccountFactories.getListAccount(value, 30);
@@ -43,12 +43,15 @@ const HomeAdmin = () => {
       ToastNotiError()
     }
   };
-  useEffect(()=>{fetchApiList()},[selectedMenuItem])
+  useEffect(() => { fetchApiList() }, [selectedMenuItem])
   return (
     <>
-      <Layout theme="light" style={{ height: '100vh' }} >
+      <Layout theme="light" style={{ display: 'sticky', top: 0, left: 0, height: '100vh' }} >
         <Sider theme="light"
-          style={{ width: 200 }}
+          style={{
+            width: 200,
+            display: 'sticky', top: 0, left: 0,
+          }}
         >
           <Menu
             theme="light"

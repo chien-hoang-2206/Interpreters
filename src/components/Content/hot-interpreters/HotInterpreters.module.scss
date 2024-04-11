@@ -18,9 +18,10 @@
       width: 100%;
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-evenly; /* Để các phần tử cuối cùng bắt đầu từ bên trái */
-      align-items: center; /* Để căn giữa dọc */
-
+      justify-content: flex-start;
+      align-items: center;
+      row-gap: 20px;
+      column-gap: 20px;
       .item {
         max-width: 16%;
       }

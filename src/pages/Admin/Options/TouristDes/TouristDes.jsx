@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Input, Modal, Typography, Button, Avatar, Form, Space, TimePicker } from "antd";
+import { Table, Image, Input, Modal, Typography, Button, Avatar, Form, Space, TimePicker } from "antd";
 import classes from './TouristDes.module.css'
 import CategoriesFactories from "../../../../services/CategoriesFatories";
 import { ToastNoti, ToastNotiError, convertStringToNumber, getDate } from "../../../../utils/Utils";
@@ -49,6 +49,27 @@ const TouristDes = () => {
             render: (text, data) => <div className="name-title-table">{text}</div>,
         },
         {
+            title: "Ảnh đại diện",
+            dataIndex: "image",
+            width: 120,
+            key: "image",
+            render: (text, data) => <Image src={text} className="name-title-table" style={{ width: 100, height: 100 }} />,
+        },
+        {
+            title: "Kinh độ",
+            width: 120,
+            key: "latitude",
+            dataIndex: "latitude",
+            render: (text, data) => <div className="name-title-table">{text}</div>,
+        },
+        {
+            title: "Vĩ độ",
+            width: 120,
+            key: "longitude",
+            dataIndex: "longitude",
+            render: (text, data) => <div className="name-title-table">{text}</div>,
+        },
+        {
             title: "Giá vé",
             dataIndex: "price",
             key: "price",
@@ -60,6 +81,13 @@ const TouristDes = () => {
             key: "time_start",
             render: (text, data) => <div className="name-title-table">{`${getDate(data?.time_start, 6)} - ${getDate(data?.time_end, 6)}`}</div>,
         },
+        // {
+        //     title: "Mô tả",
+        //     dataIndex: "experience",
+        //     key: "experience",
+        //     width: 220,
+        //     render: (text, data) => <div className="name-title-table">{text}</div>,
+        // },
         {
             title: "Tác vụ",
             key: "action",
@@ -71,7 +99,7 @@ const TouristDes = () => {
                     >
                         Xóa
                     </Button>
-                    {/* <Button
+                    <Button
                         type='default'
                         style={{
                             color: '#fff'
@@ -79,7 +107,7 @@ const TouristDes = () => {
                         onClick={() => onUpdatedestination(record)}
                     >
                         Sửa
-                    </Button> */}
+                    </Button>
                 </div>
             ),
         },
@@ -151,7 +179,7 @@ const TouristDes = () => {
         const data = {
             name: value?.name,
             image: fileUploadLink,
-            latitudeL: value?.latitudeL,
+            latitude: value?.latitude,
             longitude: value?.longitude,
             time_start: value?.time[0],
             time_end: value?.time[1],
@@ -304,7 +332,7 @@ const TouristDes = () => {
                                 className={classes['add-modal-input']}
                             />
                         </Form.Item>
-                        <Form.Item label="Nhập vĩ độ" name='latitudeL'>
+                        <Form.Item label="Nhập vĩ độ" name='latitude'>
                             <Input
                                 type="text"
                                 style={{ width: '100%' }}
@@ -322,7 +350,7 @@ const TouristDes = () => {
 
                         <Form.Item label="Nhập vé vào cửa" name='price'>
                             <Input
-                                type="text"
+                                type="number"
                                 style={{ width: '100%' }}
                                 className={classes['add-modal-input']}
                             />

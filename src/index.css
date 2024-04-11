@@ -23,10 +23,8 @@ body::-webkit-scrollbar {
 }
 
 button, [type='button'], [type='submit'] {
-  -webkit-appearance: button;
-  background-color: #1677ff;
-  color: #fff;
-  background-image: none;
+  background-color: #81c8f7;
+  color: #ffffff;
 }
 
 body::-webkit-scrollbar-track {

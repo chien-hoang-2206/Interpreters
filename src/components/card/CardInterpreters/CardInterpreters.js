@@ -16,7 +16,7 @@ const CardInterpreters = (props) => {
     const data = props.data;
     const navigate = useNavigate();
     const handleClickCard = () => {
-        navigate(`/pgt/${data?.id}`);
+        navigate(`/hint/${data?.id}`);
     };
     return (
         <div className="card" onClick={handleClickCard}>

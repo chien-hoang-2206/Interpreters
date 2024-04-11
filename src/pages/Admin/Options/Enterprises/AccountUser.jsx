@@ -153,7 +153,6 @@ const AccountUser = () => {
             enterButton="Search"
             onChange={(e) => setValueSearch(e.target.value)}
             onKeyDown={(e) => handleKeyDown(e)}
-            allowClear
             placeholder="Tìm kiếm với tên,...."
             onSearch={handleSearch} />
         </div>

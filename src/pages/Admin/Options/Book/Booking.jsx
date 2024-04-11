@@ -4,20 +4,25 @@ import "./Booking.css";
 import Constants from "../../../../utils/constants";
 import BookingFactories from "../../../../services/BookingFactories";
 import { ToastNoti, ToastNotiError, convertStringToNumber, getDate, getTime } from "../../../../utils/Utils";
+import Temp from "../../../../utils/temp";
 
 const Booking = () => {
   const [bookingList, setBookingList] = useState([]);
   const [namePgt, setNamePgt] = useState("");
-  const [dateCreate,setDateCreate] = useState();
-  const [DateBooking,setDateBooking] = useState();
+  const [dateCreate, setDateCreate] = useState();
+  const [DateBooking, setDateBooking] = useState();
 
-  const fetchDataBookingList = async (name,dateCreate,dateBooking) => {
-    // try {
-    //   const response = await BookingFactories.getListBooking(name,dateCreate,dateBooking);
-    //   setBookingList(response?.data);
-    // } catch (error) {
-    //   ToastNotiError();
-    // }
+  const fetchDataBookingList = async (name, dateCreate, dateBooking) => {
+    try {
+      const response =
+      {
+        data: Temp.bookingRequest
+      }
+      //  await BookingFactories.getListBooking(name, dateCreate, dateBooking);
+      setBookingList(response?.data);
+    } catch (error) {
+      ToastNotiError();
+    }
   };
 
   useEffect(() => {
@@ -29,7 +34,7 @@ const Booking = () => {
       fetchDataBookingList(namePgt);
     }
   };
-  
+
   function handleReset() {
     setNamePgt("");
     setDateCreate();
@@ -37,7 +42,7 @@ const Booking = () => {
     fetchDataBookingList()
   }
   function handleSearch() {
-    fetchDataBookingList(namePgt,dateCreate?.$d,DateBooking?.$d)
+    fetchDataBookingList(namePgt, dateCreate?.$d, DateBooking?.$d)
   }
 
   const columns = [
@@ -61,54 +66,62 @@ const Booking = () => {
       ),
     },
     {
-      title: "Tên Interpreters",
-      dataIndex: "pgt_name",
+      title: "Phiên dịch",
+      dataIndex: "hint_name",
       width: 140,
       align: 'left',
       render: (text) => <div className="text-data">{text}</div>,
     },
     {
+      title: "Địa điểm",
+      dataIndex: "destination",
+      width: 300,
+      align: 'left',
+      render: (text) => <div className="text-data">{text}</div>,
+    },
+    {
       title: "Ngày tạo",
-      dataIndex: "created_at",
+      dataIndex: "booking_date",
       key: "created_at",
       width: 160,
-      render: (text, data) => <div>{getDate(data?.date, 1)}</div>,
+      render: (text, data) => <div>{getDate(text, 1)}</div>,
     },
     {
       title: "Ngày booking",
       key: "date",
-      dataIndex: "date",
+      dataIndex: "booking_date",
       align: "left",
       width: 200,
-      render: (text, data) => <div>{getDate(data?.date, 1)}</div>,
+      render: (text, data) => <div>{getDate(text, 1)}</div>,
     },
     {
       title: "Thời gian",
       key: "time_from",
-      dataIndex: "time_from",
+      dataIndex: "timestamp",
       align: "left",
       width: 200,
-      render: (text, data) => <div><span style={{ width: 160 }}>{getTime(data?.time_from)}</span> - {getTime(data.time_to)}</div>,
+      // render: (text, data) => <div><span style={{ width: 160 }}>{getTime(data?.time_from)}</span> - {getTime(data.time_to)}</div>,
+      render: (text, data) => <div><span style={{ width: 160 }}>{text}</span></div>,
     },
     {
       title: "Tình trạng",
       key: "status",
       align: "left",
-      width: 250, 
-      filters:Constants.optionsFilterStatusBooking,
+      width: 250,
+      filters: Constants.optionsFilterStatusBooking,
       onFilter: (value, record) => record.status === value,
       render: (value, data) => (
         <Select
           style={{ width: '100%' }}
           onChange={(e) => handleChangeStatusBooking(data?.id, e)}
-          options={Constants.optionsStatusBooking} value={data?.status}
+          options={Constants.optionsStatusBooking} value={parseInt(data?.status)}
         />
       )
     },
     {
       title: "Tổng sô tiền",
-      dataIndex: "price",
-      key: "price",
+      dataIndex: "money",
+      key: "money",
       align: 'right',
       width: 200,
       render: (text) => <div className="text-data">{convertStringToNumber(text)}</div>,
@@ -153,22 +166,21 @@ const Booking = () => {
 
   async function handleClickDelete() {
     try {
-      // const response = await BookingFactories.deleteBookingId(deleteId);
-      // if (response?.status === 200) {
-      //   ToastNoti()
-      //   fetchDataBookingList();
-      //   hideModal();
-      // }
+      const response = await BookingFactories.deleteBookingId(deleteId);
+      if (response?.status === 200) {
+        ToastNoti()
+        fetchDataBookingList();
+        hideModal();
+      }
     } catch (error) {
       hideModal();
-      console.log("🚀 ~ file: Booking.jsx:123 ~ fetchDataUpdateBooking ~ error:", error)
       ToastNotiError()
     }
   }
 
   function handleChangeStatusBooking(id, value) {
-    console.log(id);
     fetchDataUpdateBooking(id, value)
+    ToastNoti()
   }
 
   const handleOnChangeDateCreate = (e) => {
@@ -185,7 +197,7 @@ const Booking = () => {
 
   return (
     <div className="booking-container" style={{ height: '100vh', overflow: 'scroll' }}>
-      <div className="booking-title"><span>Booking</span></div>
+      <div className="booking-title"><span>Lượt thuê</span></div>
       <div className="booking-search">
         <Input
           placeholder="Tìm kiếm theo mã, tên người thuê, ..."
@@ -208,13 +220,13 @@ const Booking = () => {
         <Button
           type='default'
           onClick={handleReset}>
-            Mặc định
-          </Button>
+          Mặc định
+        </Button>
         <Button
           type='primary'
           onClick={handleSearch}>
-            Tìm kiếm
-          </Button>
+          Tìm kiếm
+        </Button>
       </div>
 
       <Modal
@@ -228,10 +240,14 @@ const Booking = () => {
         Bạn chắc chắn muốn xóa lượt booking này ?
       </Modal>
 
-      <div className="booking-table">
+      <div className="bg-[#fff] p-2 rounded-md">
         <Table
           columns={columns}
           dataSource={bookingList}
+          scroll={{
+            y: 430,
+            x: 900
+          }}
         // dataSource={booking
         //   .filter((item) => {
         //     return monthSelect + statusBooking === ""

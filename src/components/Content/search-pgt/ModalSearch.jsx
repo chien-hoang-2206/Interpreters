@@ -83,13 +83,13 @@ const ModalSearch = () => {
 
   const onSearchHandler = () => {
     if (searchCategory) {
-      navigate(`/pgt?category=${searchCategory}`)
+      navigate(`/hint?category=${searchCategory}`)
     }
     if (searchName) {
-      navigate(`/pgt?keyword=${searchName}`)
+      navigate(`/hint?keyword=${searchName}`)
     }
     if (searchName && searchCategory) {
-      navigate(`/pgt?keyword=${searchName}&category=${searchCategory}`)
+      navigate(`/hint?keyword=${searchName}&category=${searchCategory}`)
     }
   }
 

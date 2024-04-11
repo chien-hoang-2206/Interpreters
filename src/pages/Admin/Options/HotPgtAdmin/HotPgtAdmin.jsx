@@ -9,12 +9,12 @@ import AccountFactories from "../../../../services/AccountFactories";
 const HotPgtAdmin = () => {
   const [namePgt, setNamePgt] = useState("");
   const [typeSearch, setTypeSearch] = useState(10);
-  const [hotPgts, setHotPgtList] = useState([]);
+  const [hotHints, setHotHintsList] = useState([]);
 
   const fetchData = async (name, type) => {
     try {
       const response = await PgtFactories.getListPGT(type, name);
-      setHotPgtList(response);
+      setHotHintsList(response);
     } catch (error) {
       ToastNotiError();
     }
@@ -60,7 +60,7 @@ const HotPgtAdmin = () => {
       key: "booking",
       render: text =>
         <div>
-          {parseStringToNumber(text)}
+          {parseStringToNumber(text ?? 10)}
         </div>
     },
     {
@@ -77,7 +77,7 @@ const HotPgtAdmin = () => {
       align: 'right',
       render: text =>
         <div>
-          {convertStringToNumber(text)}
+          {convertStringToNumber(text ? text : 3200000)}
         </div>
     },
     {
@@ -88,6 +88,11 @@ const HotPgtAdmin = () => {
         <div className="action-btn" >
           <Button
             type='primary'
+            style={{
+              background: 'transparent',
+              border: '1px solod red',
+              color: 'red'
+            }}
             onClick={() => record?.hot_pgt ? handleDeleteHotPgt(record) : handleAddHotPgt(record)}
           >
             {record?.hot_pgt ? 'Xóa nổi bật' : 'Thêm nổi bật'}
@@ -177,7 +182,7 @@ const HotPgtAdmin = () => {
         <Button
           type='default'
           style={{
-            backgroundColor: 'transparent'
+            // backgroundColor: 'transparent'
           }}
           onClick={handleReset}
         >
@@ -193,7 +198,12 @@ const HotPgtAdmin = () => {
       <div className="booking-table">
         <Table
           columns={columns}
-          dataSource={hotPgts ?? []}
+          dataSource={hotHints ?? []}
+          scroll={
+            {
+              y: 440
+            }
+          }
           pagination={{
             defaultPageSize: 8,
             showSizeChanger: false,
