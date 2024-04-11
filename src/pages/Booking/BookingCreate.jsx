@@ -181,7 +181,7 @@ const BookingCreate = (props) => {
           onFinish={onSubmit}
         >
           <Form.Item label="Tên" >{pgt.firstName} {pgt?.user_name}</Form.Item>
-          <Form.Item label="Dạng" name='typeTravel'>
+          <Form.Item label="Dạng" name='typeTravel111'>
             <Radio.Group onChange={(value) => setTypeBooking(value?.target?.value)} value={typeBooking}>
               <Radio value={1}>Du lịch theo nhóm</Radio>
               <Radio value={2}>Du lịch cá nhân</Radio>
@@ -198,11 +198,14 @@ const BookingCreate = (props) => {
             />
           </Form.Item>
 
-          <Form.Item label="Dạng Thuê" name='typeTravel'>
-            <Radio.Group onChange={(value) => setTypeTime(value?.target?.value)} value={typeTime}>
-              <Radio value={1}>Thuê buổi sáng </Radio>
-              <Radio value={2}>Thuê buổi chiều </Radio>
-              <Radio value={2}>Thuê cả ngày</Radio>
+          <Form.Item label="Dạng Thuê" name='typeTravel2'>
+            <Radio.Group
+            // onChange={(value) => setTypeTime(value?.target?.value)}
+            // value={}
+            >
+              <Radio value={3}>Thuê buổi sáng </Radio>
+              <Radio value={4}>Thuê buổi chiều </Radio>
+              <Radio value={7}>Thuê cả ngày</Radio>
             </Radio.Group>
           </Form.Item>
 
