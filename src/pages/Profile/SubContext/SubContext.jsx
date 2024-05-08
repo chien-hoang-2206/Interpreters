@@ -1,5 +1,4 @@
 import React from "react";
-import FormProfilepGT from "../FormContent/FormProfilePGT";
 import FormProfileUser from "../FormContent/FormProfileUser";
 import FormEmail from "../FormContent/FormEmail";
 import FormPassword from "../FormContent/FormPassword";
@@ -7,9 +6,10 @@ import FormActivity from "../FormContent/FormActivity";
 import FormPayment from "../FormContent/FormPayment";
 import PaymentWallett from "../FormContent/Payment/PaymentWallett";
 import RequestBooking from "../FormContent/Book/RequestBooking";
+import FormProfileHint from "../FormContent/FormProfileHint";
 
 const componentPgt = [
-  { key: "1", component: <FormProfilepGT /> },
+  { key: "1", component: <FormProfileHint /> },
   { key: "sub1", component: <FormEmail /> },
   { key: "sub2", component: <FormPassword /> },
   { key: "3", component: <FormActivity /> },
@@ -31,7 +31,7 @@ const SubContext = (props) => {
   return (
     <div className="sub-context" style={{ width: "100%"  , height: 'calc(100vh - 60px)' , overflow: 'scroll' }}>
       {props.user?.role_id === 2 &&
-        Object.keys(props.changeContent).length === 0 && <FormProfilepGT />}
+        Object.keys(props.changeContent).length === 0 && <FormProfileHint />}
 
       {props.user?.role_id === 2 &&
         componentPgt.map((component) => {

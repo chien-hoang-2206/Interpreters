@@ -22,10 +22,13 @@ const TouristDes = () => {
     const [destinationUpdateImage, setDestinationUpdateImage] = useState()
     const [error, setError] = useState();
     const [showModalUpdate, setShowModalUpdate] = useState();
+    const [loading, setLoading] = useState(true);
 
     const fetchData = async (Keyword) => {
+        setLoading(true)
         const response = await DestinationFactories.getListDestination(Keyword);
         setTouristDes(response);
+        setLoading(false)
     };
 
     useEffect(() => {
@@ -275,6 +278,7 @@ const TouristDes = () => {
             <div className="booking-table">
                 <Table
                     columns={columns}
+                    loading={loading}
                     dataSource={TouristDes ?? []}
                     pagination={{
                         defaultPageSize: 10,

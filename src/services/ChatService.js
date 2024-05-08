@@ -1,7 +1,8 @@
+
 import { addDoc, collection, doc, getDocs, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../firebase";
 
-export const createNotification = async (toUserId, type, action_id, title, body,user_id,pgt_id) => {
+export const createNotification = async (data) => {
     // type :
     // 1 : có yêu cầu booking mới 
     // 2 : pgt chấp nhận / từ chối yêu cầu booking
@@ -9,25 +10,33 @@ export const createNotification = async (toUserId, type, action_id, title, body,
     // 4 : admin  từ chối  yêu cầu pgt
     // 5 : hoàn thành  yêu cầu pgt
     // 6 : user thanh toán thành công  yêu cầu pgt
+    const {
+        toUserId,
+        type,
+        action_id,
+        title,
+        body,
+        user_id,
+        pgt_id
+    } = data
     try {
-        // await addDoc(collection(db, "notifications"), {
-        //     toUserId: toUserId,
-        //     title: title,
-        //     body: body,
-        //     createdAt: serverTimestamp(),
-        //     type: type,
-        //     action_id: action_id,
-        //     read: false,
-        //     pgt_id: pgt_id ?? 0,
-        //     user_id: user_id ?? 0,
-
-        // });
+        await addDoc(collection(db, "notifications"), {
+            toUserId: toUserId,
+            title: title,
+            body: body,
+            createdAt: serverTimestamp(),
+            type: type,
+            action_id: action_id,
+            read: false,
+            pgt_id: pgt_id ?? 0,
+            user_id: user_id ?? 0,
+        });
     } catch (e) {
         console.error("Lỗi khi tạo thông báo: ", e);
     }
 };
 
-export const sendMessage = async (firstUserId, secondUserId, firstName, secondName, firstAvatar, secondAvatar, message,userId) => {
+export const sendMessage = async (firstUserId, secondUserId, firstName, secondName, firstAvatar, secondAvatar, message, userId) => {
     const chatId = `${firstUserId}_${secondUserId}`;
     const chatId2 = `${secondUserId}_${firstUserId}`;
 
@@ -38,15 +47,15 @@ export const sendMessage = async (firstUserId, secondUserId, firstName, secondNa
     const chatQuerySnapshot2 = await getDocs(chatQuery2);
 
     if (!chatQuerySnapshot.empty || !chatQuerySnapshot2.empty) {
-        await sendNewMessageToExistingUser(chatId, firstUserId, secondUserId, message,userId);
+        await sendNewMessageToExistingUser(chatId, firstUserId, secondUserId, message, userId);
     }
-    else{
-        await sendNewMessageToNewUser(firstUserId, secondUserId, firstName, secondName, firstAvatar, secondAvatar, message,userId);
+    else {
+        await sendNewMessageToNewUser(firstUserId, secondUserId, firstName, secondName, firstAvatar, secondAvatar, message, userId);
     }
 };
 
 
-export const sendNewMessageToNewUser = async (firstUserId, secondUserId, firstName, secondName, firstAvatar, secondAvatar, message,userId) => {
+export const sendNewMessageToNewUser = async (firstUserId, secondUserId, firstName, secondName, firstAvatar, secondAvatar, message, userId) => {
     // Create a new chat document in the "chat" collection
     await addDoc(collection(db, "chats"), {
         chatId: `${firstUserId}_${secondUserId}`,
@@ -57,7 +66,7 @@ export const sendNewMessageToNewUser = async (firstUserId, secondUserId, firstNa
         firstAvatar: firstAvatar,
         secondAvatar: secondAvatar,
         createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(), 
+        updatedAt: serverTimestamp(),
         lastMessage: message,
         read: false,
         userSendId: userId,
@@ -69,12 +78,12 @@ export const sendNewMessageToNewUser = async (firstUserId, secondUserId, firstNa
         senderId: firstUserId,
         message: message,
         createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(), 
+        updatedAt: serverTimestamp(),
         read: false,
     });
 };
 
-export const sendNewMessageToExistingUser = async (chatId, userId, recipientUserId, message,userSendId) => {
+export const sendNewMessageToExistingUser = async (chatId, userId, recipientUserId, message, userSendId) => {
 
     const chatQuery = query(collection(db, "chats"), where("chatId", "==", chatId));
     const chatQuerySnapshot = await getDocs(chatQuery);
@@ -85,7 +94,7 @@ export const sendNewMessageToExistingUser = async (chatId, userId, recipientUser
         await updateDoc(existingChatDocRef, {
             read: false,
             lastMessage: message,
-            updatedAt: serverTimestamp(), 
+            updatedAt: serverTimestamp(),
             userSendId: userSendId,
         });
     });
@@ -95,7 +104,7 @@ export const sendNewMessageToExistingUser = async (chatId, userId, recipientUser
         senderId: userId,
         message: message,
         createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(), 
+        updatedAt: serverTimestamp(),
         read: false,
     });
 };

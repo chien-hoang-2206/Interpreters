@@ -27,6 +27,12 @@ const DestinationFactories = {
       data: data
     });
   },
+  getListDestinationDetail: async (id) => {
+    return ApiOperation.request({
+      url: `${ApiConstants.Destination}/${id}`,
+      method: "GET",
+    });
+  },
   deleteDestination: async id => {
     return ApiOperation.request({
       url: `${ApiConstants.Destination}/${id}`,

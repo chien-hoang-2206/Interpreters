@@ -12,9 +12,11 @@ import CategoriesFactories from "../../../../services/CategoriesFatories";
 const AccountInterpreters = () => {
   const [pgtList, setPgtList] = useState([]);
   const [valueSearch, setValueSearch] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchApiList = async (value) => {
     try {
+      setLoading(true)
       const response = await AccountFactories.getListAccount(value, 20);
       if (response && response.data) {
         setPgtList(response.data);
@@ -22,7 +24,10 @@ const AccountInterpreters = () => {
         toast.error('Hệ thống lỗi')
         console.error("API response does not contain expected data:", response);
       }
+      setLoading(false)
+
     } catch (error) {
+      setLoading(false)
       toast.error('Hệ thống lỗi')
     }
   };
@@ -76,6 +81,13 @@ const AccountInterpreters = () => {
       width: 140,
       dataIndex: 'user_name',
       key: 'name',
+      fixed: 'left',
+    },
+    {
+      title: 'Email',
+      width: 140,
+      dataIndex: 'email',
+      key: 'email',
       fixed: 'left',
     },
     {
@@ -210,6 +222,7 @@ const AccountInterpreters = () => {
           <Table
             columns={columns}
             dataSource={pgtList ?? []}
+            loading={loading}
           // scroll={{
           //   y: 'calc(100vh - 220px)'
           // }}

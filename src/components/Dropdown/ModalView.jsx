@@ -3,6 +3,7 @@ import { Modal, Image, Row, Col, Button } from "antd";
 import classes from './Dropdown.module.scss'
 import AvatarGroup from '../image-group/AvatarGroup';
 import StarRating from '../start-rating/StarRating';
+import Constants from '../../utils/constants';
 
 const InfoItem = ({ label, content }) => {
     return (
@@ -42,8 +43,9 @@ const ModalView = (props) => {
                         <Row>
                             <Col span={12}>
                                 <InfoItem label="Tên tài khoản" content={props.data?.user_name} />
+                                <InfoItem label="Tuổi" content={props.data?.age} />
                                 <InfoItem label="Email" content={props.data?.email} />
-                                <InfoItem label="Khu vực" content={'Đà Nẵng'} />
+                                <InfoItem label="Khu vực" content={Constants.vietnamProvinces.find(item => item.value === props.data?.province)?.label} />
 
                                 {props?.type === 'Interpreters' ?
                                     <>
@@ -58,7 +60,7 @@ const ModalView = (props) => {
                                     </>
                                     :
                                     <>
-                                        <InfoItem label="Trạng thái" content={props.data?.flag  === 1 ? 'Đang hoạt động' : 'Đang khóa'} />
+                                        {/* <InfoItem label="Trạng thái" content={props.data?.flag === 1 ? 'Đang hoạt động' : 'Đang khóa'} /> */}
                                     </>
                                 }
                             </Col>
@@ -68,7 +70,7 @@ const ModalView = (props) => {
                                 <InfoItem label="Địa chỉ cụ thể" content={props.data?.address} />
                                 {props?.type === 'Interpreters' ?
                                     <>
-                                        <InfoItem label="Đánh giá" content={<StarRating starCount={props.data?.star}/>}/>
+                                        <InfoItem label="Đánh giá" content={<StarRating starCount={props.data?.star} />} />
                                         <InfoItem label="Số người theo dõi" content={props.data?.follow} />
                                         <InfoItem label="Trạng thái" content={props.data?.flag === 1 ? 'Đang hoạt động' : 'Đang khóa'} />
                                     </>

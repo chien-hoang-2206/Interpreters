@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import BookingFactories from "../../services/BookingFactories";
 import { createNotification, sendMessage, sendNewMessageToExistingUser, sendNewMessageToNewUser } from "../../services/ChatService";
 import PaymentFactories from "../../services/PaymentFactories";
-import PgtFactories from "../../services/PgtFatories";
+import HintFactories from "../../services/HintFatories";
 
 const BookingDetail = (props) => {
   const { bookingId, isHaveComment } = props;

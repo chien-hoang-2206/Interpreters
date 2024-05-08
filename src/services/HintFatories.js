@@ -1,7 +1,7 @@
 import ApiConstants from "../adapter/ApiConstants";
 import ApiOperation from "../adapter/ApiOperation";
 
-const PgtFactories = {
+const HintFactories = {
   getListPGT: async ( Type = 10  , KeyWord, Category) => {
     let params = {} ; 
     if (KeyWord){
@@ -33,11 +33,11 @@ const PgtFactories = {
   },
   requestBooking: async data => {
     return ApiOperation.request({
-      url: ApiConstants.BOOKING_PGT,
+      url: ApiConstants.BOOKING_Hint,
       method: "POST",
       data: data,
     });
   },
 };
 
-export default PgtFactories;
+export default HintFactories;

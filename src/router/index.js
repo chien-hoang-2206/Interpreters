@@ -21,6 +21,7 @@ import TrendingPage from "../pages/Trending/TrendingPage";
 import SearchPgt from "../pages/SearchPgt/SearchPgt";
 import PageInterpreterDetail from "../pages/Details/PageHintDetail/PageHINTDetail";
 import RegisterInterpreters from "../pages/RegisterInterpreters/RegisterInterpreters";
+import DestinationPage from "../pages/Destination/DestinationPage";
 
 const Router = () => {
   return (
@@ -55,6 +56,13 @@ const Router = () => {
           element={
             <LayoutHeader>
               <PageInterpreterDetail />
+            </LayoutHeader>}
+        />
+        <Route
+          path="/destination/:id"
+          element={
+            <LayoutHeader>
+              <DestinationPage />
             </LayoutHeader>}
         />
         <Route

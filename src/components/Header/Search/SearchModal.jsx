@@ -2,7 +2,7 @@ import React, { useState, useEffect, useLayoutEffect, startTransition, useDeferr
 import { Input, Avatar } from 'antd';
 import classes from './SearchModal.module.css'
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import PgtFactories from '../../../services/PgtFatories';
+import HintFactories from '../../../services/HintFatories';
 
 const { Search } = Input;
 

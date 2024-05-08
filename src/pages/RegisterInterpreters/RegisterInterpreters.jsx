@@ -9,29 +9,13 @@ import AccountFactories from "../../services/AccountFactories";
 import { AuthContext } from "../../context/auth.context";
 import DestinationFactories from "../../services/DestinationFatories";
 
-import { UploadOutlined } from '@ant-design/icons';
-import { Button, Card, Avatar, InputNumber, Steps, Upload, Typography } from "antd";
+import { Card, Avatar, InputNumber, Steps, Typography, Image, Spin } from "antd";
+import { useTranslation } from "react-i18next";
+import { uploadFirebase } from "../../utils/FirebaseService";
+import { CameraOutlined } from "@ant-design/icons";
+import { Button } from "@nextui-org/react";
+import { ToastNotiError } from "../../utils/Utils";
 const { Text } = Typography;
-const fileList = [
-  {
-    uid: '0',
-    name: 'Chứng chỉ ngoại ngữ toeic 800.png',
-    status: 'uploading',
-    percent: 33,
-  },
-  {
-    uid: '-1',
-    name: 'Chứng chỉ ngoại ngữ Ielts 7.0.png',
-    status: 'done',
-    url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  },
-  {
-    uid: '-2',
-    name: 'Chứng chỉ ngoại ngữ Hướng dân viên 7.0.png',
-    status: 'error',
-  },
-];
 
 const RegisterInterpreters = (props) => {
   const [selectedCardsDes, setSelectedCardsDes] = useState();
@@ -46,25 +30,27 @@ const RegisterInterpreters = (props) => {
   })
   const [error, setError] = useState()
   const [step, setStep] = useState(0)
+  const [loading, setLoading] = useState(true);
 
-
+  const { t } = useTranslation()
   const [TouristDes, setTouristDes] = useState()
 
-  useEffect(() => {
+  function checkPrice() {
     // const arePricesNullOrZero = Object.values(price).some(value => value === null || value === 0);
-
     // if (arePricesNullOrZero) {
-    //   console.log("Some price values are null or zero");
-    // } else {
     //   setError({
-    //     price: 'Nhập đầy đủ các giá trị'
+    //     price: 'Nhập đầy đủ các đơn giá'
     //   })
+    //   return false
+    // } else {
     // }
-  }, [price])
+    return true
+  }
 
   const fetchData = async (Keyword) => {
     const response = await DestinationFactories.getListDestination(Keyword);
     setTouristDes(response);
+
   };
 
   useEffect(() => {
@@ -103,31 +89,76 @@ const RegisterInterpreters = (props) => {
     newPrice[field] = e
     setPrice(newPrice)
   }
-  function handleNextStep2() {
-    if (!price || price === 0 || price === '') {
-      setError('Hãy chọn giá thuê')
-    }
-    else {
-      setStep(step + 1)
-      onSubmit();
+  function handleNextStepSubmit() {
+    if (checkPrice()) {
+      setStep(parseInt(step) + 1)
+      onSubmit()
+    } else {
+      setStep(2)
     }
   }
   const { user, setUser } = useContext(AuthContext);
+  const [imageList, setImageList] = useState([]);
+  const [fileUpload, setFileUpload] = useState([]);
+
+
+  const handleChange = (e) => {
+    const file = e.target.files[0];
+    setFileUpload(e.target.files[0]);
+    if (file) {
+      const url = URL.createObjectURL(file);
+      const newObject = { url: url, name: file.name };
+      const newList = [...imageList, newObject];
+
+
+      const newObjectFile = file
+      const newListFile = [...fileUpload, newObjectFile];
+      setFileUpload(newListFile)
+      setImageList(newList);
+    }
+  };
+  const handleDeleteImg = (name) => {
+    const newList = imageList.filter(v => v.name !== name)
+    setImageList(newList);
+  };
 
   async function onSubmit() {
-    const data = {
-      categories: selectedCards,
-      price: price.individual1
-    }
-    const response = await AccountFactories.requestPgt(user?.id, data);
-    if (response?.status === 200) {
-      toast.success('Gửi yêu cầu thành công, admin đang duyệt yêu cầu của bạn.');
-      user.role_id = 4;
-      localStorage.setItem("user", JSON.stringify(user));
-      const storedUser = localStorage.getItem("user");
-      setUser(JSON.parse(storedUser));
-    } else {
-      toast.error('Hệ thống lỗi');
+    try {
+      const data = {
+        categories: selectedCards,
+        personal_price_session: price.individual1,
+        personal_price_day: price.individual2,
+        group_price_avge: price.group1,
+        group_price_session: price.group2,
+        group_price_day: price.group3,
+        destination_id: selectedCardsDes,
+      }
+      let images = []
+      if (fileUpload) {
+        const uploadImages = async () => {
+          for (const file of fileUpload) {
+            const url = await uploadFirebase(file);
+            images.push(url);
+          }
+        };
+        await uploadImages();
+      }
+      data.images = images
+      const response = await AccountFactories.requestHint(user.id, data);
+      if (response?.status === 200) {
+        toast.success('Gửi yêu cầu thành công, admin đang duyệt yêu cầu của bạn.');
+        user.role_id = 4;
+        localStorage.setItem("user", JSON.stringify(user));
+        const storedUser = localStorage.getItem("user");
+        setUser(JSON.parse(storedUser));
+        setLoading(false)
+      } else {
+        toast.error('Hệ thống lỗi');
+        setLoading(false)
+      }
+    } catch (error) {
+      console.log("🚀 ~ onSubmit ~ error:", error)
+      setLoading(false)
     }
   }
 
@@ -153,18 +184,23 @@ const RegisterInterpreters = (props) => {
               items={[
                 {
                   title: 'Chọn điểm du lịch',
+                  onClick: () => setStep(0)
                 },
                 {
                   title: 'Chọn lĩnh vực',
+                  onClick: () => step > 1 && setStep(1)
                 },
                 {
                   title: 'Xác nhận giá thuê',
+                  onClick: () => step > 2 && setStep(2)
                 },
                 {
                   title: 'Điều khoản',
+                  onClick: () => step > 3 && setStep(3)
                 },
                 {
                   title: 'Văn bằng / Chứng chỉ',
+                  onClick: () => step > 4 && setStep(4)
                 },
                 {
                   title: 'Xác nhận',
@@ -174,13 +210,14 @@ const RegisterInterpreters = (props) => {
           </div>
           {step === 0 && <>
             <div className={styles.listCard}>
-              <h1 className="text-2xl text-center" style={{ padding: '0px 21%' }}>Chọn địa điểm du lịch</h1>
-              <div className="flex w-full justify-between flex-wrap " >
+              <h1 className="text-2xl my-4 text-center" style={{ padding: '0px 21%' }}>Chọn địa điểm du lịch</h1>
+              <div className="flex w-full justify-between flex-wrap gap-10" >
                 {TouristDes?.map((item) => (
                   <div className="">
                     <Card
                       hoverable
                       style={{ width: 240 }}
+                      className="shadow-lg"
                       onClick={() => handleCardClickDes(item.id)}
                       cover={<img alt="example" src={item?.image} />}
                     >
@@ -193,7 +230,7 @@ const RegisterInterpreters = (props) => {
           </>}
           {step === 1 && <>
             <div className={styles.listCard}>
-              <h1 className="text-2xl text-center" style={{ padding: '0px 21%' }}> Chọn lĩnh vực bạn  muốn tham gia</h1>
+              <h1 className="text-2xl text-center" style={{ padding: '0px 21%' }}>Chọn lĩnh vực bạn  muốn tham gia</h1>
               <div className="flex w-full justify-between flex-wrap " >
                 {categoryList?.map((item) => (
                   <div className="">
@@ -252,8 +289,8 @@ const RegisterInterpreters = (props) => {
             <h2 className="mt-5 font-bold">Khách đi theo nhóm</h2>
             <div className='flex flex-row gap-10'>
 
-              <div className="flex flex-col gap-3">
-                <h3>Giá thuê trung bình mỗi người</h3>
+              {/* <div className="flex flex-col gap-3">
+                <h3>Giám giá theo trung bình mỗi người</h3>
                 <InputNumber
                   placeholder="Nhập số tiền"
                   addonAfter="VND"
@@ -263,9 +300,9 @@ const RegisterInterpreters = (props) => {
                   formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                   parser={value => value.replace(/\$\s?|(,*)/g, '')}
                 />
-              </div>
+              </div> */}
               <div className="flex flex-col gap-3">
-                <h3>Giá thuê theo buổi</h3>
+                <h3>Giá thuê mỗi người / theo buổi</h3>
                 <InputNumber
                   placeholder="Nhập số tiền"
                   addonAfter="VND"
@@ -279,7 +316,7 @@ const RegisterInterpreters = (props) => {
 
 
               <div className="flex flex-col gap-3">
-                <h3>Giá thuê theo ngày</h3>
+                <h3>Giá thuê mỗi người / theo ngày</h3>
                 <InputNumber
                   placeholder="Nhập số tiền"
                   addonAfter="VND"
@@ -301,7 +338,7 @@ const RegisterInterpreters = (props) => {
             <h1 className="font-bold">
               Điều khoản dành cho hướng dẫn viên / phiên dịch viên khi tham gia hệ thống
             </h1>
-            <div className="flex flex-col shadow-md p-5 gap-3 mt-3 overflow-scroll h-[400px]">
+            <div className="flex flex-col shadow-md p-5 gap-3 mt-3 ">
               <span>
                 Khoản 11 Điều 3 Luật Du lịch 2017 định nghĩa hướng dẫn viên du lịch là người được cấp thẻ để hành nghề hướng dẫn du lịch. Hãy cùng tìm hiểu quy định liên quan đến hướng dẫn viên du lịch qua nội dung dưới đây.
               </span>
@@ -365,59 +402,94 @@ const RegisterInterpreters = (props) => {
             </div>
           </div>}
 
-
           {step === 4 && <div className={styles.price}>
             <h1 className="font-bold text-xl">
               Cung cấp hình ảnh cho minh chứng Văn bằng chứng chỉ của bạn
             </h1>
-            <div className="flex flex-row gap-4  w-full justify-between">
+            <div className="flex flex-row gap-4 w-full justify-between">
 
-              <div className="w-full mt-5">
-                <Upload
+              <div className="w-full mt-5 p-10">
+                <input
+                  id="uploadInput"
+                  type="file"
+                  className='uploadInput'
+                  style={{ display: 'none' }}
+                  onChange={(e) => handleChange(e)}
+                />
+                <Button className="w-fit px-0 pr-3" color="primary" endContent={<CameraOutlined />}>
+                  <label htmlFor="uploadInput" className='w-44'>
+                    Đính kèm ảnh
+                  </label>
+                </Button>
+                <div className="fllex flex-col gap-10 my-20 ">
+                  {imageList?.map((item, index) => (
+                    <div className="mt-3 w-full flex flex-row justify-between items-center border border-dashed boder-1 border-blue-600 rounded-lg p-4" >
+                      <div className="flex flex-row gap-5 items-center justify-start">
+                        <Image
+                          src={item?.url}
+                          alt="avatar"
+                          className="max"
+                          style={{ width: 50, height: 50 }}
+                          fallback="data:image/png;base64,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"
+                        />
+                        <span className="text-xl  text-blue-500 text-bold">{item?.name}</span>
+                      </div>
+
+                      <Button onClick={() => handleDeleteImg(item.name)} size='small' type="primary" danger>
+                        {t('Delete')}
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* <Upload
                   action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
                   listType="picture"
                   defaultFileList={[...fileList]}
                   className="w-full"
                 >
                   <Button icon={<UploadOutlined />}>Select your files</Button>
-                </Upload>
+                </Upload> */}
               </div>
             </div>
           </div>
           }
 
           {step === 5 && <div className={styles.price}>
-            <h1>
-              Gửi yêu cầu thanh công, admin đang duyệt yêu cầu của bạn.
-            </h1>
+            {loading ? <Spin></Spin> :
+              <h1>
+                Gửi yêu cầu thanh công, admin đang duyệt yêu cầu của bạn.
+              </h1>
+            }
           </div>
           }
 
           <div className={styles.btnFooter}>
-            {(step !== 0 && step < 5) && <Button type='default' style={{ marginTop: 20, height: 35, width: 80, background: 'transparent', color: '#111' }} size={'small'} onClick={handleBackStep} >Quay lại</Button>}
-            {(step < 4) && <Button type='primary'
+            {(step !== 0 && step < 5) &&
+              <Button
+                variant='light'
+                color='primary'
+                onClick={handleBackStep}
+              >Quay lại</Button>}
+            {(step < 4) &&
+              <Button
+                color='primary'
+                style={{
+                  height: 35, width: 100
+                }}
+                onClick={handleNextStep1}>Tiếp tục</Button>}
+            {step === 4 && <Button
+              color='success'
               style={{
                 height: 35, width: 100
               }}
-              size={'small'} onClick={handleNextStep1} className={styles.btnSubmit}>Tiếp tục</Button>}
-            {step === 4 && <Button type='primary'
-              style={{
-                height: 35, width: 100
-              }}
-              size={'small'} onClick={handleNextStep2} className={styles.btnSubmit}>Gửi yêu cầu</Button>}
-            {step === 6 && <Button type='primary'
-              style={{
-                height: 35, width: 100
-              }}
-              size={'small'} onClick={navigateHome} className={styles.btnSubmit}>Trang chủ</Button>}
+              disabled={imageList.length == 0}
+              onClick={handleNextStepSubmit} >Gửi yêu cầu</Button>}
+            {step === 6 &&
+              <Button color='secondary'
+                size={'small'} onClick={navigateHome} >Trang chủ</Button>}
           </div>
 
-
-          {/* <h1>Thêm lĩnh vực mới</h1>
-          <div className={styles.addCategory}>
-            <Input placeholder="Nhập tên lĩnh vực" />
-            <TextArea placeholder="Giải thích về lĩnh vực mới này ..." />
-          </div> */}
         </div>
       </main>
     </div>

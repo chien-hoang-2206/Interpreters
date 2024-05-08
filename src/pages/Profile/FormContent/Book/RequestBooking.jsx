@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Table, Input, Select, DatePicker, Avatar, Badge } from "antd";
 import "./Booking.css";
 import Constants from "../../../../utils/constants";
-import DropDownBookingRequest from "../../../../components/Dropdown/DropDownBookingRequest/DropDownBookingRequest";
 import Temp from "../../../../utils/temp";
 import BookingFactories from "../../../../services/BookingFactories";
 import { convertStringToNumber, getDate, getTime } from "../../../../utils/Utils";
+import DropDownBookingRequest from "../../../../components/Dropdown/DropDownBookingRequest/DropDownBookingRequest";
 
 const RequestBooking = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -14,8 +14,8 @@ const RequestBooking = () => {
   const [nameKOL, setNameKOL] = useState("");
   const fetchData = async () => {
     try {
-      // const response = await BookingFactories.getListRequestBookingForPGT(user?.id);
-      setBookingList(Temp.bookingRequest);
+      const response = await BookingFactories.getListRequestBookingForHint(user?.id);
+      setBookingList(response.data);
     } catch (error) {
       // Handle errors here
     }
@@ -46,39 +46,60 @@ const RequestBooking = () => {
         </div>
       ),
     },
-    {
-      title: "Ngày tạo",
-      dataIndex: "booking_date",
-      width: 150,
-      render: (text) => <div className="text-data">{text}</div>,
-    },
+    // {
+    //   title: "Ngày tạo",
+    //   dataIndex: "create_At",
+    //   width: 150,
+    //   render: (text) => <div className="text-data">{text}</div>,
+    // },
     {
       title: "Ngày booking",
-      dataIndex: "booking_date",
-      width: 140,
-      render: (text) => <div className="text-data">{text}</div>,
+      key: "date",
+      dataIndex: "date",
+      align: "left",
+      width: 160,
+      render: (text, data) => <div>{getDate(text, 1)}</div>,
     },
     {
-      title: "Thời Gian",
-      dataIndex: "timestamp",
+      title: "Thời gian",
+      key: "time_from",
+      dataIndex: "time",
+      align: "left",
+      width: 180,
+      // render: (text, data) => <div><span style={{ width: 160 }}>{getTime(data?.time_from)}</span> - {getTime(data.time_to)}</div>,
+      render: (text, data) => <div><span style={{ width: 160 }}>{text}</span></div>,
+    },
+    {
+      title: "Thể loại",
+      key: "date",
+      dataIndex: "type_travel",
+      align: "left",
       width: 200,
-      render: (text, data) => <div className="text-data">{data?.timestamp} - {data?.timeEnd}</div>,
+      render: (text, data) => <div>{text}</div>,
     },
     {
-      title: "Số tiền",
-      dataIndex: "money",
-      align: 'right',
-      width: 140,
-      render: (text) => <div className="text-data">{text}</div>,
+      title: "Số lượng người",
+      key: "date",
+      dataIndex: "quantity",
+      align: "left",
+      width: 160,
+      render: (text, data) => <div>{(text ?? 1)}</div>,
     },
     {
-      title: "Lĩnh Vực",
-      dataIndex: "categoryName",
-      align: 'center',
-      width: 120,
-      render: (text, data) => (
-        <Avatar alt={text} src={data?.categoryImage} width={20} height={20} />
-      ),
+      title: "Chi phí /người",
+      key: "date",
+      dataIndex: "price",
+      align: "left",
+      width: 160,
+      render: (text, data) => <div>{convertStringToNumber(text)}</div>,
+    },
+    {
+      title: "Tổng chi phí",
+      key: "date",
+      dataIndex: "cost",
+      align: "left",
+      width: 123,
+      render: (text, data) => <div>{convertStringToNumber(text)}</div>,
     },
     {
       title: "Tình trạng",
@@ -86,13 +107,13 @@ const RequestBooking = () => {
       align: "left",
       width: 150,
       render: (text, data) =>
-        (data.status === '4' || data.status === '5') ? (
+        (data.status === 4 || data.status === 5) ? (
           <Badge status="success" text="Hoàn thành" />
-        ) : data.status === '3' ? (
+        ) : data.status === 3 ? (
           <Badge status="error" text="Interpreters Đã từ chối" />
-        ) : data.status === '2' ? (
+        ) : data.status === 2 ? (
           <Badge status="processing" text="Interpreters Đã xác nhận" />
-        ) : data.status === '1' ? (
+        ) : data.status === 1 ? (
           <Badge status="warning" text="Chờ xác nhận" />
         ) : null,
     },
@@ -149,9 +170,9 @@ const RequestBooking = () => {
             pageSizeOptions: ["10", "20", "30"]
           }}
           dataSource={bookingList ?? []}
-          scroll={{
-            y: 570
-          }}
+          // scroll={{
+          //   y: 570
+          // }}
         />
       </div>
 

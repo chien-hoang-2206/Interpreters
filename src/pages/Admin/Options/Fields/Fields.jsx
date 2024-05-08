@@ -20,10 +20,13 @@ const Fields = () => {
     const [categoryUpdateImage, setcategotyUpdateImage] = useState()
     const [error, setError] = useState();
     const [showModalUpdate, setShowModalUpdate] = useState();
+    const [loading, setLoading] = useState(true);
 
     const fetchData = async (Keyword) => {
+        setLoading(true)
         const response = await CategoriesFactories.getListCategories(Keyword);
         setFields(response);
+        setLoading(false)
     };
 
     useEffect(() => {
@@ -240,6 +243,7 @@ const Fields = () => {
                 <Table
                     columns={columns}
                     dataSource={fields ?? []}
+                    loading={loading}
                     pagination={{
                         defaultPageSize: 10,
                         showSizeChanger: true,

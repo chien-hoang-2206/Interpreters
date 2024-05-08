@@ -7,13 +7,13 @@ import { Layout, Menu, Button } from "antd";
 import classes from './HomeAdmin.module.css'
 import Statistical from "./Options/Statistical/Statistical";
 import Title from "antd/es/typography/Title";
-import RequestPGT from "./Options/RequestPGT/RequestPGT";
-import HotPgtAdmin from "./Options/HotPgtAdmin/HotPgtAdmin";
+import RequestHint from "./Options/RequestHint/RequestHint";
 import AccountFactories from "../../services/AccountFactories";
 import { ToastNotiError } from "../../utils/Utils";
 import BannerPage from "./Options/BannerPage/BannerPage";
 import AccountInterpreters from "./Options/PGT/AccountInterpreters";
 import TouristDes from "./Options/TouristDes/TouristDes";
+import HotHintAdmin from "./Options/HotHintAdmin/HotHintAdmin";
 const { Sider } = Layout;
 
 const HomeAdmin = () => {
@@ -88,10 +88,10 @@ const HomeAdmin = () => {
             {selectedMenuItem === "1" && <AccountUser />}
             {selectedMenuItem === "2" && <AccountInterpreters />}
             {selectedMenuItem === "3" && <Booking />}
-            {selectedMenuItem === "4" && <HotPgtAdmin />}
+            {selectedMenuItem === "4" && <HotHintAdmin />}
             {selectedMenuItem === "5" && <Fields />}
             {selectedMenuItem === "9" && <TouristDes />}
-            {selectedMenuItem === "6" && <RequestPGT onReload={fetchApiList} />}
+            {selectedMenuItem === "6" && <RequestHint onReload={fetchApiList} />}
             {selectedMenuItem === "7" && <Statistical />}
             {selectedMenuItem === "8" && <BannerPage />}
           </Layout.Content>

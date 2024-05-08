@@ -4,7 +4,7 @@ import styles from "../content.module.scss";
 import styled from "styled-components";
 import { Button, Input, Select } from 'antd';
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons'
-import PgtFactories from "../../../services/PgtFatories";
+import HintFactories from "../../../services/HintFatories";
 import CategoriesFactories from "../../../services/CategoriesFatories";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -40,7 +40,7 @@ const ModalSearch = () => {
 
   const fetchData = async (keyword, category) => {
     try {
-      const response = await PgtFactories.getListPGT(20, keyword, category);
+      const response = await HintFactories.getListPGT(20, keyword, category);
       console.log("🚀 ~ fetchData ~ response:", response)
       setPgtList(response);
     } catch (error) {

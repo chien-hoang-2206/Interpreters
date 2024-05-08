@@ -4,13 +4,12 @@
   align-items: center;
   justify-content: center;
   width: 96%;
-  height: 90vh;
+  min-height: 60vh;
   margin: auto;
 }
 
 .container {
   min-width: 1300px;
-  height: 87vh;
   width: 100%;
   padding: 30px 10px;
   background: var(--base-on-background, #fff);

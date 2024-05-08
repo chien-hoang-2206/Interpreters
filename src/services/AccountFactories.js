@@ -30,7 +30,7 @@ const AccountFactories = {
       data: data
     });
   },
-  requestPgt: async (id, data) => {
+  requestHint: async (id, data) => {
     return ApiOperation.request({
       url: `${ApiConstants.Interpreters}/${id}`,
       method: "POST",

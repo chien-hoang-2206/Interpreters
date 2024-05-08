@@ -7,7 +7,7 @@ import Constants from "../../../utils/constants";
 import CategoriesFactories from "../../../services/CategoriesFatories";
 import AccountFactories from "../../../services/AccountFactories";
 import { ToastNoti, ToastNotiError } from "../../../utils/Utils";
-import PgtFactories from "../../../services/PgtFatories";
+import HintFactories from "../../../services/HintFatories";
 import axios from "axios";
 
 export default function FormProfileUser(props) {

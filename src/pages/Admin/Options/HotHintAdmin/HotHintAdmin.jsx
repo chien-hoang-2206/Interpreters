@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Button, Input, Select, Table } from "antd";
-import "./HotPgt.css";
-import PgtFactories from "../../../../services/PgtFatories";
+import "./styles.css";
+import HintFactories from "../../../../services/HintFatories";
 import StarRating from "../../../../components/start-rating/StarRating";
 import { ToastNoti, ToastNotiError, convertStringToNumber, partStringToNumber as parseStringToNumber } from "../../../../utils/Utils";
 import AccountFactories from "../../../../services/AccountFactories";
 
-const HotPgtAdmin = () => {
+const HotHintAdmin = () => {
   const [namePgt, setNamePgt] = useState("");
   const [typeSearch, setTypeSearch] = useState(10);
   const [hotHints, setHotHintsList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async (name, type) => {
     try {
-      const response = await PgtFactories.getListPGT(type, name);
+      setLoading(true)
+      const response = await HintFactories.getListPGT(type, name);
       setHotHintsList(response);
+      setLoading(false)
     } catch (error) {
+      setLoading(false)
       ToastNotiError();
     }
   };
@@ -93,9 +97,9 @@ const HotPgtAdmin = () => {
               border: '1px solod red',
               color: 'red'
             }}
-            onClick={() => record?.hot_pgt ? handleDeleteHotPgt(record) : handleAddHotPgt(record)}
+            onClick={() => record?.hot_hint ? handleDeleteHotPgt(record) : handleAddHotPgt(record)}
           >
-            {record?.hot_pgt ? 'Xóa nổi bật' : 'Thêm nổi bật'}
+            {record?.hot_hint ? 'Xóa nổi bật' : 'Thêm nổi bật'}
           </Button>
         </div>
     }
@@ -106,7 +110,7 @@ const HotPgtAdmin = () => {
   };
   const handleAddHotPgt = async value => {
     const data = {
-      hot_pgt: true
+      hot_hint: true
     }
     try {
       const response = await AccountFactories.requestUpdate(value?.id, data);
@@ -123,7 +127,7 @@ const HotPgtAdmin = () => {
   };
   const handleDeleteHotPgt = async value => {
     const data = {
-      hot_pgt: false
+      hot_hint: false
     }
     try {
       const response = await AccountFactories.requestUpdate(value?.id, data);
@@ -204,6 +208,7 @@ const HotPgtAdmin = () => {
               y: 440
             }
           }
+          loading={loading}
           pagination={{
             defaultPageSize: 8,
             showSizeChanger: false,
@@ -215,4 +220,4 @@ const HotPgtAdmin = () => {
   );
 };
 
-export default HotPgtAdmin;
+export default HotHintAdmin;

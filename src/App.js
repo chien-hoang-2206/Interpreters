@@ -6,10 +6,12 @@ import { CollapseProvider } from "./context/collapse.context";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { NotificationProvider } from "./context/Notification.context";
-import "./trans/i18n"; 
+import "./trans/i18n";
+import { NextUIProvider } from "@nextui-org/react";
 export default function App() {
   return (
-    <AuthProvider>
+    <NextUIProvider>
+      <AuthProvider>
         <NotificationProvider>
           <MessageProvider>
             <CollapseProvider>
@@ -29,6 +31,7 @@ export default function App() {
             </CollapseProvider>
           </MessageProvider>
         </NotificationProvider>
-    </AuthProvider >
+      </AuthProvider >
+    </NextUIProvider>
   );
 }

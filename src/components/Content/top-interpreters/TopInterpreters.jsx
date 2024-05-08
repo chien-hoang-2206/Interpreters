@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './styles.module.scss'
 import CardTopInterpreters from '../../card/CardTopInterpreters/CardTopInterpreters';
 import { useTranslation } from 'react-i18next';
+import { Card, CardBody, CardFooter, Image } from '@nextui-org/react';
 const TopInterpreters = () => {
     const { t } = useTranslation();
 
@@ -40,6 +41,8 @@ const TopInterpreters = () => {
                         );
                     })}
                 </div>
+
+               
             </div>
             {/* <div className={styles["cont ent-pagination"]}> */}
             {/* <Pagination /> */}

@@ -20,7 +20,6 @@ import { storage, uploadImage } from '../../../../firebase';
 import { v4 } from 'uuid';
 import AvatarCustom from '../../../../components/Avatar/Avatar';
 import { useDropzone } from 'react-dropzone';
-import IntroduceHint from '../../PageHintDetail/IntroduceKOL/IntroduceHint';
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {

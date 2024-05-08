@@ -5,20 +5,25 @@ import AvatarGroup from "../../../../components/image-group/AvatarGroup";
 import { ToastNoti, ToastNotiError, convertStringToNumber } from "../../../../utils/Utils";
 import AccountFactories from "../../../../services/AccountFactories";
 import { createNotification } from "../../../../services/ChatService";
-const RequestPGT = ({ onReload = () => { } }) => {
+const RequestHint = ({ onReload = () => { } }) => {
   const [dataList, setDataList] = useState([]);
   const [namePgt, setNamePgt] = useState("");
   const [typeSearch, setTypeSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const fetchApiList = async (value) => {
     try {
+      setLoading(true)
+
       const response = await AccountFactories.getListAccount(value, 30);
       if (response && response.data) {
         setDataList(response.data);
       } else {
         ToastNotiError()
       }
+      setLoading(false)
     } catch (error) {
+      setLoading(false)
       ToastNotiError()
     }
   };
@@ -100,7 +105,7 @@ const RequestPGT = ({ onReload = () => { } }) => {
                 Buổi:
               </span>
               <span>
-                {text ? convertStringToNumber(140000) : 20}
+                {convertStringToNumber(text.personal_price_session)}
               </span>
             </div>
           </span>
@@ -110,7 +115,7 @@ const RequestPGT = ({ onReload = () => { } }) => {
                 Ngày:
               </span>
               <span>
-                {text ? convertStringToNumber(190000) : 20}
+                {convertStringToNumber(text.personal_price_day)}
               </span>
             </div>
           </span>
@@ -129,7 +134,7 @@ const RequestPGT = ({ onReload = () => { } }) => {
                 Buổi:
               </span>
               <span>
-                {text ? convertStringToNumber(100000) : 20}
+                {convertStringToNumber(text.group_price_session)}
               </span>
             </div>
           </span>
@@ -138,7 +143,7 @@ const RequestPGT = ({ onReload = () => { } }) => {
               Ngày:
             </span>
             <span>
-              {text ? convertStringToNumber(170000) : 20}
+              {convertStringToNumber(text.group_price_day)}
             </span>
           </div>
           </span>
@@ -156,25 +161,34 @@ const RequestPGT = ({ onReload = () => { } }) => {
     },
     {
       title: 'Chứng chỉ',
-      dataIndex: 'age',
-      key: 'age',
+      dataIndex: 'photoList',
+      key: 'photoList',
       width: 170,
       align: 'center',
       sorter: (a, b) => a.age - b.age,
-      render: (text) =>
-        <div className="text-data flex flex-col gap-2 ">
-          <Image src={'https://duhocaumyuc.edu.vn/wp-content/uploads/2021/01/bang_diem_toeic.jpg'} />
-          <Image src={'https://pasal.edu.vn/upload_images/images/2023/tim_hieu_ve_bang_ielts-1.png'} />
-          <Image src={'https://gdvnedu.com/wp-content/uploads/2018/05/CC-HDV-1.jpg'} />
-        </div>,
+      render: (text) => {
+        return <div className="text-data flex flex-col gap-2 ">
+          {text?.map(item => (
+            <Image src={item?.url ?? ''} />
+          ))}
+        </div>
+      },
+    },
+    {
+      title: 'Địa điểm',
+      dataIndex: 'destination',
+      width: 230,
+      key: 'destination',
+      render: (text) => <div className="text-data">{text}</div>,
     },
     {
       title: "Tác vụ",
       key: "action",
       render: (_, record) => (
         <div className="btn-action-group flex flex-col gap-3" >
-          <Button style={{ marginRight: 10 }}
-            type='primary'
+          <Button
+            style={{ marginRight: 10 }}
+            className='btn'
             onClick={() => onAcceptRequest(record?.id)}
           >
             Chấp nhận
@@ -253,7 +267,7 @@ const RequestPGT = ({ onReload = () => { } }) => {
           onKeyDown={(e) => handleKeyDown(e)}
           onChange={(e) => handleOnChangeInput(e)} />
         <Button
-          type='default'
+          type='primary'
           onClick={handleReset}
         >
           Mặc định
@@ -268,7 +282,12 @@ const RequestPGT = ({ onReload = () => { } }) => {
       <div className="booking-table">
         <Table
           columns={columns}
+          loading={loading}
           dataSource={dataList}
+          scroll={
+            {
+              x: 1720,
+            }}
         />
       </div>
 
@@ -276,4 +295,4 @@ const RequestPGT = ({ onReload = () => { } }) => {
   );
 };
 
-export default RequestPGT;
+export default RequestHint;

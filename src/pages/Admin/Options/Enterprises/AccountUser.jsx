@@ -9,17 +9,22 @@ import AccountFactories from "../../../../services/AccountFactories";
 const AccountUser = () => {
   const { Search } = Input;
   const [userList, setUserList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchApiList = async (value) => {
+    setLoading(true)
     try {
       const response = await AccountFactories.getListAccount(value);
       if (response && response.data) {
         setUserList(response.data);
+
       } else {
         console.error("API response does not contain expected data:", response);
       }
+      setLoading(false)
     } catch (error) {
       console.error("Error while fetching API:", error);
+      setLoading(false)
     }
   };
   function handleSearch() {
@@ -35,11 +40,11 @@ const AccountUser = () => {
     fetchApiList();
   }, []);
 
-  function handleReload () {
+  function handleReload() {
     fetchApiList();
   }
   const [valueSearch, setValueSearch] = useState();
-  
+
   const columns = [
     {
       title: '#',
@@ -57,6 +62,14 @@ const AccountUser = () => {
       key: 'name',
       fixed: 'left',
     },
+    {
+      title: 'Email',
+      width: 140,
+      dataIndex: 'email',
+      key: 'email',
+      fixed: 'left',
+    },
+
     {
       title: 'Giớt tính',
       dataIndex: 'gender',
@@ -92,6 +105,14 @@ const AccountUser = () => {
       sorter: (a, b) => a.age - b.age,
     },
     {
+      title: 'Khu vực',
+      dataIndex: 'province',
+      key: 'age',
+      width: 70,
+      align: 'center',
+      sorter: (a, b) => a.age - b.age,
+    },
+    {
       title: 'SĐT',
       dataIndex: 'phone',
       width: 130,
@@ -120,6 +141,7 @@ const AccountUser = () => {
           }}
           onChange={(value) => onChangeSelectHandler(value, data?.id)}
           value={data?.flag}
+          disabled
           options={Constants.optionStatusAccount}
         />
     },
@@ -162,6 +184,7 @@ const AccountUser = () => {
         <Table
           columns={columns}
           dataSource={userList ?? []}
+          loading={loading}
           onChange={onChange}
           scroll={{
             y: 'calc(100vh - 215px)'

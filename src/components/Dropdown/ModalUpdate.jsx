@@ -8,7 +8,7 @@ import AccountFactories from '../../services/AccountFactories';
 import { ToastNoti } from '../../utils/Utils';
 import CategoriesFactories from '../../services/CategoriesFatories';
 
-const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler,updateSuccess = () =>{}, data, type = 'user' }) => {
+const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler, updateSuccess = () => { }, data, type = 'user' }) => {
     const [loading, setLoading] = useState(false);
     const [profile, setProfile] = useState({});
     useEffect(() => {
@@ -25,7 +25,7 @@ const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler,updateSuccess = () 
         };
         fetchData();
     }, []);
-    
+
 
     const optionCategory = fields?.map((field) => {
         return {
@@ -34,13 +34,13 @@ const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler,updateSuccess = () 
         };
     });
 
-    const inputChangeHandler = (event,name) => {
+    const inputChangeHandler = (event, name) => {
         setProfile((prevState) => {
             return {
                 ...prevState,
                 [name]: event.target.value,
             };
-        }); 
+        });
     };
 
     const onChangeCityHandler = (value) => {
@@ -78,14 +78,14 @@ const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler,updateSuccess = () 
             errMsg = "Vui lòng trạng thái tài khoản";
         } else if (formData.listGame?.lenght == 0) {
             errMsg = "Vui lòng chọn lĩnh vực hoạt động!";
-        } 
+        }
         if (errMsg) {
             toast.error(errMsg)
         }
         return res;
     };
 
-    async function onUpdate (event) {
+    async function onUpdate(event) {
         if (!validateFormData(profile)) return;
         setLoading(true);
         try {
@@ -96,6 +96,7 @@ const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler,updateSuccess = () 
                 email: profile?.email,
                 gender: profile?.gender,
                 address: profile?.address,
+                age: profile?.age,
                 phone: profile?.phone,
                 flag: profile?.flag,
                 province: profile?.province,
@@ -150,7 +151,7 @@ const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler,updateSuccess = () 
                                             className={classes['modal-update-col-input']}
                                             value={profile.first_name}
                                             name="first_name"
-                                            onChange={(e) => inputChangeHandler(e,'first_name')}
+                                            onChange={(e) => inputChangeHandler(e, 'first_name')}
                                         />
                                     </Row>
                                 </div>
@@ -165,7 +166,7 @@ const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler,updateSuccess = () 
                                             className={classes['modal-update-col-input']}
                                             value={profile.user_name}
                                             name="user_name"
-                                            onChange={(e) => inputChangeHandler(e,'user_name')}
+                                            onChange={(e) => inputChangeHandler(e, 'user_name')}
                                         />
                                     </Row>
                                 </div>
@@ -182,7 +183,7 @@ const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler,updateSuccess = () 
                                                 width: "100%",
                                             }}
                                             value={profile.gender}
-                                            onChange={(value) => onChangeSelectHandler(value,'gender')}
+                                            onChange={(value) => onChangeSelectHandler(value, 'gender')}
                                             options={Constants.optionSex}
                                         />
                                     </Row>
@@ -196,7 +197,7 @@ const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler,updateSuccess = () 
                                         <input
                                             placeholder="Số điện thoại"
                                             className={classes['modal-update-col-input']}
-                                            onChange={(e) => inputChangeHandler(e,'phone')}
+                                            onChange={(e) => inputChangeHandler(e, 'phone')}
                                             value={profile.phone}
                                             name="phone"
                                         />
@@ -230,12 +231,28 @@ const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler,updateSuccess = () 
                                         <input
                                             placeholder="Nhập tên"
                                             className={classes['modal-update-col-input']}
-                                            onChange={(e) => inputChangeHandler(e,'last_name')}
+                                            onChange={(e) => inputChangeHandler(e, 'last_name')}
                                             value={profile?.last_name}
                                             name="last_name"
                                         />
                                     </Row>
                                 </div>
+
+                                <div className={classes.formInfo}>
+                                    <Row>
+                                        <span>Tuổi:</span>
+                                    </Row>
+                                    <Row>
+                                        <input
+                                            placeholder="Tuổi"
+                                            className={classes['modal-update-col-input']}
+                                            onChange={(e) => inputChangeHandler(e, 'age')}
+                                            value={profile.age}
+                                            name="age"
+                                        />
+                                    </Row>
+                                </div>
+
                                 <div className={classes.formInfo}>
                                     <Row>
                                         <span>Email:</span>
@@ -245,26 +262,13 @@ const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler,updateSuccess = () 
                                             placeholder="Email"
                                             className={classes['modal-update-col-input']}
                                             value={profile.email}
-                                            onChange={(e) => inputChangeHandler(e,'email')}
+                                            onChange={(e) => inputChangeHandler(e, 'email')}
                                             name="email"
                                         />
                                     </Row>
                                 </div>
 
-                                <div className={classes.formInfo}>
-                                    <Row>
-                                        <span>Địa chỉ cụ thể:</span>
-                                    </Row>
-                                    <Row>
-                                        <input
-                                            placeholder="Địa chỉ cụ thể"
-                                            className={classes['modal-update-col-input']}
-                                            onChange={(e) => inputChangeHandler(e,'address')}
-                                            value={profile.address}
-                                            name="address"
-                                        />
-                                    </Row>
-                                </div>
+
 
                                 {type == 'Interpreters' && <div className={classes.formInfo}>
                                     <Row>
@@ -285,6 +289,8 @@ const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler,updateSuccess = () 
                                 </div>}
 
 
+
+
                                 <div className={classes.formInfo}>
                                     <Row>
                                         <span>Trạng thái:</span>
@@ -301,6 +307,22 @@ const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler,updateSuccess = () 
                                         />
                                     </Row>
                                 </div>
+
+                                <div className={classes.formInfo}>
+                                    <Row>
+                                        <span>Địa chỉ cụ thể:</span>
+                                    </Row>
+                                    <Row>
+                                        <input
+                                            placeholder="Địa chỉ cụ thể"
+                                            className={classes['modal-update-col-input']}
+                                            onChange={(e) => inputChangeHandler(e, 'address')}
+                                            value={profile.address}
+                                            name="address"
+                                        />
+                                    </Row>
+                                </div>
+
                             </Col>
                         </Row>
                     </Col>

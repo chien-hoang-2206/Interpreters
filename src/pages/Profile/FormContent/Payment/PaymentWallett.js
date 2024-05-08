@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styles from './Payment.module.scss'
-import { Button, Input, InputNumber, Modal, Row, Space, Table, message } from 'antd';
+import {  Input, InputNumber, Modal, Row, Space, Table, message } from 'antd';
 import { toast } from 'react-toastify';
 import Title from 'antd/es/typography/Title';
 import PaymentFactories from '../../../../services/PaymentFactories';
 import { AuthContext } from '../../../../context/auth.context';
 import { ToastNotiError, convertStringToNumber, getDate } from '../../../../utils/Utils';
 import { MoneyCollectTwoTone, WalletTwoTone } from '@ant-design/icons';
+import { Button } from '@nextui-org/react';
 const PaymentWallett = () => {
     const columns = [
         {
@@ -125,7 +126,7 @@ const PaymentWallett = () => {
                     </Space>
                     <Space direction="vertical">
 
-                        <Button style={{ width: 170 }} onClick={showModal} type="primary" icon={<WalletTwoTone width={70} />} size={'large'} >
+                        <Button color='primary' style={{ width: 170 }} onClick={showModal} type="primary" icon={<WalletTwoTone width={70} />} size={'large'} >
                             <span>
                                 Nạp tiền
                             </span>

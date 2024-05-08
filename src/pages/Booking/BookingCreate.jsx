@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "./Booking.module.css";
-import { Modal, DatePicker, Form, Select, Input, TimePicker, Space, Button, Radio } from "antd";
-import TextArea from "antd/es/input/TextArea";
+import { Modal, Form, Radio, DatePicker } from "antd";
 import { ToastNoti, ToastNotiError, convertStringToNumber } from './../../utils/Utils';
 import { toast } from "react-toastify";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
@@ -11,41 +10,50 @@ import BookingFactories from "../../services/BookingFactories";
 import moment from "moment";
 import dayjs, { Dayjs } from "dayjs";
 import { createNotification } from "../../services/ChatService";
+import { Button, Input } from "@nextui-org/react";
+import { useTranslation } from "react-i18next";
+import TextArea from "antd/es/input/TextArea";
 
 const BookingCreate = (props) => {
   const user = JSON.parse(localStorage.getItem("user"));
-  const pgt = props.kol;
+  const hint = props.data;
   const onCloseModal = () => {
     props.onCancelOpenHandler();
   };
+  const { t } = useTranslation()
+  const [form] = Form.useForm();
+  const watchtypeTravel = Form.useWatch('typeTravel', form);
+  const watchtNumberPerson = Form.useWatch('numberPerson', form);
+  const watchtDateBooking = Form.useWatch('dateBooking', form);
+  const watchtTimeBooking = Form.useWatch('timeBooking', form);
+  const watchtCost = Form.useWatch('Cost', form);
+  const watchtPrice = Form.useWatch('price', form);
+
+
+  useEffect(() => {
+    if (parseInt(watchtypeTravel) == 1 && watchtNumberPerson < 1) {
+      form.setFieldValue('numberPerson', 2)
+    }
+  }, [watchtNumberPerson, watchtypeTravel]);
+
+  useEffect(() => {
+    if (parseInt(watchtypeTravel) == 1 && watchtNumberPerson && watchtDateBooking) {
+      const basePrice = parseInt(watchtTimeBooking) == 3 ? hint?.price?.group_price_day : hint?.price?.group_price_session
+      const newValue = watchtNumberPerson * basePrice
+      form.setFieldValue('Cost', parseInt(newValue))
+      form.setFieldValue('price', parseInt(basePrice))
+    }
+    else if (parseInt(watchtypeTravel) == 2) {
+      const basePrice = parseInt(watchtTimeBooking) == 7 ? hint?.price?.personal_price_day : hint?.price?.personal_price_session
+      const newValue = 1 * basePrice
+      form.setFieldValue('price', parseInt(basePrice))
+      form.setFieldValue('Cost', parseInt(newValue))
+    }
+  }, [watchtypeTravel, watchtNumberPerson, watchtTimeBooking, watchtDateBooking]);
+
 
   const [errorMessage, setErrorMessage] = useState('');
   const [errorDate, setErrorDate] = useState(false);
-  const [typeBooking, setTypeBooking] = useState();
-  const [typeTime, setTypeTime] = useState();
-  const [timeBooking, setTimeBooking] = useState(1);
-  const [dateBooking, setDateBooking] = useState();
-  const [rangeTimeBooking, setRangeTimeBooking] = useState();
-
-  const [note, setNote] = useState();
-  const [priceTotalShow, setPriceShow] = useState(convertStringToNumber(parseInt(pgt?.price)));
-  const [priceTotal, setPrice] = useState();
-  useEffect(() => {
-    const newTime = dayjs().startOf('day').add(7, 'hour');
-    const newTimeTo = dayjs().startOf('day').add(22, 'hour');
-    if (typeTime === 1) {
-      const rangeTimeBooking = [
-        newTime,
-        newTimeTo
-      ]
-      setRangeTimeBooking(rangeTimeBooking)
-    }
-  }, [typeTime])
-  useEffect(() => { setDateBooking(dayjs()) }, [])
-  useEffect(() => {
-    setPriceShow(convertStringToNumber(parseInt(pgt?.price) * timeBooking))
-    setPrice(pgt?.price * timeBooking)
-  }, [pgt?.price, timeBooking])
 
   const checkDateBooking = (value) => {
     setErrorDate(false);
@@ -72,98 +80,79 @@ const BookingCreate = (props) => {
     }
   };
 
-  async function checkTimePgt() {
-    const data = {
-      pgtId: pgt?.id,
-      date: dateBooking,
-      timeStart: rangeTimeBooking[0]?.$d,
-      timeEnd: rangeTimeBooking[1]?.$d,
-    }
-    const response = await BookingFactories.checkrequestTimeBooking(data);
-    if (response.status === 200) {
-    }
-    else if (response.status === 201) {
-      setErrorMessage(response?.messsageError);
-    }
-  }
-
-  useEffect(() => {
-    if (rangeTimeBooking) {
-      checkTimePgt();
-      const newTime = rangeTimeBooking[1]?.$H - rangeTimeBooking[0]?.$H;
-      const startTime = rangeTimeBooking[0]?.$d;
-      const timeCurrent = new Date();
-      if (startTime < timeCurrent) {
-        setErrorMessage('Thời gian bắt đầu phải là thời gian trong tương lai.');
-      }
-      else
-        if (newTime === 0) {
-          setErrorMessage('Vui lòng chọn thời gian thuê lớn hơn 1 giờ.')
-        }
-        else {
-          setTimeBooking(newTime);
-          setErrorMessage('')
-        }
-    }
-  }, [rangeTimeBooking])
-
 
   const requestBooking = async (data) => {
     try {
-      // const response = await BookingFactories.requestBooking(data);
-      // if (response.status === 200) {
-      //   createNotification(data?.pgtId, 1,
-      //     response?.data[0].id, "Bạn có yêu cầu booking mới",
-      //     "Vui lòng xác nhận yêu cầu booking trong vòng 5 phút.",
-      //     data?.userId,
-      //     data?.pgtId
-      //   );
-      //   toast.success('Tạo lượt booking thành công, Interpreters sẽ phàn hồi lại trong 5 phút.',
-      //   );
-      //   props.onCancelOpenHandler();
-      // }
-      // else if (response.status === 201) {
-      //   toast.error(response?.messsage);
-      //   setErrorMessage(response?.messsageError);
-      // }
-      // else if (response.status === 220) {
-      //   toast.error(response?.message);
-      //   navigator('/setting/4')
-      // }
-      // else {
-      //   // toast.error('Hệ thống lỗi, vui lòng thử lại sau')
-      // }
+      const response = await BookingFactories.requestBooking(data);
+      if (response.status === 200) {
+        // createNotification(data?.hint_id, 1,
+        //   response?.data[0].id, "Bạn có yêu cầu booking mới",
+        //   "Vui lòng xác nhận yêu cầu booking trong vòng 5 phút.",
+        //   data?.userId,
+        //   hint?.id
+        // );
+        toast.success('Tạo lượt booking thành công, Interpreters sẽ phàn hồi lại trong 5 phút.',
+        );
+        props.onCancelOpenHandler();
+      }
+      else if (response.status === 201) {
+        ToastNotiError(response?.message);
+        setErrorMessage(response?.messsageError);
+      }
+      else if (response.status === 220) {
+        toast.error(response?.message);
+        navigator('/setting/4')
+      }
+      else {
+        // toast.error('Hệ thống lỗi, vui lòng thử lại sau')
+      }
     } catch (error) {
-      // toast.error('Hệ thống lỗi, vui lòng thử lại sau')
+      toast.error('Hệ thống lỗi, vui lòng thử lại sau')
     }
   };
   const navigator = useNavigate();
-  const onSubmit = (value) => {
-    ToastNoti()
-    // if (user?.id === pgt?.id) {
-    //   ToastNotiError('Không thể tự tạo booking cho bản thân')
-    //   return;
-    // }
-    // else {
-    //   const data = {
-    //     userId: user?.id,
-    //     pgtId: pgt?.id,
-    //     price: parseInt(priceTotal),
-    //     date: dateBooking,
-    //     timeStart: rangeTimeBooking[0]?.$d,
-    //     timeEnd: rangeTimeBooking[1]?.$d,
-    //     note: note,
-    //   }
-    //   requestBooking(data);
-    // }
+  const onSubmit = (data) => {
+    let newData = {
+      userId: user.id,
+      hintId: hint.id,
+      date: data.dateBooking,
+      category: data.category ?? 2,
+      cost: data.Cost,
+      quantity: parseInt(watchtNumberPerson) ?? 1,
+      price: watchtPrice ? watchtPrice : data.Cost,
+      destination_id: parseInt(hint.destination_id),
+      destination: hint.destination,
+      note: data.note,
+      typeTravel: parseInt(data.typeTravel) == 1 ? t('travelGroup') : t('travelOlone'),
+    }
+    if (parseInt(data.timeBooking) == 3) {
+      newData.time = t('hire_morning')
+    }
+    if (parseInt(data.timeBooking) == 4) {
+      newData.time = t('hire_afternoon')
+    }
+    if (parseInt(data.timeBooking) == 7) {
+      newData.time = t('hire_day')
+    }
+    if (user?.id === hint?.id) {
+      ToastNotiError('Không thể tự tạo booking cho bản thân')
+      return;
+    }
+    else {
+      requestBooking(newData);
+    }
   };
 
 
+  const disabledDate = (current) => {
+    // Can not select days before today and today
+    return current && current < dayjs().endOf('day');
+  };
   return (
     <Modal
-      width={600}
       open={props.open}
       title="Tạo lượt thuê"
+      width={800}
       destroyOnClose={true}
       onCancel={onCloseModal}
       footer=""
@@ -171,35 +160,46 @@ const BookingCreate = (props) => {
 
       <div className={classes["modal-booking-create"]}>
         <Form
-          name="basic"
           labelAlign='left'
-          labelCol={{ span: 5 }}
-          wrapperCol={{ span: 19 }}
-          style={{ maxWidth: 600 }}
+          labelCol={{ span: 7 }}
+          wrapperCol={{ span: 17 }}
+          form={form}
           initialValues={{ remember: true }}
           autoComplete="off"
           onFinish={onSubmit}
         >
-          <Form.Item label="Tên" >{pgt.firstName} {pgt?.user_name}</Form.Item>
-          <Form.Item label="Dạng" name='typeTravel111'>
-            <Radio.Group onChange={(value) => setTypeBooking(value?.target?.value)} value={typeBooking}>
+          <Form.Item label="Phiên dịch viên" >{hint.firstName} {hint?.user_name}</Form.Item>
+          <Form.Item label="Địa điểm du lịch" >{hint.destination}</Form.Item>
+
+
+          <Form.Item label="Dạng" name='typeTravel'>
+            <Radio.Group
+              defaultValue={2}
+            >
               <Radio value={1}>Du lịch theo nhóm</Radio>
               <Radio value={2}>Du lịch cá nhân</Radio>
             </Radio.Group>
           </Form.Item>
 
 
-          <Form.Item label="Số người" name='numberPerson'>
-            <Input
-              style={{ width: '100%', textAlign: 'right', }}
-              type="number"
-              min={parseInt(typeBooking) === 1 ? 2 : 1}
-              max={parseInt(typeBooking) === 2 && 1}
-            />
-          </Form.Item>
-
-          <Form.Item label="Dạng Thuê" name='typeTravel2'>
+          {parseInt(watchtypeTravel) == 1 &&
+            <Form.Item
+              label="Số người" name='numberPerson'
+              rules={[
+                { required: true, message: 'Bắt buộc chọn số lượng người' },
+                { validator: checkDateBooking },]}
+            >
+              <Input
+                style={{ width: '100%', textAlign: 'right', }}
+                type="number"
+                value={parseInt(watchtTimeBooking) === 2 && 1}
+                min={2}
+              />
+            </Form.Item>
+          }
+          <Form.Item label="Thời gian thuê" name='timeBooking'>
             <Radio.Group
+              defaultValue={3}
             // onChange={(value) => setTypeTime(value?.target?.value)}
             // value={}
             >
@@ -218,13 +218,12 @@ const BookingCreate = (props) => {
             <DatePicker
               placeholder="Chọn ngày"
               mode='date'
-              onChange={(e) => setDateBooking(e)}
-              value={dateBooking}
+              disabledDate={disabledDate}
               style={{ width: '100%' }} />
           </Form.Item>
 
 
-          <Form.Item label="Thời gian" name="timefrom"
+          {/* <Form.Item label="Thời gian" name="timefrom"
           // rules={[{ required: true, message: 'Bắt buộc chọn giờ' }]}
           >
             <Space.Compact block >
@@ -237,35 +236,42 @@ const BookingCreate = (props) => {
               />
             </Space.Compact>
             {errorMessage !== '' && <span style={{ color: 'red' }}> {errorMessage}</span>}
-          </Form.Item>
+          </Form.Item> */}
 
-          <Form.Item label="Tổng tiền">
-            <Input
-              style={{ width: '100%', textAlign: 'right', }}
-              value={priceTotalShow}
-            />
-          </Form.Item>
+
           <Form.Item
             label="Ghi chú"
-            name="mota"
+            name="note"
           >
             <TextArea
               rows={2}
+              radius="sm"
               placeholder="Nhập lời nhắn"
-              onChange={(e) => setNote(e.target.value)}
-              value={note}
             />
+          </Form.Item>
+          {parseInt(watchtypeTravel) == 1 &&
+            <Form.Item label="Đơn giá cho một người" name='price'>
+              <div className="text-bold text-right text-2xl text-blue-400">{convertStringToNumber(watchtPrice)}</div>
+            </Form.Item>
+          }
+
+          <Form.Item label="Tổng tiền" name='Cost'>
+
+            <div className="text-bold text-right text-2xl text-blue-400">{convertStringToNumber(watchtCost)}</div>
             <div style={{ display: 'flex', gap: 20, float: 'right', marginTop: 20 }}>
-              <Button type="link" htmlType="button" onClick={onCloseModal}>
-                Hủy
+              <Button variant='light' htmlType="button" onClick={onCloseModal}>
+                {t('cancel')}
               </Button>
-              <Button type="primary" htmlType="submit"
+              <Button
+                color="primary"
+                type="submit"
               // disabled={((errorMessage || errorDate) ? true : false)}
               >
-                Submit
+                {t('create_booking')}
               </Button>
             </div>
           </Form.Item>
+
 
         </Form>
       </div>

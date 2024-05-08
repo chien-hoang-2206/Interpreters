@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './CardType.module.scss'
 import { useNavigate } from 'react-router-dom';
-const CardType = ({ id, name = 'game', background }) => {
+import { Button, Image } from '@nextui-org/react';
+const CardType = ({ id, name = 'game', image, background }) => {
     const navigator = useNavigate()
     function RedirectToCategory(id) {
         navigator(`/field/${id}`);
@@ -23,14 +24,11 @@ const CardType = ({ id, name = 'game', background }) => {
             break;
     }
     return (
-        <div onClick={() => RedirectToCategory(id)} className={styles.cardType} style={{
-            background: backgroundT,
-            //  background: `url(${backgroundT}) center center no-repeat` 
-        }}>
-            <p className={styles}>
-                {name}
-            </p>
-        </div>
+        <Button onClick={() => RedirectToCategory(id)} style={{ background: '#fff !important'}} className=' rounded-lg flex flex-col w-[130px] h-[165px] bg-[#fff]'>
+            <Image width={120} height={145} src={image} />
+            <span className='font=bold text-xl '> {name.slice(16)}</span>
+        </Button>
+
     );
 };
 

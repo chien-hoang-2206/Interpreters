@@ -5,14 +5,14 @@ import classes from "./Form.module.css";
 import Message from "../../../components/UI/Message/Message";
 import ImageSlider from "../../../components/UI/ImageSlider/ImageSlider";
 import { GenderOptions } from "../../../utils/Enums";
-import PgtFactories from "../../../services/PgtFatories";
+import HintFactories from "../../../services/HintFatories";
 import AccountFactories from "../../../services/AccountFactories";
 import { ToastNoti, ToastNotiError } from "../../../utils/Utils";
 import Constants from "../../../utils/constants";
 import CategoriesFactories from "../../../services/CategoriesFatories";
 import axios from "axios";
 
-export default function FormProfilePgt(props) {
+export default function FormProfileHint(props) {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const [profile, setProfile] = useState();
   const [fields, setFields] = useState([]);
@@ -32,11 +32,11 @@ export default function FormProfilePgt(props) {
 
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   const response = await PgtFactories.getPGTDetail(user?.id);
-    //   setProfile(response[0]);
-    // };
-    // fetchData();
+    const fetchData = async () => {
+      const response = await HintFactories.getPGTDetail(user?.id);
+      setProfile(response[0]);
+    };
+    fetchData();
   }, [user?.id]);
 
   const inputChangeHandler = (event, name) => {

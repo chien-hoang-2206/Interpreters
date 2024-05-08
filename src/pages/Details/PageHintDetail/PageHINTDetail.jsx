@@ -1,66 +1,48 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import IntroduceHint from "./IntroduceKOL/IntroduceKOL";
 import { AuthContext } from "../../../context/auth.context";
 import styles from './HomeDetails.module.scss'
 import { CollapseContext } from "../../../context/collapse.context";
 import CardType from "../../../components/catgegory/CardType";
 import Feedback from "../../../components/Feedback/Feedback";
-import { Button, Pagination, Tabs } from 'antd';
-import AvatarCustom from "../../../components/Avatar/Avatar";
-import StarRating from "../../../components/start-rating/StarRating";
-import BookingCreate from "../../Booking/BookingCreate";
-import PgtFactories from "../../../services/PgtFatories";
+import { Carousel, Pagination } from 'antd';
+import HintFactories from "../../../services/HintFatories";
 import { toast } from "react-toastify";
 import { convertStringToNumber, getDate } from "../../../utils/Utils";
-import Temp from "../../../utils/temp";
+import { Avatar, Button, Image, Spacer, Spinner, Textarea, image } from "@nextui-org/react";
+import BoxCustom from "../../../components/Box/BoxCustom";
+import { useTranslation } from "react-i18next";
+import { StarFilled } from "@ant-design/icons";
+import HintFeedback from "./HintFeedback";
+import BookingCreate from "../../Booking/BookingCreate";
 
 const PageInterpreterDetail = () => {
   const { user } = useContext(AuthContext);
   const { id } = useParams();
-  const [pgtInfo, setPgtInfo] = useState();
+  const [hintInfo, setHintInfo] = useState();
   const navigate = useNavigate();
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false);
-  const [statusPGT, setStatus] = useState("");
+  const [statusHint, setStatusHint] = useState("");
   const { isCollapse } = useContext(CollapseContext);
   const [dataFeedback, setDataFeedback] = useState();
   const [rate, setRate] = useState();
+  const [loading, setLoading] = useState();
 
-  async function fetchFeedbackData(id) {
-    try {
-      // const resp = await PgtFactories.getPGTFeedbackList(id);
-      const resp = {
-        status: 200,
-        data: Temp.feedbackData
-      }
-      if (resp.status === 200) {
-        setDataFeedback(resp.data);
-        setRate(resp.rate)
-      }
-    } catch (error) {
-
-    }
-  }
-
-  useEffect(() => {
-    if (id) {
-      fetchFeedbackData(id);
-    }
-  }, [id])
-
-  const onCancelOpenHandler = () => {
-    setOpen(false);
-  };
 
   useEffect(() => {
     window.scroll(0, 0)
     const fetchData = async () => {
       try {
-        const response = await PgtFactories.getPGTDetail(id);
-        setPgtInfo(response[0]);
-        setStatus(response[0].status);
+        setLoading(true)
+        const response = await HintFactories.getPGTDetail(id);
+        setHintInfo(response[0]);
+        setStatusHint(response[0].status);
+        setLoading(false)
+
       } catch (error) {
         toast.error('Hệ thống lỗi, vui lòng thử lại sau')
+        setLoading(false)
         // Handle errors here
       }
     };
@@ -70,24 +52,25 @@ const PageInterpreterDetail = () => {
 
   const checkStatus = (bookings, user, kol) => {
     if (!user) {
-      setStatus("GUEST");
+      setStatusHint("GUEST");
     } else if (kol.userId === user.id) {
-      setStatus("ME");
+      setStatusHint("ME");
     } else if (
       bookings.findIndex(
         (booking) => booking.user.id === user.id && booking.status === "PENDING"
       ) !== -1
     ) {
-      setStatus("PENDING");
+      setStatusHint("PENDING");
     } else if (
       bookings.findIndex(
         (booking) =>
           booking.user.id === user.id && booking.status === "ACCEPTED"
       ) !== -1
     ) {
-      setStatus("ACCEPTED");
-    } else setStatus("BOOK");
+      setStatusHint("ACCEPTED");
+    } else setStatusHint("BOOK");
   };
+
 
 
   const bookingHandler = () => {
@@ -101,8 +84,8 @@ const PageInterpreterDetail = () => {
     navigate(`/chat`, {
       state: {
         chatId: id,
-        toUserAvatar: pgtInfo?.avatar,
-        toUserName: pgtInfo?.user_name,
+        toUserAvatar: hintInfo?.avatar,
+        toUserName: hintInfo?.user_name,
       }
     })
   };
@@ -112,8 +95,8 @@ const PageInterpreterDetail = () => {
   };
 
   const onRedirect = () => {
-    const booking = pgtInfo.bookings.find(
-      (booking) => booking.status === statusPGT && booking.user.id === user.id
+    const booking = hintInfo.bookings.find(
+      (booking) => booking.status === statusHint && booking.user.id === user.id
     );
     if (booking) {
       navigate(`/bookings/${booking.id}`);
@@ -123,7 +106,7 @@ const PageInterpreterDetail = () => {
   const renderCategopryGame = () => {
     return (
       <>
-        {pgtInfo?.listgame?.map((item, index) => (
+        {hintInfo?.listgame?.map((item, index) => (
           <CardType
             key={index}
             id={item.id}
@@ -160,130 +143,228 @@ const PageInterpreterDetail = () => {
     )
   };
 
-  const items = [
-    {
-      key: '1',
-      label: 'Giới thiệu',
-      children: <IntroduceHint introduction={pgtInfo?.introduction} />,
-    },
-    {
-      key: '2',
-      label: 'Đánh giá',
-      children: renderFeedBack(),
-    },
-    {
-      key: '3',
-      label: 'Khoảnh khắc',
-      children: renderFeedBack(),
-    },
-  ];
 
 
   return (
     <>
-      <main className={styles["main-details"]} >
-        {open === true &&
-          <BookingCreate
-            kol={pgtInfo ?? ''}
-            onCancelOpenHandler={onCancelOpenHandler}
-            open={open}
-          />
-        }
-        <div
-          className={`${styles["container"]} ${styles[isCollapse ? "isCollapse" : '']}  `}
-        >
+      {open === true &&
+        <BookingCreate
+          data={hintInfo ?? ''}
+          onCancelOpenHandler={()=> setOpen()}
+          open={open}
+        />
+      }
+      <div className="py-10 w-full flex flex-col justify-center items-center">
+        <div className="w-full flex flex-col justify-center items-center min-h-[500px]">
+          {loading ? <Spinner /> :
+            <div className="flex flex-row justify-between items-start gap-5">
+              <div className="w-[220] flex flex-col justify-start gap-5 items-center">
+                <BoxCustom
+                  alignTitle='center'
+                  description={
+                    <>
+                      <div className='flex flex-col w-[300px]'>
+                        <div className="flex px-4 py-2 w-full flex-col gap-4 justify-center items-center">
 
-          <div className={styles.profile}>
-            <div className={styles.stickyProfile}>
-              <div className={styles.profileContainer}>
-                <AvatarCustom
-                  avatar={pgtInfo?.avatar ?? ''}
-                  photoList={pgtInfo?.listImage ?? ''}
+                          <div className="flex-shrink-0">
+                            <Avatar
+                              src={hintInfo?.avatar}
+                              alt=""
+                              style={{
+                                width: '250px',
+                                height: '300px',
+                              }}
+                              className="object-cover w-full h-full rounded-lg"
+                            />
+                          </div>
+                          <div className="flex flex-col flex-start w-full gap-2">
+                            <span className='font-bold '>
+                              Họ và Tên: {hintInfo?.first_name} {hintInfo?.last_name}
+                            </span>
+                            <span className='font-bold  '>
+                              {t('gender')}: {hintInfo?.gender === 1 ? t('female') : t('male')}
+                            </span>
+                            <span className='font-bold  '>
+                              Tuổi: {hintInfo?.age}
+                            </span>
+                            <span className='font-bold text-2xl text-center flex flex-col gap-2 text-blue2'>
+                              <Button color='success' style={{ color: 'white' }} disabled>
+                                {statusHint === 1 ? 'Đang làm việc' : 'Đang tạm nghỉ'}
+                              </Button>
+                              <Button onClick={() => bookingHandler()} className="bg-gradient-to-tr from-pink-300 to-blue-700 text-white shadow-lg">
+                                Đặt lịch
+                              </Button>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </>}
                 />
+
+
+                <BoxCustom
+                  title='Giá dịch vụ'
+                  description={
+                    <>
+                      <div className='mt-[-30px] flex flex-col w-[300px]'>
+                        <div className="flex w-full flex-col gap-4 justify-center items-center">
+                          <div className="flex flex-col flex-start w-full gap-2">
+                            <ul className='font-bold ' >
+                              Cá nhân
+                              <li className='ml-2 text-gray-500 flex justify-between'>
+                                <span>
+                                  Theo buổi:
+                                </span>
+                                <span className=" font-medium  text-yellow-400">
+                                  {convertStringToNumber(hintInfo?.price?.personal_price_session)}
+                                </span>
+                              </li>
+                              <li className='text-gray-500  ml-2  flex justify-between'>
+                                <span>
+                                  Theo ngày:
+                                </span>
+                                <span className=" font-medium  text-yellow-400">
+                                  {convertStringToNumber(hintInfo?.price?.personal_price_day)}
+                                </span>
+                              </li>
+                            </ul>
+
+                            <ul className='font-bold ' >
+                              Theo nhóm
+                              <li className='text-gray-500 ml-2  flex justify-between'>
+                                <span>
+                                  Theo buổi:
+                                </span>
+                                <span className=" font-medium  text-yellow-400">
+                                  {convertStringToNumber(hintInfo?.price?.group_price_session)}/{t('personal')}
+                                </span>
+                              </li>
+                              <li className='text-gray-500  ml-2 flex justify-between'>
+                                <span>
+                                  Theo ngày:
+                                </span>
+                                <span className=" font-medium ml-2 text-yellow-400">
+                                  {convertStringToNumber(hintInfo?.price?.group_price_day)}/{t('personal')}
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </>}
+                />
+
+
               </div>
 
-              <div className={styles.statusInfo}>
-                <div className={`${styles.boxStatus}   ${styles[statusPGT === 2 ? 'Pause' : '']}`}>
-                  <div className={`${styles.textStatus}   ${styles[statusPGT === 2 ? 'Pause' : '']}`}>
-                    {statusPGT === 1 ? 'Đang làm việc' : 'Đang tạm nghỉ'}
+              <div className="w-[800px] flex flex-col gap-14 justify-center items-center">
+
+                <div className="flex flex-col justify-start w-full gap-5 ">
+                  <div className="flex flex-col justify-start w-full ">
+                    <BoxCustom
+                      alignTitle='center'
+                      title='Tổng quan'
+                      description={
+                        <div className="flex flex-row justify-around w-full p-5 pt-0" >
+                          <div className="flex flex-col gap-1 w-44"  >
+                            <span className="font-bold text-xl text-[#354052]">LƯỢT THUÊ</span>
+                            <span className='font=bold text-xl'>{dataFeedback?.length ?? 0}</span>
+                          </div>
+                          <div className="flex flex-col gap-1 w-60"  >
+                            <span className="font-bold text-xl text-[#354052]">TỶ LỆ HOÀN THÀNH</span>
+                            <span className='font=bold text-xl'>{parseInt(rate ?? 100) ?? ''}%</span>
+                          </div>
+                          <div className="flex flex-col gap-1 w-44"  >
+                            <span className="font-bold text-xl text-[#354052]">ĐÁNH GIÁ</span>
+                            <span className='font=bold text-xl mr-1'>{hintInfo?.star ?? 0}
+                              <StarFilled className='text-yellow-500 ml-1' />
+                            </span>
+                          </div>
+                        </div>
+                      }
+                    />
                   </div>
-                </div>
-                {/* <span className={styles.dateFrom}>Ngay tham gia: 22/06/2023</span> */}
-              </div>
-            </div>
 
-            <div className={styles.contact}>
-              <div className={styles.stickyBox}>
-                <div className={styles.boxContainer}>
-                  <p>{convertStringToNumber(pgtInfo?.price)}/h</p>
-                  <div className={styles['rateting-style']}>
-                    <StarRating starCount={pgtInfo?.star} />
-                    <span>{pgtInfo?.countComment} Đánh giá</span>
+
+
+                  <div>
+                    {/* <span className="text-3xl text-blue font-bold"> Các dịch vụ</span> */}
+                    <div className="flex flex-col justify-start w-full">
+                      <BoxCustom
+                        title='Các ngôn ngữ phiên dịch'
+                        description={
+                          <div className="flex flex-wrap gap-12 p-5 pt-0 justify-center items-center bg-[#fff]">
+                            {hintInfo?.listgame?.map((item, index) => (
+                              <CardType
+                                key={index}
+                                image={item.image}
+                                id={item.id}
+                                name={item.name}
+                                background={item.image}
+                              />
+                            ))}
+                          </div>
+                        }
+                      />
+                    </div>
                   </div>
-                  <div className={styles['text-center']}>
-                    <Button type="primary" size={'large'} onClick={bookingHandler} block>
-                      Thuê
-                    </Button>
-                    {/* <Button type="primary" size={'large'} onClick={handleClickChat} block  >
-                      Chat
-                    </Button> */}
+
+                  <div>
+                    {/* <span className="text-3xl mb-3 text-blue font-bold"> Giới thiệu</span> */}
+                    <BoxCustom
+                      title='Giới thiệu'
+                      alignTitle='center'
+                      description={
+                        <div className="whitespace-pre-line min-h-32" >
+                          {hintInfo?.introduction}
+                        </div>
+                      }
+                    />
                   </div>
+
+                  <div className="carousel-custom ">
+                    <BoxCustom
+                      title='Hình ảnh tại nơi làm việc'
+                      description={
+                        <div className="flex flex-wrap gap-12 p-5 pt-0 justify-center items-center bg-[#fff]">
+                          <Carousel
+                            arrows={true}
+                            style={{ width: 730 }}
+                          >
+                            {hintInfo?.listImage?.map((item, index) => (
+                              <>
+                                <Image
+                                  key={index}
+                                  src={item?.link ?? ''}
+                                  style={{ width: 730, objectFit: 'fill' }}
+                                />
+                              </>
+                            ))
+                            }
+                          </Carousel>
+                        </div>
+                      }
+                    />
+                  </div>
+
+                  <div className="w-full">
+                    <BoxCustom
+                      alignTitle='center'
+                      title='Đánh giá'
+                      description={
+                        <>
+                          {renderFeedBack}
+                        </>
+                      }
+                    />
+                  </div>
+
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className={styles.info}>
-            <div className={styles.profileInfo}>
-              <div className={styles.title}>
-                <span className={` ${styles.userName}  `} >{pgtInfo?.user_name}  </span>
-                <buton className={` ${styles.buttonFollow}  `} >Theo dõi </buton>
-              </div>
-
-              <div className={styles.properties}>
-                {/* <div className={styles.boxPropertie}>
-                  <span className={styles.namePropertie}>
-                    SỐ NGƯỜI THEO DÕI
-                  </span>
-                  <span className={styles.number}>
-                    {pgtInfo?.follower}
-                  </span>
-                </div> */}
-
-                <div className={styles.boxPropertie}>
-                  <span className={styles.namePropertie}>
-                    LƯỢT THUÊ
-                  </span>
-                  <span className={styles.number}>
-                    {dataFeedback?.length}
-                  </span>
-                </div>
-
-                <div className={styles.boxPropertie}>
-                  <span className={styles.namePropertie}>
-                    TỶ LỆ HOÀN THÀNH
-                  </span>
-                  <span className={styles.number}>
-                    {parseInt(rate ?? 100) ?? ''}%
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className={styles.category}>
-              {renderCategopryGame()}
-            </div>
-
-            <div className={styles.infomation}>
-              <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
-            </div>
-
-          </div>
-
-
-
+          }
         </div>
-        {/* <BackTop /> */}
-      </main >
+      </div >
     </>
   );
 };

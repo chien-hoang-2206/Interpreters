@@ -14,40 +14,40 @@ const ChartYear = (props) => {
     const [loading, setLoading] = useState(true);
     const fetchDataYear = async (year, month) => {
         try {
-            // const response = await BookingFactories.getBookingChart(year, month);
-            // if (response?.status === 200) {
-            //     const responseData = response?.data
-            //     let labels;
-            //     if (month) {
-            //         labels = responseData.map(item => `Ngày ${item.day}`);
-            //     } else {
-            //         labels = responseData.map(item => `Tháng ${item.month}`);
-            //     }
-            //     const bookingData = responseData.map(item => parseInt(item.bookings, 10));
-            //     const totalPriceData = responseData.map(item => parseInt(item.total_price, 10));
-            //     const barData1 = {
-            //         labels: labels,
-            //         datasets: [
-            //             {
-            //                 label: "Số lần được booking",
-            //                 backgroundColor: "rgb(54, 162, 235)",
-            //                 data: bookingData
-            //             },
-            //         ]
-            //     };
-            //     const barData2 = {
-            //         labels: labels,
-            //         datasets: [
-            //             {
-            //                 label: "Tổng doanh thu (VND)",
-            //                 backgroundColor: "rgb(255, 99, 132)",
-            //                 data: totalPriceData
-            //             }
-            //         ]
-            //     };
-            //     setBarData1(barData1);
-            //     setBarData2(barData2);
-            // }
+            const response = await BookingFactories.getBookingChart(year, month);
+            if (response?.status === 200) {
+                const responseData = response?.data
+                let labels;
+                if (month) {
+                    labels = responseData.map(item => `Ngày ${item.day}`);
+                } else {
+                    labels = responseData.map(item => `Tháng ${item.month}`);
+                }
+                const bookingData = responseData.map(item => parseInt(item.bookings, 10));
+                const totalPriceData = responseData.map(item => parseInt(item.total_price, 10));
+                const barData1 = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Số lần được booking",
+                            backgroundColor: "rgb(54, 162, 235)",
+                            data: bookingData
+                        },
+                    ]
+                };
+                const barData2 = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Tổng doanh thu (VND)",
+                            backgroundColor: "rgb(255, 99, 132)",
+                            data: totalPriceData
+                        }
+                    ]
+                };
+                setBarData1(barData1);
+                setBarData2(barData2);
+            }
         } catch (error) {
             ToastNotiError();
         }
@@ -55,24 +55,24 @@ const ChartYear = (props) => {
 
     const fetchDataTop = async (year, month) => {
         try {
-            // const response = await BookingFactories.getBookingTopPgt(year, month);
-            // if (response?.status === 200) {
-            //     const responseData = response?.data
-            //     const labels = responseData.map(item => `${item.user_name}`);
-            //     const totalTime = responseData.map(item => parseInt(item.total_duration_minutes, 10));
-            //     const barData3 = {
-            //         labels: labels,
-            //         datasets: [
-            //             {
-            //                 label: "Top Interpreters Có số giờ booking cao nhất",
-            //                 backgroundColor: "rgb(75, 192, 192)", // Teal
-            //                 data: totalTime
-            //             }
-            //         ]
-            //     };
-            //     setBarData3(barData3);
-            //     setLoading(false);
-            // }
+            const response = await BookingFactories.getBookingTopPgt(year, month);
+            if (response?.status === 200) {
+                const responseData = response?.data
+                const labels = responseData.map(item => `${item.user_name}`);
+                const totalTime = responseData.map(item => parseInt(item.total_duration_minutes, 10));
+                const barData3 = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Top Interpreters Có số giờ booking cao nhất",
+                            backgroundColor: "rgb(75, 192, 192)", // Teal
+                            data: totalTime
+                        }
+                    ]
+                };
+                setBarData3(barData3);
+                setLoading(false);
+            }
         } catch (error) {
             ToastNotiError();
             setLoading(false);
@@ -209,7 +209,7 @@ const ChartYear = (props) => {
                         }
                         {barData2?.labels &&
                             <Bar
-                                style={{ height: '40vh' ,marginTop: 10 }}
+                                style={{ height: '40vh', marginTop: 10 }}
                                 data={barData2}
                                 options={options2}
                             />
@@ -219,7 +219,7 @@ const ChartYear = (props) => {
                     {barData3?.labels &&
                         <div>
                             <Bar
-                                style={{ height: '40vh'  }}
+                                style={{ height: '40vh' }}
                                 data={barData3}
                                 options={options3}
                             />

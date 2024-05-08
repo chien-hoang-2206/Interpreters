@@ -6,7 +6,7 @@ import { FaDotCircle } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { MessageContext } from "../../context/Message.context";
 import { collection, getDocs, query, serverTimestamp, where, writeBatch } from "firebase/firestore";
-import PgtFactories from "../../services/PgtFatories";
+import HintFactories from "../../services/HintFatories";
 import { db } from "../../firebase";
 
 const Chat = () => {
