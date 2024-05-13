@@ -266,6 +266,7 @@ const Fields = () => {
                         <input
                             id="uploadInput"
                             type="file"
+                  accept="image/*"
                             className={classes.uploadInput}
                             style={{ display: 'none' }}
                             onChange={(e) => handleChangeImage(e.target.files[0])}
@@ -312,6 +313,7 @@ const Fields = () => {
                         <input
                             id="uploadInput"
                             type="file"
+                  accept="image/*"
                             className={classes.uploadInput}
                             style={{ display: 'none' }}
                             onChange={(e) => handleChangeImage(e.target.files[0])}

@@ -343,6 +343,7 @@ const TouristDes = () => {
                             <input
                                 id="uploadInput"
                                 type="file"
+                  accept="image/*"
                                 className={classes.uploadInput}
                                 style={{ display: 'none' }}
                                 onChange={(e) => handleChange(e)}
@@ -449,6 +450,7 @@ const TouristDes = () => {
                         <input
                             id="uploadInput"
                             type="file"
+                  accept="image/*"
                             className={classes.uploadInput}
                             style={{ display: 'none' }}
                             onChange={(e) => handleChange(e)}

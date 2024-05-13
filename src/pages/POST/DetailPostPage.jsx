@@ -37,14 +37,14 @@ const DetailPostPage = () => {
     }
 
     const fetchDataCmt = async () => {
-        try {
-            const commentsQuery = query(collection(db, 'comments'), where('postId', '==', id));
-            const snapshot = await getDocs(commentsQuery);
-            const commentsData = snapshot.docs.map(doc => doc.data());
-            setComments(commentsData);
-        } catch (error) {
-            console.error('Error fetching comments:', error);
-        }
+        // try {
+        //     const commentsQuery = query(collection(db, 'comments'), where('postId', '==', id));
+        //     const snapshot = await getDocs(commentsQuery);
+        //     const commentsData = snapshot.docs.map(doc => doc.data());
+        //     setComments(commentsData);
+        // } catch (error) {
+        //     console.error('Error fetching comments:', error);
+        // }
     };
 
     useEffect(() => {

@@ -412,6 +412,8 @@ const RegisterInterpreters = (props) => {
                 <input
                   id="uploadInput"
                   type="file"
+                  accept="image/*"
+                  accept="image/*"
                   className='uploadInput'
                   style={{ display: 'none' }}
                   onChange={(e) => handleChange(e)}

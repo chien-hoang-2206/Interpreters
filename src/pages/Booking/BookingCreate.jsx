@@ -55,30 +55,30 @@ const BookingCreate = (props) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [errorDate, setErrorDate] = useState(false);
 
-  const checkDateBooking = (value) => {
-    setErrorDate(false);
-    const now = new Date();
-    const bookingDate = new Date(dateBooking);
+  // const checkDateBooking = (value) => {
+  //   setErrorDate(false);
+  //   const now = new Date();
+  //   const bookingDate = new Date(dateBooking);
 
-    if (bookingDate) {
-      const timeDiff = bookingDate - now;
-      const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
-      if (daysDiff >= 15) {
-        setErrorDate(true)
-        // return Promise.reject(new Error('Ngày đặt phải nằm trong 15 ngày kể từ ngày hiện tại'));
+  //   if (bookingDate) {
+  //     const timeDiff = bookingDate - now;
+  //     const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+  //     if (daysDiff >= 15) {
+  //       setErrorDate(true)
+  //       // return Promise.reject(new Error('Ngày đặt phải nằm trong 15 ngày kể từ ngày hiện tại'));
 
-      } else if (daysDiff < -1) {
-        setErrorDate(true)
-        return Promise.reject(new Error('Không thể chọn ngày trong quá khứ'));
-      }
-      else {
-        return Promise.resolve();
-      }
-    }
-    else {
-      return Promise.reject(new Error('Bắt buộc chọn ngày'));
-    }
-  };
+  //     } else if (daysDiff < -1) {
+  //       setErrorDate(true)
+  //       return Promise.reject(new Error('Không thể chọn ngày trong quá khứ'));
+  //     }
+  //     else {
+  //       return Promise.resolve();
+  //     }
+  //   }
+  //   else {
+  //     return Promise.reject(new Error('Bắt buộc chọn ngày'));
+  //   }
+  // };
 
 
   const requestBooking = async (data) => {
@@ -187,7 +187,8 @@ const BookingCreate = (props) => {
               label="Số người" name='numberPerson'
               rules={[
                 { required: true, message: 'Bắt buộc chọn số lượng người' },
-                { validator: checkDateBooking },]}
+                // { validator: checkDateBooking },
+              ]}
             >
               <Input
                 style={{ width: '100%', textAlign: 'right', }}
@@ -213,7 +214,8 @@ const BookingCreate = (props) => {
           <Form.Item label="Ngày" name='dateBooking'
             rules={[
               { required: true, message: 'Bắt buộc chọn ngày' },
-              { validator: checkDateBooking },]}
+              // { validator: checkDateBooking },
+            ]}
           >
             <DatePicker
               placeholder="Chọn ngày"

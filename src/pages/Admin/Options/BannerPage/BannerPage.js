@@ -83,6 +83,11 @@ const BannerPage = (props) => {
                             <input
                                 id="uploadInput"
                                 type="file"
+                  accept="image/*"
+                  accept="image/*"
+                  accept="image/*"
+                  accept="image/*"
+                  accept="image/*"
                                 style={{ display: 'none' }}
                                 onChange={(e) => handleChangeImage(e.target.files[0])}
                             />
