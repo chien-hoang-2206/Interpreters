@@ -3,10 +3,10 @@ import FormProfileUser from "../FormContent/FormProfileUser";
 import FormEmail from "../FormContent/FormEmail";
 import FormPassword from "../FormContent/FormPassword";
 import FormActivity from "../FormContent/FormActivity";
-import FormPayment from "../FormContent/FormPayment";
 import PaymentWallett from "../FormContent/Payment/PaymentWallett";
 import RequestBooking from "../FormContent/Book/RequestBooking";
 import FormProfileHint from "../FormContent/FormProfileHint";
+import ManagerPost from "../FormContent/ManagerPost/ManagerPost";
 
 const componentPgt = [
   { key: "1", component: <FormProfileHint /> },
@@ -15,6 +15,7 @@ const componentPgt = [
   { key: "3", component: <FormActivity /> },
   { key: "4", component: <PaymentWallett /> },
   { key: "5", component: <RequestBooking /> },
+  { key: "6", component: <ManagerPost /> },
 
 ];
 

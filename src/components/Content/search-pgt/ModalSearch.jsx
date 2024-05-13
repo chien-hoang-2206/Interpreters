@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { Button, Input, Select } from 'antd';
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons'
 import HintFactories from "../../../services/HintFatories";
-import CategoriesFactories from "../../../services/CategoriesFatories";
+import CategoriesFactories from "../../../services/CategoryFactories";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import CardInterpreters from "../../card/CardInterpreters/CardInterpreters";

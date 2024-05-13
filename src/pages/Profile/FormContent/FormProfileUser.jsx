@@ -4,7 +4,7 @@ import { Col, Input, Row, Select } from "antd";
 import classes from "./Form.module.css";
 import Message from "../../../components/UI/Message/Message";
 import Constants from "../../../utils/constants";
-import CategoriesFactories from "../../../services/CategoriesFatories";
+import CategoriesFactories from "../../../services/CategoryFactories";
 import AccountFactories from "../../../services/AccountFactories";
 import { ToastNoti, ToastNotiError } from "../../../utils/Utils";
 import HintFactories from "../../../services/HintFatories";

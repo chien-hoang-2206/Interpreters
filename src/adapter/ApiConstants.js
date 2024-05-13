@@ -8,6 +8,8 @@ const ApiConstants = {
     PAYMENT_URL: 'payment/create_payment_url',
     PAYMENT_USER: 'payment/user',
     PAYMENT: 'payment',
+    
+    POST: 'post',
 
     BOOKING: `/booking`,
     BOOKING_CHART: `/booking/chart`,
@@ -22,10 +24,6 @@ const ApiConstants = {
     LOGIN: '/account/login',
     SIGNUP: '/account/signup',
 
-    HOME: `${BASE_PREFIX}/novels`,
-    READING_HISTORY_ACC: `${BASE_PREFIX}/history`,
-    CHAPTER_NOVEL: `${BASE_PREFIX}/chapters`,
-    BOOKMARK: `${BASE_PREFIX}/bookmarks`,
 }
 
 export default ApiConstants

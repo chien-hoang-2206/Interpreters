@@ -9,7 +9,7 @@ import HintFactories from "../../../services/HintFatories";
 import AccountFactories from "../../../services/AccountFactories";
 import { ToastNoti, ToastNotiError } from "../../../utils/Utils";
 import Constants from "../../../utils/constants";
-import CategoriesFactories from "../../../services/CategoriesFatories";
+import CategoriesFactories from "../../../services/CategoryFactories";
 import axios from "axios";
 
 export default function FormProfileHint(props) {

@@ -1,7 +1,7 @@
 import ApiConstants from "../adapter/ApiConstants";
 import ApiOperation from "../adapter/ApiOperation";
 
-const CategoriesFactories = {
+const CategoryFactories = {
   getListCategories: async data => {
     let params = {};
     if (data) {
@@ -35,4 +35,4 @@ const CategoriesFactories = {
   }
 };
 
-export default CategoriesFactories;
+export default CategoryFactories;

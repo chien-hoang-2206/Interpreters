@@ -1,4 +1,4 @@
-import { FieldValue, addDoc, collection,  getDocs, query, serverTimestamp, where, writeBatch } from "firebase/firestore";
+import { FieldValue, addDoc, collection, getDocs, query, serverTimestamp, where, writeBatch } from "firebase/firestore";
 import { auth, db, storage } from "../firebase.jsx";
 import { v4 } from "uuid";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
@@ -127,61 +127,26 @@ export const updateReadNotification = async (id) => {
 // đăng post 
 /////////////////////////
 /////////////////////////
-export function createPost(data) {
-    const { userId, fullName, imageUrl, } = data
-
-    return db.collection("posts").add({
-        userId: userId,
-        userName: fullName,
-        imageUrl: imageUrl,
-        likes: 0,
-        commentsCount: 0,
-        createdAt: serverTimestamp(),
-
-    });
-}
-export function likePost(postId, userId) {
-    return db.collection("posts").doc(postId).collection("likes").doc(userId).set({
-        likedAt: new Date()
-    });
-}
-export function addComment(postId, userId, content) {
-    return db.collection("posts").doc(postId).collection("  ").add({
-        userId: userId,
-        content: content,
-        createdAt: serverTimestamp(),
-    }).then(() => {
-        return db.collection("posts").doc(postId).update({
-            commentsCount: FieldValue.increment(1)
+export const addComment = async (data) => {
+    const { postId, userId, userName, content } = data;
+    console.log("🚀 ~ addComment ~ content:", content)
+    console.log("🚀 ~ addComment ~ userName:", userName)
+    console.log("🚀 ~ addComment ~ postId:", postId)
+    console.log("🚀 ~ addComment ~ userId:", userId)
+    try {
+        const commentsRef = collection(db, "comments");
+        const timestamp = serverTimestamp();
+        await addDoc(commentsRef, {
+            postId: parseInt(postId),
+            userId: userId,
+            userName: userName,
+            content: content,
+            createdAt: timestamp
         });
-    });
-}
-
-export function getPost(postId) {
-    return db.collection("posts").doc(postId).get();
-}
-
-export function getComments(postId) {
-    return db.collection("posts").doc(postId).collection("comments").orderBy("createdAt", "desc").get();
-}
-
-export function unlikePost(postId, userId) {
-    return db.collection("posts").doc(postId).collection("likes").doc(userId).delete();
-}
-
-export function getAllPosts(limit, lastPost) {
-    let query = db.collection("posts").orderBy("createdAt", "desc");
-
-    if (lastPost) {
-        query = query.startAfter(lastPost.data().createdAt);
+    } catch (error) {
+        throw error; // Ném ra lỗi để có thể xử lý ở nơi gọi hàm nếu cần
     }
-
-    if (limit) {
-        query = query.limit(limit);
-    }
-
-    return query.get();
-}
+};
 
 /////////////////////////
 /////////////////////////
@@ -215,101 +180,3 @@ export const onSignUpPhoneNumberOtp = async (phone) => {
             console.log(error);
         });
 }
-// export const sendMessage = async (firstUserId, secondUserId, firstName, secondName, firstAvatar, secondAvatar, message, userId) => {
-//     const chatId = `${firstUserId}_${secondUserId}`;
-//     const chatId2 = `${secondUserId}_${firstUserId}`;
-
-//     // Check if the chat already exists
-//     const chatQuery = query(collection(db, "chats"), where("chatId", "==", chatId));
-//     const chatQuery2 = query(collection(db, "chats"), where("chatId", "==", chatId2));
-//     const chatQuerySnapshot = await getDocs(chatQuery);
-//     const chatQuerySnapshot2 = await getDocs(chatQuery2);
-
-//     if (!chatQuerySnapshot.empty || !chatQuerySnapshot2.empty) {
-//         await sendNewMessageToExistingUser(chatId, firstUserId, secondUserId, message, userId);
-//     }
-//     else {
-//         await sendNewMessageToNewUser(firstUserId, secondUserId, firstName, secondName, firstAvatar, secondAvatar, message, userId);
-//     }
-// };
-
-
-// export const sendNewMessageToNewUser = async (firstUserId, secondUserId, firstName, secondName, firstAvatar, secondAvatar, message, userId) => {
-//     // Create a new chat document in the "chat" collection
-//     await addDoc(collection(db, "chats"), {
-//         chatId: `${firstUserId}_${secondUserId}`,
-//         firstUserId: Number(firstUserId),
-//         secondUserId: Number(secondUserId),
-//         firstName: firstName,
-//         secondName: secondName,
-//         firstAvatar: firstAvatar,
-//         secondAvatar: secondAvatar,
-//         createdAt: serverTimestamp(),
-//         updatedAt: serverTimestamp(),
-//         lastMessage: message,
-//         read: false,
-//         userSendId: userId,
-//     });
-
-//     // Send a new message to the newly created chat
-//     await addDoc(collection(db, "messages"), {
-//         chatId: `${firstUserId}_${secondUserId}`, // This should be the document ID, not the document reference
-//         senderId: firstUserId,
-//         message: message,
-//         createdAt: serverTimestamp(),
-//         updatedAt: serverTimestamp(),
-//         read: false,
-//     });
-// };
-
-// export const sendNewMessageToExistingUser = async (chatId, userId, recipientUserId, message, userSendId) => {
-
-//     const chatQuery = query(collection(db, "chats"), where("chatId", "==", chatId));
-//     const chatQuerySnapshot = await getDocs(chatQuery);
-
-//     chatQuerySnapshot.forEach(async (doc) => {
-//         const existingChatDocRef = doc.ref;
-//         // Update the specific chat with the provided chatId
-//         await updateDoc(existingChatDocRef, {
-//             read: false,
-//             lastMessage: message,
-//             updatedAt: serverTimestamp(),
-//             userSendId: userSendId,
-//         });
-//     });
-
-//     await addDoc(collection(db, "messages"), {
-//         chatId: chatId,
-//         senderId: userId,
-//         message: message,
-//         createdAt: serverTimestamp(),
-//         updatedAt: serverTimestamp(),
-//         read: false,
-//     });
-// };
-
-// export const getMessagesForChat = (chatId, callback) => {
-//     // Check if chatId is defined before creating the query
-//     if (chatId) {
-//         const q = query(
-//             collection(db, "messages"),
-//             where("chatId", "==", chatId)
-//         );
-
-//         const unsubscribe = onSnapshot(q, (querySnapshot) => {
-//             const messages = [];
-//             querySnapshot.forEach((doc) => {
-//                 messages.push({ id: doc.id, ...doc.data() });
-//             });
-
-//             // Sort messages by createdAt in descending order
-//             messages.sort((a, b) => a.createdAt - b.createdAt);
-
-//             callback(messages);
-//         });
-
-//         return unsubscribe; // Return the unsubscribe function
-//     } else {
-//         return () => { }; // Return a dummy unsubscribe function if chatId is undefined
-//     }
-// };      

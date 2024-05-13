@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useLayoutEffect } from 'react'
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styles from './Sidebar.module.scss'
 import { CollapseContext } from '../../context/collapse.context';
-import CategoriesFactories from '../../services/CategoriesFatories';
+import CategoriesFactories from '../../services/CategoryFactories';
 
 const SideBar = ({ onChangeCollapse }) => {
     const [fields, setFields] = useState()

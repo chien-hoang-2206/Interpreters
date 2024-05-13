@@ -20,7 +20,6 @@ const DropDownBookingRequest = ({ status, booking, icon, options, id, onFetchDat
     const { user, setUser } = useContext(AuthContext);
 
     const [isOpen, setIsOpen] = useState(false);
-    console.log("🚀 ~ DropDownBookingRequest ~ isOpen:", isOpen)
     const handleOpen = () => {
         setIsOpen(!isOpen)
     }

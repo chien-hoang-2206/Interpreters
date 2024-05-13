@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Image, Input, Modal, Typography, Button, Avatar } from "antd";
 import classes from './Fields.module.css'
-import CategoriesFactories from "../../../../services/CategoriesFatories";
+import CategoriesFactories from "../../../../services/CategoryFactories";
 import { ToastNoti, ToastNotiError } from "../../../../utils/Utils";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { storage } from "../../../../firebase";
@@ -153,13 +153,13 @@ const Fields = () => {
                 image: fileUploadLink,
             }
             try {
-                // const resp = await CategoriesFactories.createCategory(data);
-                // if (resp?.status === 200) {
-                //     ToastNoti();
-                //     onCloseModalAddField()
-                // } else {
-                //     ToastNotiError('resp?.message');
-                // }
+                const resp = await CategoriesFactories.createCategory(data);
+                if (resp?.status === 200) {
+                    ToastNoti();
+                    onCloseModalAddField()
+                } else {
+                    ToastNotiError('resp?.message');
+                }
             } catch (error) {
                 ToastNotiError();
             }

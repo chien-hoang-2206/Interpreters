@@ -6,7 +6,7 @@ import Constants from '../../utils/constants';
 import { toast } from 'react-toastify';
 import AccountFactories from '../../services/AccountFactories';
 import { ToastNoti } from '../../utils/Utils';
-import CategoriesFactories from '../../services/CategoriesFatories';
+import CategoriesFactories from '../../services/CategoryFactories';
 
 const ModalUpdate = ({ openUpdate, onCloseUpdateModalHandler, updateSuccess = () => { }, data, type = 'user' }) => {
     const [loading, setLoading] = useState(false);

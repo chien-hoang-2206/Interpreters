@@ -7,7 +7,7 @@ import Search from "antd/es/input/Search";
 import DropdownOperation from "../../../../components/Dropdown/DropdownOperation";
 import AccountFactories from "../../../../services/AccountFactories";
 import { toast } from "react-toastify";
-import CategoriesFactories from "../../../../services/CategoriesFatories";
+import CategoriesFactories from "../../../../services/CategoryFactories";
 
 const AccountInterpreters = () => {
   const [pgtList, setPgtList] = useState([]);

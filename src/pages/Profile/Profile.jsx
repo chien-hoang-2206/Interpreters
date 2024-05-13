@@ -9,18 +9,18 @@ const Profile = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
   const id = location.pathname.split("/")[2];
-  useEffect(()=>{
+  useEffect(() => {
     setChangeContent(id)
-  },[id])
+  }, [id])
   return (
     <>
       <div style={{ width: '100%', backgroundColor: "#fff" }}>
-        <Row 
-          style={{height: 'calc(100vh - 58px)', overflow: 'hidden'}}
+        <Row
+          style={{ height: 'calc(100vh - 58px)', overflow: 'hidden' }}
         >
-          <Col span={4} style={{height: '100%' }}>
+          <Col span={4} style={{ height: '100%' }}>
             <MenuProfile
-              // style={{marginTop: '-64px'}}
+              changeContent={changeContent}
               user={user}
             />
           </Col>

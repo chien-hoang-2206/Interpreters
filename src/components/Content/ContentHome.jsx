@@ -48,7 +48,7 @@ const ContentHome = (props) => {
 
   const fetchData = async (Keyword) => {
     setLoading(true)
-    const response = await DestinationFactories.getListDestination(Keyword);
+    const response = await DestinationFactories.getListDestination({});
     setTouristDes(response);
     setLoading(false)
   };

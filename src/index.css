@@ -31,6 +31,36 @@ body::-webkit-scrollbar {
   height: 2px;
 }
 
+/* // style cho quill */
+.preview-content .ql-indent-1 {
+  margin-left: 20px; /* Thụt vào 20px cho mức độ 1 */
+}
+
+.preview-content img {
+  object-fit: fill;
+  width: 100%;
+}
+
+
+.preview-content .ql-indent-2 {
+  margin-left: 40px; /* Thụt vào 40px cho mức độ 2 */
+}
+
+.preview-content ol li {
+  list-style: decimal;
+  margin-right: 8px; /* Khoảng cách giữa kí tự dấu chấm và nội dung */
+}
+.preview-content ul li:before {
+  content: "\2022"; /* Kí tự dấu chấm (bullet) */
+  margin-right: 8px; /* Khoảng cách giữa kí tự dấu chấm và nội dung */
+}
+
+.preview-content .ql-indent-3 {
+  margin-left: 60px; /* Thụt vào 60px cho mức độ 3 */
+}
+
+/* Thêm các tùy chỉnh khác cho các mức độ thụt vào khác nếu cần thiết */
+
 
 body::-webkit-scrollbar-track {
   border-radius: 10px;

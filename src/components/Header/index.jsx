@@ -18,7 +18,7 @@ import MenuItem from "antd/es/menu/MenuItem";
 import { useTranslation } from "react-i18next";
 import Login from "../../pages/Login";
 import Register from "../../pages/Register/Register";
-import CategoriesFactories from "../../services/CategoriesFatories";
+import CategoriesFactories from "../../services/CategoryFactories";
 
 const Header = (props) => {
   const navigate = useNavigate();
@@ -156,7 +156,11 @@ const Header = (props) => {
               {/* <DownOutlined className="font-bold" /> */}
             </Link>
           </Dropdown>
-          <Link className="hover:text-[#7733ff] text-xl font-bold border-b-[transparent] hover:border-b-2 hover:border-[#7733ff]">
+          <Link to='/destination' className="hover:text-[#7733ff] text-xl font-bold border-b-[transparent] hover:border-b-2 hover:border-[#7733ff]">
+            {t('destination')}
+            {/* <DownOutlined className="font-bold" /> */}
+          </Link>
+          <Link to='/post' className="hover:text-[#7733ff] text-xl font-bold border-b-[transparent] hover:border-b-2 hover:border-[#7733ff]">
             {t('moment')}
           </Link>
         </div>

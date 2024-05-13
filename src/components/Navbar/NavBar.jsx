@@ -5,12 +5,17 @@ import {
   ProfileOutlined,
   WifiOutlined,
   RightSquareOutlined,
+  FileTextOutlined,
+  CloseCircleOutlined,
+  AlignLeftOutlined,
+  SolutionOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { Link } from "react-router-dom";
 import AccountFactories from "../../services/AccountFactories";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../context/auth.context";
+import { useTranslation } from "react-i18next";
 
 function getItem(label, key, icon, children) {
   return {
@@ -23,6 +28,7 @@ function getItem(label, key, icon, children) {
 
 const NavBar = (props) => {
   const { user, setUser } = useContext(AuthContext);
+  const { t } = useTranslation()
   const [isOnline, setIsOnline] = useState();
   const fetchDataUpdate = async (data) => {
     try {
@@ -69,7 +75,7 @@ const NavBar = (props) => {
           Trang cá nhân
         </Link>
       </>, '1',
-      <ProfileOutlined />
+      <SolutionOutlined />
     ),
     getItem(
       <>
@@ -87,7 +93,7 @@ const NavBar = (props) => {
           <Link style={{}} to={'/register-hint'}>
             Đăng ký làm Interpreters
           </Link>
-        </>, '2',
+        </>, '3',
         <RightSquareOutlined />
       )
     );
@@ -97,7 +103,7 @@ const NavBar = (props) => {
           <Link style={{}} onClick={props.logOutHandler}>
             Đăng xuất
           </Link>
-        </>, '2',
+        </>, '4',
         <RightSquareOutlined />
       )
     );
@@ -109,7 +115,7 @@ const NavBar = (props) => {
           <Link style={{}} onClick={props.logOutHandler}>
             Đăng xuất
           </Link>
-        </>, '2',
+        </>, '5',
         <RightSquareOutlined />
       )
     );
@@ -137,8 +143,18 @@ const NavBar = (props) => {
           <Link style={{}} to='/setting/1'>
             Quản lý booking
           </Link>
-        </>, '2',
-        <RightSquareOutlined />
+        </>, '3',
+        <AlignLeftOutlined />
+      )
+    );
+    items2 = items2.concat(
+      getItem(
+        <>
+          <Link to='/setting/6' >
+            {t('mn_post')}
+          </Link>
+        </>, '6',
+        <FileTextOutlined />
       )
     );
     items2 = items2.concat(
@@ -147,8 +163,8 @@ const NavBar = (props) => {
           <Link style={{}} onClick={props.logOutHandler}>
             Đăng xuất
           </Link>
-        </>, '2',
-        <RightSquareOutlined />
+        </>, '9',
+        <CloseCircleOutlined />
       )
     );
   }

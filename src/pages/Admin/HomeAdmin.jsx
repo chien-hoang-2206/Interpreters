@@ -14,12 +14,15 @@ import BannerPage from "./Options/BannerPage/BannerPage";
 import AccountInterpreters from "./Options/PGT/AccountInterpreters";
 import TouristDes from "./Options/TouristDes/TouristDes";
 import HotHintAdmin from "./Options/HotHintAdmin/HotHintAdmin";
+import { useTranslation } from "react-i18next";
+import ManagerPostAdmin from "./Options/ManagerPost/ManagerPostAdmin";
 const { Sider } = Layout;
 
 const HomeAdmin = () => {
   const [selectedMenuItem, setSelectedMenuItem] = useState("1");
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
+  const { t } = useTranslation()
   const handleMenuClick = (e) => {
     setSelectedMenuItem(e.key);
   };
@@ -75,6 +78,7 @@ const HomeAdmin = () => {
             <Menu.Item key="6">{`Yêu cầu Interpreters (${countBooking ?? 0}) `}</Menu.Item>
             <Menu.Item key="7">Thống kê</Menu.Item>
             <Menu.Item key="8">Banner</Menu.Item>
+            <Menu.Item key="10">{t('mn_post')}</Menu.Item>
             <Button
               onClick={logoutHandler}
               className={classes['btn-logout']}
@@ -94,6 +98,7 @@ const HomeAdmin = () => {
             {selectedMenuItem === "6" && <RequestHint onReload={fetchApiList} />}
             {selectedMenuItem === "7" && <Statistical />}
             {selectedMenuItem === "8" && <BannerPage />}
+            {selectedMenuItem === "10" && <ManagerPostAdmin />}
           </Layout.Content>
         </Layout>
       </Layout>

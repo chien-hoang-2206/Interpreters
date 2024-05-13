@@ -22,6 +22,10 @@ import SearchPgt from "../pages/SearchPgt/SearchPgt";
 import PageInterpreterDetail from "../pages/Details/PageHintDetail/PageHINTDetail";
 import RegisterInterpreters from "../pages/RegisterInterpreters/RegisterInterpreters";
 import DestinationPage from "../pages/Destination/DestinationPage";
+import CreatePostPage from "../pages/POST/CreatePostPage";
+import DetailPostPage from "../pages/POST/DetailPostPage";
+import ListPostPage from "../pages/POST/ListPostPage";
+import DestinationListPage from "../pages/Destination/DestinationListPage";
 
 const Router = () => {
   return (
@@ -66,6 +70,13 @@ const Router = () => {
             </LayoutHeader>}
         />
         <Route
+          path="/destination"
+          element={
+            <LayoutHeader>
+              <DestinationListPage />
+            </LayoutHeader>}
+        />
+        <Route
           path="/trending"
           element={
             <LayoutHeader>
@@ -100,6 +111,29 @@ const Router = () => {
             <LayoutHeader>
               <ProtectedRoute Component={Profile} />
             </LayoutHeader>}
+        />
+        <Route
+          path="/create-post"
+          element={
+            <LayoutHeader>
+              <ProtectedRoute Component={CreatePostPage} />
+            </LayoutHeader>}
+        />
+        <Route
+          path="/post/:id"
+          element={
+            <LayoutHeader>
+              <DetailPostPage />
+            </LayoutHeader>
+          }
+        />
+        <Route
+          path="/post"
+          element={
+            <LayoutHeader>
+              <ListPostPage />
+            </LayoutHeader>
+          }
         />
         <Route
           path="/vnpay/return"

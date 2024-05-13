@@ -38,7 +38,7 @@ const BookingCreate = (props) => {
 
   useEffect(() => {
     if (parseInt(watchtypeTravel) == 1 && watchtNumberPerson && watchtDateBooking) {
-      const basePrice = parseInt(watchtTimeBooking) == 3 ? hint?.price?.group_price_day : hint?.price?.group_price_session
+      const basePrice = parseInt(watchtTimeBooking) == 7 ? hint?.price?.group_price_day : hint?.price?.group_price_session
       const newValue = watchtNumberPerson * basePrice
       form.setFieldValue('Cost', parseInt(newValue))
       form.setFieldValue('price', parseInt(basePrice))

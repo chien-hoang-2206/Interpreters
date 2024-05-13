@@ -1,39 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Table, Image, Input, Modal, Typography, Button, Avatar, Form, Space, TimePicker } from "antd";
+import { Table, Image, Input, Modal, Typography, Button, Avatar, Form, Space, TimePicker, Select } from "antd";
 import classes from './TouristDes.module.css'
-import CategoriesFactories from "../../../../services/CategoriesFatories";
+import CategoriesFactories from "../../../../services/CategoryFactories";
 import { ToastNoti, ToastNotiError, convertStringToNumber, getDate } from "../../../../utils/Utils";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { storage } from "../../../../firebase";
 import { v4 } from 'uuid';
 import DestinationFactories from "../../../../services/DestinationFatories";
 import TextArea from "antd/es/input/TextArea";
+import { useTranslation } from "react-i18next";
+import Constants from "../../../../utils/constants";
+import ReactQuill from "react-quill";
+import { uploadFirebase } from "../../../../utils/FirebaseService";
 
 const { Text } = Typography;
 
 const TouristDes = () => {
-    const [TouristDes, setTouristDes] = useState()
-    const [inputSearch, setInputSearch] = useState("");
-    const [openModalAdd, setOpenModalAdd] = useState(false)
-    const [destinationAddName, setDestinationAddName] = useState()
-    const [destinationUpdateId, setDestinationUpdateId] = useState()
 
-    const [destinationUpdateName, setDestinationUpdateName] = useState()
-    const [destinationUpdateImage, setDestinationUpdateImage] = useState()
-    const [error, setError] = useState();
-    const [showModalUpdate, setShowModalUpdate] = useState();
-    const [loading, setLoading] = useState(true);
-
-    const fetchData = async (Keyword) => {
-        setLoading(true)
-        const response = await DestinationFactories.getListDestination(Keyword);
-        setTouristDes(response);
-        setLoading(false)
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
+    const { t } = useTranslation()
 
     const columns = [
         {
@@ -57,6 +41,13 @@ const TouristDes = () => {
             width: 120,
             key: "image",
             render: (text, data) => <Image src={text} className="name-title-table" style={{ width: 100, height: 100 }} />,
+        },
+        {
+            title: t('province'),
+            width: 120,
+            key: "province",
+            dataIndex: "province",
+            render: (text, data) => <div className="name-title-table">{Constants.vietnamProvinces.find(item => item.value === text).label}</div>,
         },
         {
             title: "Kinh độ",
@@ -116,6 +107,43 @@ const TouristDes = () => {
         },
     ];
 
+    const [TouristDes, setTouristDes] = useState()
+    const [inputSearch, setInputSearch] = useState("");
+    const [openModalAdd, setOpenModalAdd] = useState(false)
+    const [destinationAddName, setDestinationAddName] = useState()
+    const [destinationUpdateId, setDestinationUpdateId] = useState()
+    const [destinationUpdateName, setDestinationUpdateName] = useState()
+    const [destinationUpdateImage, setDestinationUpdateImage] = useState()
+    const [error, setError] = useState();
+    const [showModalUpdate, setShowModalUpdate] = useState();
+    const [loading, setLoading] = useState(true);
+    const [content, setContent] = useState('');
+    const [imageLink, setImageLinK] = useState([]);
+    const [fileUpload, setFileUpload] = useState([]);
+
+    const handleChange = (e) => {
+        const file = e.target.files[0];
+        setFileUpload(e.target.files[0]);
+        if (file) {
+            const url = URL.createObjectURL(file);
+            setFileUpload(file)
+            setImageLinK(url);
+        }
+    };
+
+    const fetchData = async (Keyword) => {
+        setLoading(true)
+        const response = await DestinationFactories.getListDestination({});
+        setTouristDes(response);
+        setLoading(false)
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+
+
     const handleKeyDown = (event) => {
         if (event.key === "Enter" || event.keyCode === 13) {
             fetchData(inputSearch);
@@ -167,27 +195,20 @@ const TouristDes = () => {
         fetchData();
     }
 
-    const onChangeDataAddField = (event) => {
-        setError()
-        setDestinationAddName(event.target.value)
-    }
-
-    const onChangeDataUpdateField = (event) => {
-        setDestinationUpdateName(event.target.value);
-    }
-
-
     const onAddSubmit = async (value) => {
         setError();
+
+        const url = await uploadFirebase(fileUpload);
         const data = {
             name: value?.name,
-            image: fileUploadLink,
+            image: url,
             latitude: value?.latitude,
+            province: value?.province,
             longitude: value?.longitude,
             time_start: value?.time[0],
             time_end: value?.time[1],
             price: value?.price,
-            experience: value.experience
+            experience: content ? content : ''
         }
         try {
             const resp = await DestinationFactories.createDestination(data);
@@ -229,21 +250,31 @@ const TouristDes = () => {
     const [fileUploadLink, setFileUploadLink] = useState();
 
 
-    function handleChangeImage(file) {
-        if (file === null || !file) {
-            console.log('No file selected.');
-            return;
-        }
-        const uniqueFileName = `${file.name}_${v4()}`;
-        const imageRef = ref(storage, `avatar/${uniqueFileName}`);
-        uploadBytes(imageRef, file).then((snapshot) => {
-            getDownloadURL(snapshot.ref).then((downloadURL) => {
-                setFileUploadLink(downloadURL)
-            });
-        }).catch((error) => {
-            console.error('Error uploading file:', error);
-        });
-    }
+    const modules = {
+        toolbar: [
+            [{ header: [1, 2, 3, false] }],
+            ["bold", "italic", "underline", "strike"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["link", "color", "image"],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+            ["clean"],
+        ],
+    };
+    const formats = [
+        "header",
+        "bold",
+        "italic",
+        "underline",
+        "strike",
+        "blockquote",
+        "list",
+        "bullet",
+        "link",
+        "indent",
+        "image",
+        "code-block",
+        "color",
+    ];
     return (
         <div className="booking-container" style={{ height: '100vh', overflow: 'scroll' }}>
             <div className="booking-title"><span>Địa điểm du lịch</span></div>
@@ -273,9 +304,10 @@ const TouristDes = () => {
                 <Button type='primary'
                     style={{
                     }}
-                    onClick={onOpenModalAddField} >Thêm Địa điểm du lịch</Button>
+                    onClick={onOpenModalAddField}
+                >Thêm Địa điểm du lịch</Button>
             </div>
-            <div className="booking-table">
+            <div >
                 <Table
                     columns={columns}
                     loading={loading}
@@ -289,7 +321,7 @@ const TouristDes = () => {
             </div>
             <Modal
                 width={800}
-                title="Thêm Địa điểm du lịch"
+                title={t('add_dddl')}
                 open={openModalAdd}
                 onCancel={onCloseModalAddField}
                 footer={[]}
@@ -313,11 +345,11 @@ const TouristDes = () => {
                                 type="file"
                                 className={classes.uploadInput}
                                 style={{ display: 'none' }}
-                                onChange={(e) => handleChangeImage(e.target.files[0])}
+                                onChange={(e) => handleChange(e)}
                             />
                         </div>
                         <Avatar
-                            src={fileUploadLink ?? ''}
+                            src={imageLink ?? ''}
                             alt="avatar"
                             style={{ width: 200, height: 200 }}
                         />
@@ -327,6 +359,17 @@ const TouristDes = () => {
                                 type="text"
                                 style={{ width: '100%' }}
                                 className={classes['add-modal-input']}
+                            />
+                        </Form.Item>
+                        <Form.Item label={t('province')}
+                            rules={[
+                                { required: true, message: t('must_choose') },
+                            ]}
+                            name='province'>
+                            <Select
+                                type="text"
+                                style={{ width: '100%' }}
+                                options={Constants.vietnamProvinces}
                             />
                         </Form.Item>
                         <Form.Item label="Nhập kinh độ" name='longitude'>
@@ -361,10 +404,20 @@ const TouristDes = () => {
                         </Form.Item>
 
                         <Form.Item label="Giới thiệu" name='experience'>
-                            <TextArea
+                            {/* <TextArea
                                 placeholder='Giới thiệu về địa điểm...'
                                 autoSize={{ minRows: 3, maxRows: 20 }}
                             // onChange={(e) => setEditValue(e.target.value)} value={editValue} 
+                            /> */}
+
+                            <ReactQuill
+                                theme="snow"
+                                value={content}
+                                onChange={(e) => setContent(e)}
+                                modules={modules}
+                                formats={formats}
+                                placeholder="Giới thiệu về địa điểm..."
+                                className="bg-white rounded mt-5"
                             />
                         </Form.Item>
 
@@ -398,7 +451,7 @@ const TouristDes = () => {
                             type="file"
                             className={classes.uploadInput}
                             style={{ display: 'none' }}
-                            onChange={(e) => handleChangeImage(e.target.files[0])}
+                            onChange={(e) => handleChange(e)}
                         />
                     </div>
                     <Avatar
@@ -414,7 +467,7 @@ const TouristDes = () => {
                             width: '100%', float: 'right'
                         }}
                         htmlType="submit"
-                    // onClick={onUpdatedestinationSubmit}
+                        onClick={onUpdatedestinationSubmit}
                     >Sửa</Button>
                 </div>
             </Modal >

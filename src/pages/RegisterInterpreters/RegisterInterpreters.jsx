@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./RegisterInterpreters.module.css";
 import Meta from "antd/es/card/Meta";
 import { toast } from "react-toastify";
-import CategoriesFactories from "../../services/CategoriesFatories";
+import CategoriesFactories from "../../services/CategoryFactories";
 import AccountFactories from "../../services/AccountFactories";
 import { AuthContext } from "../../context/auth.context";
 import DestinationFactories from "../../services/DestinationFatories";
@@ -48,7 +48,7 @@ const RegisterInterpreters = (props) => {
   }
 
   const fetchData = async (Keyword) => {
-    const response = await DestinationFactories.getListDestination(Keyword);
+    const response = await DestinationFactories.getListDestination({});
     setTouristDes(response);
 
   };
