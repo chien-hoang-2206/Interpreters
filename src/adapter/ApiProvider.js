@@ -3,8 +3,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { setupInterceptersTo } from './AxiosConfig'
 import { BASE_PREFIX } from './ApiConstants'
 
-const BASE_URL = 'http://localhost:4096'
-// const BASE_URL = 'https://interpreters-be.onrender.com'
+// const BASE_URL = 'http://localhost:4096'
+const BASE_URL = 'https://interpreters-be.onrender.com'
 
 const api = setupInterceptersTo(
     axios.create({
