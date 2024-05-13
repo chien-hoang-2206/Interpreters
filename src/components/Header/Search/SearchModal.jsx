@@ -3,6 +3,7 @@ import { Input, Avatar } from 'antd';
 import classes from './SearchModal.module.css'
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import HintFactories from '../../../services/HintFatories';
+import { useTranslation } from 'react-i18next';
 
 const { Search } = Input;
 
@@ -14,7 +15,7 @@ const SearchModal = () => {
   const keyword = searchParams.get("keyword");
 
   useEffect(() => {
-    if (keyword){
+    if (keyword) {
       setValue(keyword)
     }
   }, [keyword])
@@ -55,12 +56,12 @@ const SearchModal = () => {
     });
   }, [x])
 
-
+  const { t } = useTranslation()
   return (
     <div className={classes['search-modal']} style={{ left: windowChange.leftSearch, }}  >
       <Search
         size="medium"
-        placeholder="Search Interpreters"
+        placeholder={t('searcH_imt')}
         onSearch={onSearch}
         onChange={onChangeInputHandler}
         style={{ width: windowChange.widthSearch, }}
