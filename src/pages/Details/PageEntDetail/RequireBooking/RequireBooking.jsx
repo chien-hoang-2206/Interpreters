@@ -76,7 +76,7 @@ const RequireBooking = () => {
       ),
     },
     {
-      title: "Tác vụ",
+      title: t('action'),
       key: "action",
       width: 90,
       align: 'center',

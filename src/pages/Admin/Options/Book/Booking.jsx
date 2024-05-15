@@ -5,6 +5,7 @@ import Constants from "../../../../utils/constants";
 import BookingFactories from "../../../../services/BookingFactories";
 import { ToastNoti, ToastNotiError, convertStringToNumber, getDate, getTime } from "../../../../utils/Utils";
 import Temp from "../../../../utils/temp";
+import { useTranslation } from "react-i18next";
 
 const Booking = () => {
   const [bookingList, setBookingList] = useState([]);
@@ -12,7 +13,7 @@ const Booking = () => {
   const [dateCreate, setDateCreate] = useState();
   const [DateBooking, setDateBooking] = useState();
   const [loading, setLoading] = useState(true);
-
+  const { t } = useTranslation()
   const fetchDataBookingList = async (name, dateCreate, dateBooking) => {
     try {
       setLoading(true)
@@ -138,7 +139,7 @@ const Booking = () => {
       render: (text, data) => <div>{convertStringToNumber(text)}</div>,
     },
     {
-      title: "Tác vụ",
+      title: t('action'),
       key: "action",
       width: 90,
       align: 'center',

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import './BannerPage.scss'; // Bạn cần tạo một file CSS với các style cần thiết
-import b1 from '../../../../assets/banner/b1.jpg'
 import Banner from '../../../../components/Banner/Banner';
 import { Button, Image, Modal, Space, Spin, Table } from 'antd';
 import BannerFactories from '../../../../services/BannerFactories';
-import { ToastInfo, ToastNoti, ToastNotiError } from '../../../../utils/Utils';
+import { ToastNoti, ToastNotiError } from '../../../../utils/Utils';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { storage } from '../../../../firebase';
 import { v4 } from 'uuid';
+import { useTranslation } from 'react-i18next';
 
 const BannerPage = (props) => {
     const [open, setOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(false);
     const [bannerUpdate, setBannerUpdate] = useState(false);
-
+    const { t } = useTranslation()
     const [dataBander, setData] = useState([]);
 
     const fetchApiList = async () => {
@@ -66,7 +66,7 @@ const BannerPage = (props) => {
             ),
         },
         {
-            title: "Tác vụ",
+            title: t('action'),
             key: "action",
             width: 90,
             align: 'center',

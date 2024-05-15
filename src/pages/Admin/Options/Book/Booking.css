@@ -9,15 +9,14 @@
 }
 .booking-title {
   font-size: 30px;
-  border-radius: 16px;
+  border-radius: 4px;
   padding: 10px 14px;
   background-color: #FFF;
-    color: red;
   font-weight: bold;
 }
 .booking-container .booking-status {
   display: flex;
-  border-radius: 16px;
+  border-radius: 4px;
   padding: 10px 14px;
   background-color: #FFF;
 }
@@ -29,7 +28,7 @@
   margin-right: 20px;
 }
 .booking-container .booking-search {
-  border-radius: 16px;
+  border-radius: 4px;
   padding: 10px 14px;
   background-color: #FFF;
 
@@ -42,7 +41,7 @@
 }
 
 .booking-table{
-  border-radius: 16px;
+  border-radius: 4px;
   padding: 10px 14px;
   min-height: 400px;
   background-color: #FFF;

@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useLayoutEffect, startTransition, useDeferredValue } from 'react'
-import { Input, Avatar } from 'antd';
+import React, { useState, useEffect, useLayoutEffect } from 'react'
+import { Input } from 'antd';
 import classes from './SearchModal.module.css'
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import HintFactories from '../../../services/HintFatories';
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 
 const { Search } = Input;

@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ButtonFull from "../../components/UI/Button/ButtonFull";
 import "./style.css";
-import { useNavigate } from "react-router-dom";
-import logo from '../../assets/logo/LogoPage.png'
 import { Input, Modal } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import Message from "../../components/UI/Message/Message";
 import AccountFactories from "../../services/AccountFactories";
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 
-import { auth } from "../../firebase";
 import { toast } from "react-toastify";
 import { ToastNotiError } from "../../utils/Utils";
 import { useTranslation } from "react-i18next";
@@ -55,36 +51,37 @@ const Register = (props) => {
     });
   };
 
-  const navigator = useNavigate()
-
   const validateUserInput = (userInput) => {
     let res = true;
     let errMsg = '';
-    if (!userInput.email) {
-      errMsg = 'Hãy nhập email';
+
+    // Email validation with a more robust regex
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!userInput.email || !emailRegex.test(userInput.email)) {
+      errMsg = t('Validate_email');
     }
-    else if (userInput.email.indexOf('@') < 0) {
-      errMsg = 'Cấu trúc mail sai phải có @';
+
+    // Password validation
+    if (!userInput.password) {
+      errMsg = t('Validate_pass1');
+    } else if (userInput.password.length < 6 || userInput.password.length > 32) {
+      errMsg = t('Validate_pass2');
     }
-    else if (!userInput.password) {
-      errMsg = 'Hãy nhập mật khẩu';
+
+    // Confirm password validation
+    if (!userInput.confirmPassword) {
+      errMsg = t('Validate_pass3');
+    } else if (userInput.password !== userInput.confirmPassword) {
+      errMsg = t('Validate_pass4');
     }
-    else if (userInput.password.length > 32 || userInput.password.length < 6) {
-      errMsg = 'Độ dài mật khẩu từ 6 đến 36 ký tự';
-    }
-    else if (!userInput.confirmPassword) {
-      errMsg = 'Hãy nhập mật khẩu để xác nhận';
-    }
-    else if (userInput.password !== userInput.confirmPassword) {
-      errMsg = 'Nhập đúng mật khẩu';
-    }
+
     if (errMsg) {
-      createErrorMessage(errMsg)
+      createErrorMessage(errMsg);
       res = false;
     }
+
     return res;
   }
-
   const registerWithCredentials = async ({ email, password }) => {
     setLoading(true)
     try {
@@ -156,18 +153,19 @@ const Register = (props) => {
             <h1 className="font-bold text-3xl text-blue-500" style={{ textAlign: 'center' }}>{t('info_res')}</h1>
             <div className="register-form__control">
               <input
-                type="text"
+                type="email"
                 name="email"
                 onChange={inputChangeHandler}
-                placeholder='Enter your email'
+                placeholder={t('enter_email')}
                 className='input-register'
-              ></input>
+              >
+              </input>
             </div>
             <div className="register-form__control">
               <Input.Password
                 name="password"
                 onChange={inputChangeHandler}
-                placeholder="Enter your password"
+                placeholder={t('enter_pass')}
                 className='input-register'
                 iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
               />
@@ -176,7 +174,7 @@ const Register = (props) => {
               <Input.Password
                 name="confirmPassword"
                 onChange={inputChangeHandler}
-                placeholder="Confirm your password"
+                placeholder={t('enter_pass2')}
                 className='input-register'
                 iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
               />
@@ -184,7 +182,7 @@ const Register = (props) => {
           </div>
           <div className='form-bottom mt-3'>
             <div className="register-form__control">
-              <ButtonFull disabled={loading} type="submit" onClick={handleRegister}>Đăng ký</ButtonFull>
+              <ButtonFull disabled={loading} type="submit" onClick={handleRegister}>{t('register')}</ButtonFull>
             </div>
           </div>
         </form>

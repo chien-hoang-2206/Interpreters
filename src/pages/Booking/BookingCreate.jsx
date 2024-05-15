@@ -17,6 +17,7 @@ import TextArea from "antd/es/input/TextArea";
 const BookingCreate = (props) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const hint = props.data;
+  console.log("🚀 ~ BookingCreate ~ hint:", hint)
   const onCloseModal = () => {
     props.onCancelOpenHandler();
   };
@@ -85,7 +86,7 @@ const BookingCreate = (props) => {
     try {
       const response = await BookingFactories.requestBooking(data);
       if (response.status === 200) {
-        // createNotification(data?.hint_id, 1,
+        // createNotification(hint?.id, 1,
         //   response?.data[0].id, "Bạn có yêu cầu booking mới",
         //   "Vui lòng xác nhận yêu cầu booking trong vòng 5 phút.",
         //   data?.userId,

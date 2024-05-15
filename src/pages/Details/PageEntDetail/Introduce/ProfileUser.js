@@ -21,6 +21,8 @@ import { v4 } from 'uuid';
 import AvatarCustom from '../../../../components/Avatar/Avatar';
 import { useDropzone } from 'react-dropzone';
 import IntroduceHint from '../../PageHintDetail/IntroduceKOL/IntroduceHint';
+import BoxCustom from '../../../../components/Box/BoxCustom';
+import { useTranslation } from 'react-i18next';
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -348,6 +350,7 @@ const ProfileUser = () => {
             console.error('Error uploading image:', error);
         }
     };
+    const { t } = useTranslation()
     const handleRemove = (uid) => {
         setFileList((prevImages) => prevImages.filter((image) => image.uid !== uid));
     };
@@ -509,39 +512,90 @@ const ProfileUser = () => {
                     {user?.role_id === 2 &&
                         <div className={styles.contact}>
                             <div className={styles.stickyBox}>
-                                <div className={styles.boxContainer}>
+                                <div className={''}>
                                     <div className={styles.edit}>
-                                        {editPrice ?
-                                            <div>
-                                                <InputNumber
-                                                    addonAfter="VND"
-                                                    style={{ width: '100%' }}
-                                                    // placeholder={pricePgt}
-                                                    value={pricePgt}
-                                                    onChange={(e) => setPricePgt(e)}
-                                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                                />
-                                                <div className={styles.editbtn}>
-                                                    <Button onClick={handleChagePrice} >Hủy</Button>
-                                                    <Button onClick={onSubmitChangePrice}>Lưu</Button>
-                                                </div>
-                                            </div>
-                                            :
-                                            <>
-                                                <p>{convertStringToNumber(pricePgt) ?? ''}/h</p>
-                                                <EditFilled width={50} onClick={handleChagePrice} />
-                                            </>
+                                        <BoxCustom
+                                            title='Giá dịch vụ'
+                                            description={
+                                                <>
+                                                    <div className='mt-[-30px] flex flex-col w-[300px]'>
+                                                        <div className="flex w-full flex-col gap-4 justify-center items-center">
+                                                            <div className="flex flex-col flex-start w-full gap-2">
+                                                                <ul className='font-bold ' >
+                                                                    Cá nhân
+                                                                    <li className='ml-2 text-gray-500 flex justify-between'>
+                                                                        <span>
+                                                                            Theo buổi:
+                                                                        </span>
+                                                                        <span className=" font-medium  text-yellow-400">
+                                                                            {convertStringToNumber(userInfo?.price?.personal_price_session)}
+                                                                        </span>
+                                                                    </li>
+                                                                    <li className='text-gray-500  ml-2  flex justify-between'>
+                                                                        <span>
+                                                                            Theo ngày:
+                                                                        </span>
+                                                                        <span className=" font-medium  text-yellow-400">
+                                                                            {convertStringToNumber(userInfo?.price?.personal_price_day)}
+                                                                        </span>
+                                                                    </li>
+                                                                </ul>
 
-                                        }
+                                                                <ul className='font-bold ' >
+                                                                    Theo nhóm
+                                                                    <li className='text-gray-500 ml-2  flex justify-between'>
+                                                                        <span>
+                                                                            Theo buổi:
+                                                                        </span>
+                                                                        <span className=" font-medium  text-yellow-400">
+                                                                            {convertStringToNumber(userInfo?.price?.group_price_session)}/{t('personal')}
+                                                                        </span>
+                                                                    </li>
+                                                                    <li className='text-gray-500  ml-2 flex justify-between'>
+                                                                        <span>
+                                                                            Theo ngày:
+                                                                        </span>
+                                                                        <span className=" font-medium ml-2 text-yellow-400">
+                                                                            {convertStringToNumber(userInfo?.price?.group_price_day)}/{t('personal')}
+                                                                        </span>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </>}
+                                        />
                                     </div>
+                                    {/* {editPrice ?
+                                        <div>
+                                            <InputNumber
+                                                addonAfter="VND"
+                                                style={{ width: '100%' }}
+                                                // placeholder={pricePgt}
+                                                value={pricePgt}
+                                                onChange={(e) => setPricePgt(e)}
+                                                formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                            />
+                                            <div className={styles.editbtn}>
+                                                <Button onClick={handleChagePrice} >Hủy</Button>
+                                                <Button onClick={onSubmitChangePrice}>Lưu</Button>
+                                            </div>
+                                        </div>
+                                        :
+                                        <>
+                                            <p>{convertStringToNumber(pricePgt) ?? ''}/h</p>
+                                            <EditFilled width={50} onClick={handleChagePrice} />
+                                        </>
 
+                                    } */}
                                 </div>
-                            </div>
+
+                        </div>
                         </div>
                     }
-                </div>
-            </main >
+            </div>
+        </main >
             
         </>
     );

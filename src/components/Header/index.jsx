@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Avatar, Select } from "antd";
+import { Avatar, Select, Tooltip } from "antd";
 import NotLogin from "../BtnNotLogin/NotLogin";
 import NavBar from "../Navbar/NavBar";
 import SearchModal from "./Search/SearchModal";
@@ -19,29 +19,41 @@ import { useTranslation } from "react-i18next";
 import Login from "../../pages/Login";
 import Register from "../../pages/Register/Register";
 import CategoriesFactories from "../../services/CategoryFactories";
-
+import Cookies from 'js-cookie';
+import { MessageContext } from "../../context/Message.context";
+import { MessageOutlined, NotificationOutlined } from "@ant-design/icons";
 const Header = (props) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenLogin, setIsOpenLogin] = useState(false);
   const [isOpenRes, setIsOpenRes] = useState(false);
   const { logout } = useContext(AuthContext)
-  const { user, setUser } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
   const [language, setLanguage] = useState('en')
   const [fields, setFields] = useState()
-  // useEffect(() => {
-  //   const handleStorageChange = () => {
-  //     setUser({ ...JSON.parse(localStorage.getItem("user")) });
-  //   };
-  //   window.addEventListener("storage", handleStorageChange);
-  //   return () => window.removeEventListener("storage", handleStorageChange);
-  // }, []);
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setUser({ ...JSON.parse(localStorage.getItem("user")) });
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   const { t, i18n } = useTranslation()
+
   function handleChangeTrans(value) {
     setLanguage(value)
     i18n.changeLanguage(value);
+    Cookies.set('i18next', value, { expires: 365 });
   }
+
+  useEffect(() => {
+    const newValue = Cookies.get('i18next');
+    setLanguage(newValue)
+  }, [])
+
   const logOutHandler = () => {
     logout()
     localStorage.removeItem("user");
@@ -130,6 +142,28 @@ const Header = (props) => {
     // setFields(updatedItems);
   };
 
+  const [countMes, setCountMes] = useState();
+  const { messengerList } = useContext(MessageContext);
+  const countMesRef = useRef(countMes);
+
+  useEffect(() => {
+    if (messengerList) {
+      const unreadMessages = messengerList.filter(message => {
+        return (parseInt(message?.userSendId) !== parseInt(user?.id) && message.read === false)
+      })
+      const numUnreadMessages = unreadMessages.length;
+      // if (countMesRef.current === 0 && numUnreadMessages > 0) {
+      //   ToastInfo(unreadMessages[unreadMessages.length - 1].lastMessage unreadMessages[unreadMessages.length - 1].lastMessage)
+      // }
+      setCountMes(numUnreadMessages);
+      countMesRef.current = numUnreadMessages;
+    }
+  }, [messengerList]);
+
+  const navigator = useNavigate()
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("user")));
+  }, []);
 
   useEffect(() => {
     fetchDataFields()
@@ -147,7 +181,7 @@ const Header = (props) => {
           <span className="text-2xl font-bold  text-black">HINT</span>
         </Link>
         <div className="flex flex-row gap-5 justify-center items-center">
-          <Link className="hover:text-[#7733ff] text-xl font-bold border-b-[transparent] hover:border-b-2 hover:border-[#7733ff]">
+          <Link to={'/'} className="hover:text-[#7733ff] text-xl font-bold border-b-[transparent] hover:border-b-2 hover:border-[#7733ff]">
             {t('HomePage')}
           </Link>
           <Dropdown menu={{ items }}>
@@ -165,6 +199,9 @@ const Header = (props) => {
           </Link>
         </div>
       </div>
+
+
+
       {/* 
       <div className="header__room">
         <Menu icons={[home, campaign, chat]} />
@@ -194,6 +231,21 @@ const Header = (props) => {
         {user && <Notification countNotification={countNotification} />}
         {countNotification > 0 && (
           <span className={"noti-badge"}>{countNotification}</span>
+        )}
+        {user && (
+          <div className="icon-room-guest">
+            <Tooltip title="Nhắn tin" >
+              <button
+                onClick={() => navigator('/chat')}
+                className={({ isActive }) => (isActive ? "active" : undefined)}
+              >
+                <MessageOutlined />
+                {countNotification > 0 && (
+                  <span className={"noti-badge"}>{countMes}</span>
+                )}
+              </button>
+            </Tooltip>
+          </div>
         )}
         {user && (
           <div className="avata" ref={dropRef}>

@@ -3,7 +3,6 @@ import {
   UserOutlined,
   SettingOutlined,
   ClockCircleOutlined,
-  HistoryOutlined,
   PicRightOutlined,
   WalletOutlined,
   FileDoneOutlined,

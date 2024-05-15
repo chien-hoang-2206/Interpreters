@@ -20,6 +20,7 @@ const PageInterpreterDetail = () => {
   const { user } = useContext(AuthContext);
   const { id } = useParams();
   const [hintInfo, setHintInfo] = useState();
+  console.log("🚀 ~ PageInterpreterDetail ~ hintInfo:", hintInfo)
   const navigate = useNavigate();
   const { t } = useTranslation()
   const [open, setOpen] = useState(false);
@@ -103,20 +104,6 @@ const PageInterpreterDetail = () => {
     }
   };
 
-  const renderCategopryGame = () => {
-    return (
-      <>
-        {hintInfo?.listgame?.map((item, index) => (
-          <CardType
-            key={index}
-            id={item.id}
-            name={item.name}
-            background={item.image}
-          />
-        ))}
-      </>
-    )
-  };
 
   const renderFeedBack = () => {
     return (
@@ -294,7 +281,7 @@ const PageInterpreterDetail = () => {
                         title='Các ngôn ngữ phiên dịch'
                         description={
                           <div className="flex flex-wrap gap-12 p-5 pt-0 justify-center items-center bg-[#fff]">
-                            {hintInfo?.listgame?.map((item, index) => (
+                            {hintInfo?.listcategories?.map((item, index) => (
                               <CardType
                                 key={index}
                                 image={item.image}

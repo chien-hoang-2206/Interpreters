@@ -33,7 +33,7 @@ const ListPostPage = () => {
         setMonthSelect(e)
     };
     return (
-        <div className="container mx-auto py-8">
+        <div className="container mx-auto py-8 px-[10%]">
             <h1 className="text-3xl font-bold mb-8">{t('list_post')}</h1>
             <div className='flex flex-row w-full justify-end gap-3 mb-5'>
                 <Input

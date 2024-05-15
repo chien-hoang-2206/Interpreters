@@ -50,28 +50,28 @@ const BookingDetail = (props) => {
 
   const onAcceptSubmit = async () => {
     try {
-      // const response = await BookingFactories.updateBooking(bookingId, 2);
-      // if (response?.status === 200) {
-      //   toast.success('Chấp nhận yêu cầu booking thành công.')
-      //   createNotification(booking?.user_id,
-      //      2,
-      //     booking?.id,
-      //     "Interpreters đã chấp nhận yêu cầu booking của bạn", "Liên hệ với Interpreters để biết thêm chi tiết.",
-      //     booking?.user_id,
-      //     booking?.pgt_id,
-      //   );
-      //   sendMessage(
-      //     user?.id,
-      //     parseInt(booking?.user_id),
-      //     user?.userName,
-      //     booking?.user_name,
-      //     user?.avatar,
-      //     userBookingAvatar,
-      //     'Xin chào bạn! Cảm ơn bạn đã sử dụng dịch vụ của mình. Nếu bạn có bất kỳ câu hỏi hoặc yêu cầu gì, đừng ngần ngại nói cho tôi biết. Mình luôn sẵn sàng hỗ trợ bạn một cách tốt nhất.',
-      //     user?.id
-      //   )
-      //   onCloseModal();
-      // }
+      const response = await BookingFactories.updateBooking(bookingId, 2);
+      if (response?.status === 200) {
+        toast.success('Chấp nhận yêu cầu booking thành công.')
+        // createNotification(booking?.user_id,
+        //    2,
+        //   booking?.id,
+        //   "Interpreters đã chấp nhận yêu cầu booking của bạn", "Liên hệ với Interpreters để biết thêm chi tiết.",
+        //   booking?.user_id,
+        //   booking?.pgt_id,
+        // );
+        sendMessage(
+          user?.id,
+          parseInt(booking?.user_id),
+          user?.userName,
+          booking?.user_name,
+          user?.avatar,
+          userBookingAvatar,
+          'Xin chào bạn! Cảm ơn bạn đã sử dụng dịch vụ của mình. Nếu bạn có bất kỳ câu hỏi hoặc yêu cầu gì, đừng ngần ngại nói cho tôi biết. Mình luôn sẵn sàng hỗ trợ bạn một cách tốt nhất.',
+          user?.id
+        )
+        onCloseModal();
+      }
     } catch (error) {
       toast.error('Hệ thống lỗi, vui lòng thử lại sau.')
     }
@@ -79,16 +79,16 @@ const BookingDetail = (props) => {
 
   const deniedBooking = async () => {
     try {
-      // const response = await BookingFactories.updateBooking(bookingId, 3);
-      // if (response?.status === 200) {
-      //   toast.success('Đã từ chối yêu cầu booking.')
-      //   createNotification(booking?.user_id, 2, booking?.id,
-      //     "Interpreters đã từ chối yêu cầu booking của bạn", "Liên hệ với Interpreters để biết thêm chi tiết.",
-      //     booking?.user_id,
-      //     booking?.pgt_id);
-      // }
-      // await PaymentFactories.updateMoneyToAccId(10,booking?.user_id,booking?.price);
-      // onCloseModal();
+      const response = await BookingFactories.updateBooking(bookingId, 3);
+      if (response?.status === 200) {
+        toast.success('Đã từ chối yêu cầu booking.')
+        createNotification(booking?.user_id, 2, booking?.id,
+          "Interpreters đã từ chối yêu cầu booking của bạn", "Liên hệ với Interpreters để biết thêm chi tiết.",
+          booking?.user_id,
+          booking?.pgt_id);
+      }
+      await PaymentFactories.updateMoneyToAccId(10,booking?.user_id,booking?.price);
+      onCloseModal();
     } catch (error) {
       toast.error('Hệ thống lỗi, vui lòng thử lại sau.')
     }

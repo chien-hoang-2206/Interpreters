@@ -25,7 +25,7 @@ function PaymentResult() {
         if (paymentResult?.status === 'SUCCESS') {
           try {
             await PaymentFactories.updatePaymentDetail(paymentResult.txnRef, paymentResult?.txnNo,(parseInt(paymentResult?.amount)/100),paymentData?.user_id);
-            createNotification(paymentData?.user_id, 6, paymentData?.booking_id, "Thanh toán thành công", `Thanh toán thành công cho lượt booking Interpreters ${paymentData?.pgt_name}`);
+            // createNotification(paymentData?.user_id, 6, paymentData?.booking_id, "Thanh toán thành công", `Thanh toán thành công cho lượt booking Interpreters ${paymentData?.pgt_name}`);
           } catch (error) {
             ToastNotiError('Có lỗi xảy ra, liên hệ với Admin')
           }

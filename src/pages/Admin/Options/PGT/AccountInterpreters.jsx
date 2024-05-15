@@ -8,11 +8,14 @@ import DropdownOperation from "../../../../components/Dropdown/DropdownOperation
 import AccountFactories from "../../../../services/AccountFactories";
 import { toast } from "react-toastify";
 import CategoriesFactories from "../../../../services/CategoryFactories";
+import { useTranslation } from "react-i18next";
 
 const AccountInterpreters = () => {
   const [pgtList, setPgtList] = useState([]);
   const [valueSearch, setValueSearch] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation()
+
 
   const fetchApiList = async (value) => {
     try {

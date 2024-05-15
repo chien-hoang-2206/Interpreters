@@ -27,8 +27,8 @@ body {
   background-color: #1890ff;
 }
 body::-webkit-scrollbar {
-  width: 2px;
-  height: 2px;
+  width: 10px;
+  height: 10px;
 }
 
 /* // style cho quill */

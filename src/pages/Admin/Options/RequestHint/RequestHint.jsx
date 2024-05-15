@@ -5,6 +5,7 @@ import AvatarGroup from "../../../../components/image-group/AvatarGroup";
 import { ToastNoti, ToastNotiError, convertStringToNumber } from "../../../../utils/Utils";
 import AccountFactories from "../../../../services/AccountFactories";
 import { createNotification } from "../../../../services/ChatService";
+import { useTranslation } from "react-i18next";
 const RequestHint = ({ onReload = () => { } }) => {
   const [dataList, setDataList] = useState([]);
   const [namePgt, setNamePgt] = useState("");
@@ -31,7 +32,7 @@ const RequestHint = ({ onReload = () => { } }) => {
   useEffect(() => {
     fetchApiList();
   }, []);
-
+  const { t } = useTranslation()
   const columns = [
     // {
     //   title: '#',
@@ -182,7 +183,7 @@ const RequestHint = ({ onReload = () => { } }) => {
       render: (text) => <div className="text-data">{text}</div>,
     },
     {
-      title: "Tác vụ",
+      title: t('action'),
       key: "action",
       render: (_, record) => (
         <div className="btn-action-group flex flex-col gap-3" >
@@ -212,7 +213,7 @@ const RequestHint = ({ onReload = () => { } }) => {
       const resp = AccountFactories.updateStatusRequestPgt(id, 10);
       if (resp) {
         ToastNoti();
-        createNotification(id, 4, 0, "Đăng ký làm Interpreters thất bại", "Admin đã từ chối yêu cầu đăng ký làm Interpreters của bạn.");
+        // createNotification(id, 4, 0, "Đăng ký làm Interpreters thất bại", "Admin đã từ chối yêu cầu đăng ký làm Interpreters của bạn.");
         onReload()
         fetchApiList();
       }
@@ -228,7 +229,7 @@ const RequestHint = ({ onReload = () => { } }) => {
         ToastNoti();
         fetchApiList();
         onReload()
-        createNotification(id, 3, 0, "Đăng ký làm Interpreters thành công", "Admin đã chấp nhận yêu cầu đăng ký làm Interpreters của bạn, vui lòng đăng nhập lại.");
+        // createNotification(id, 3, 0, "Đăng ký làm Interpreters thành công", "Admin đã chấp nhận yêu cầu đăng ký làm Interpreters của bạn, vui lòng đăng nhập lại.");
       }
     } catch (error) {
       ToastNotiError();
@@ -257,7 +258,7 @@ const RequestHint = ({ onReload = () => { } }) => {
     <div className="booking-container">
       <div className="booking-title">
         <span className="font-bold text-blue">
-          Yêu cầu làm Interpreters
+          {t('request_imt')}
         </span></div>
       <div className="booking-search">
         <Input

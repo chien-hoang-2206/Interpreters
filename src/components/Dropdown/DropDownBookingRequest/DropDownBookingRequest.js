@@ -71,7 +71,7 @@ const DropDownBookingRequest = ({ status, booking, icon, options, id, onFetchDat
                     //     booking?.user_id,
                     //     booking?.pgt_id,
                     // );
-                    // const resp = await PaymentFactories.updateMoneyToAccId(10, user_id, booking?.price);
+                    const resp = await PaymentFactories.updateMoneyToAccId(10, user_id, booking?.price);
                 }
                 else if (type === 4) {
                     // createNotification(user_id, 5, id, "Lượt booking đã hoàn thành", "Vui lòng đánh giá cho Interpreters.");

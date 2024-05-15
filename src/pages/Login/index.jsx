@@ -212,7 +212,7 @@ const Login = (props) => {
           <div className="login-form__control">
             <input
               className="input-login"
-              type="text"
+              type="email"
               name="email"
               onChange={inputChangeHandler}
               placeholder="Nhập email"

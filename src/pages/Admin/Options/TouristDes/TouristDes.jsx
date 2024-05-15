@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Table, Image, Input, Modal, Typography, Button, Avatar, Form, Space, TimePicker, Select } from "antd";
+import { Table, Image, Input, Modal, Typography, Button, Avatar, Form, TimePicker, Select } from "antd";
 import classes from './TouristDes.module.css'
-import CategoriesFactories from "../../../../services/CategoryFactories";
 import { ToastNoti, ToastNotiError, convertStringToNumber, getDate } from "../../../../utils/Utils";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
-import { storage } from "../../../../firebase";
-import { v4 } from 'uuid';
 import DestinationFactories from "../../../../services/DestinationFatories";
-import TextArea from "antd/es/input/TextArea";
 import { useTranslation } from "react-i18next";
 import Constants from "../../../../utils/constants";
 import ReactQuill from "react-quill";
 import { uploadFirebase } from "../../../../utils/FirebaseService";
+import dayjs from "dayjs";
 
 const { Text } = Typography;
 
@@ -30,13 +26,13 @@ const TouristDes = () => {
             showSorterTooltip: false,
         },
         {
-            title: "Tên Địa điểm du lịch",
+            title: t('name_dddl'),
             dataIndex: "name",
             key: "name",
             render: (text, data) => <div className="name-title-table">{text}</div>,
         },
         {
-            title: "Ảnh đại diện",
+            title: t('image_demo'),
             dataIndex: "image",
             width: 120,
             key: "image",
@@ -50,27 +46,27 @@ const TouristDes = () => {
             render: (text, data) => <div className="name-title-table">{Constants.vietnamProvinces.find(item => item.value === text).label}</div>,
         },
         {
-            title: "Kinh độ",
+            title: t('lat'),
             width: 120,
             key: "latitude",
             dataIndex: "latitude",
             render: (text, data) => <div className="name-title-table">{text}</div>,
         },
         {
-            title: "Vĩ độ",
+            title: t('long'),
             width: 120,
             key: "longitude",
             dataIndex: "longitude",
             render: (text, data) => <div className="name-title-table">{text}</div>,
         },
         {
-            title: "Giá vé",
+            title: t('ticket'),
             dataIndex: "price",
             key: "price",
             render: (text, data) => <div className="name-title-table">{convertStringToNumber(text)}</div>,
         },
         {
-            title: "Thời gian",
+            title: t('time'),
             dataIndex: "name",
             key: "time_start",
             render: (text, data) => <div className="name-title-table">{`${getDate(data?.time_start, 6)} - ${getDate(data?.time_end, 6)}`}</div>,
@@ -83,16 +79,16 @@ const TouristDes = () => {
         //     render: (text, data) => <div className="name-title-table">{text}</div>,
         // },
         {
-            title: "Tác vụ",
+            title: t('action'),
             key: "action",
             render: (_, record) => (
                 <div className="btn-action-group" >
-                    <Button
+                    {/* <Button
                         style={{ marginRight: 10 }}
                         onClick={() => onDeleteFiledHandler(record?.id)}
                     >
-                        Xóa
-                    </Button>
+                        {t('Delete')}
+                    </Button> */}
                     <Button
                         type='default'
                         style={{
@@ -100,7 +96,7 @@ const TouristDes = () => {
                         }}
                         onClick={() => onUpdatedestination(record)}
                     >
-                        Sửa
+                        {t('update')}
                     </Button>
                 </div>
             ),
@@ -109,6 +105,7 @@ const TouristDes = () => {
 
     const [TouristDes, setTouristDes] = useState()
     const [inputSearch, setInputSearch] = useState("");
+    const [form] = Form.useForm();
     const [openModalAdd, setOpenModalAdd] = useState(false)
     const [destinationAddName, setDestinationAddName] = useState()
     const [destinationUpdateId, setDestinationUpdateId] = useState()
@@ -119,7 +116,7 @@ const TouristDes = () => {
     const [loading, setLoading] = useState(true);
     const [content, setContent] = useState('');
     const [imageLink, setImageLinK] = useState([]);
-    const [fileUpload, setFileUpload] = useState([]);
+    const [fileUpload, setFileUpload] = useState();
 
     const handleChange = (e) => {
         const file = e.target.files[0];
@@ -130,6 +127,7 @@ const TouristDes = () => {
             setImageLinK(url);
         }
     };
+
 
     const fetchData = async (Keyword) => {
         setLoading(true)
@@ -165,6 +163,7 @@ const TouristDes = () => {
             const resp = await DestinationFactories.deleteDestination(id);
             if (resp.status) {
                 ToastNoti();
+                setImageLinK()
                 fetchData();
             }
         } catch (error) {
@@ -177,7 +176,8 @@ const TouristDes = () => {
         setDestinationUpdateName(data?.name)
         setDestinationUpdateId(data?.id)
         setDestinationUpdateImage(data?.image)
-        setShowModalUpdate(true);
+        setImageLinK()
+        setShowModalUpdate(data);
     }
     const onCloseModalUpdate = (id) => {
         setShowModalUpdate(false);
@@ -186,12 +186,10 @@ const TouristDes = () => {
     }
     const onOpenModalAddField = () => {
         setOpenModalAdd(true)
-        setFileUploadLink();
     }
 
     const onCloseModalAddField = () => {
         setOpenModalAdd(false)
-        setFileUploadLink();
         fetchData();
     }
 
@@ -214,40 +212,50 @@ const TouristDes = () => {
             const resp = await DestinationFactories.createDestination(data);
             if (resp?.status === 200) {
                 ToastNoti();
+                setImageLinK()
+                setFileUpload()
                 onCloseModalAddField()
             } else {
                 ToastNotiError('resp?.message');
+                setFileUpload()
             }
         } catch (error) {
             ToastNotiError();
         }
     }
 
-    const onUpdatedestinationSubmit = async () => {
-        if (!destinationUpdateName || destinationUpdateName?.trim() === '') {
-            setError("Điền tên Địa điểm du lịch")
-        }
-        else {
-            setError();
-            const data = {
-                name: destinationUpdateName,
-                image: fileUploadLink ? fileUploadLink : destinationUpdateImage,
+    const onUpdatedestinationSubmit = async (data) => {
+        setLoading(true)
+        try {
+            let url = showModalUpdate.image
+            if (fileUpload) {
+                url = await uploadFirebase(fileUpload);
             }
-            try {
-                const resp = await CategoriesFactories.updatedestination(destinationUpdateId, data);
-                if (resp?.status === 200) {
-                    ToastNoti();
-                    onCloseModalUpdate()
-                } else {
-                    ToastNotiError('resp?.message');
-                }
-            } catch (error) {
-                ToastNotiError();
+            const newData = {
+                name: data?.name,
+                image: url,
+                latitude: data?.latitude,
+                province: data?.province,
+                longitude: data?.longitude,
+                time_start: data?.time[0],
+                time_end: data?.time[1],
+                price: data?.price,
+                experience: data.experience
             }
+            const resp = await DestinationFactories.updateDestination(destinationUpdateId, newData);
+            if (resp?.status === 200) {
+                ToastNoti();
+                setImageLinK()
+                onCloseModalUpdate()
+                setFileUpload()
+            } else {
+                setFileUpload()
+                ToastNotiError('resp?.message');
+            }
+        } catch (error) {
+            ToastNotiError();
         }
     }
-
-    const [fileUploadLink, setFileUploadLink] = useState();
 
 
     const modules = {
@@ -275,12 +283,33 @@ const TouristDes = () => {
         "code-block",
         "color",
     ];
+
+
+    useEffect(() => {
+        if (showModalUpdate) {
+            const newtime = [
+                dayjs(showModalUpdate?.time_start),
+                dayjs(showModalUpdate?.time_end),
+
+            ]
+            form.setFieldsValue({
+                name: showModalUpdate?.name,
+                province: showModalUpdate?.province,
+                longitude: showModalUpdate?.longitude,
+                latitude: showModalUpdate?.latitude,
+                time: newtime,
+                time_end: showModalUpdate?.time_end,
+                price: showModalUpdate?.price,
+                experience: showModalUpdate?.experience,
+            });
+        }
+    }, [showModalUpdate]);
     return (
         <div className="booking-container" style={{ height: '100vh', overflow: 'scroll' }}>
-            <div className="booking-title"><span>Địa điểm du lịch</span></div>
+            <div className="booking-title"><span>{t('dddl')}</span></div>
             <div className="booking-search">
                 <Input
-                    placeholder="Tìm kiếm Địa điểm du lịch"
+                    placeholder={t('search')}
                     size="middle "
                     value={inputSearch}
                     onKeyDown={(e) => handleKeyDown(e)}
@@ -293,19 +322,19 @@ const TouristDes = () => {
                     }}
                     onClick={handleReset}
                 >
-                    Mặc định
+                    {t('default')}
                 </Button>
                 <Button
                     type='primary'
                     onClick={handleSearch}
                 >
-                    Tìm kiếm
+                    {t('search')}
                 </Button>
                 <Button type='primary'
                     style={{
                     }}
                     onClick={onOpenModalAddField}
-                >Thêm Địa điểm du lịch</Button>
+                >{t('add_dddl')}</Button>
             </div>
             <div >
                 <Table
@@ -343,7 +372,7 @@ const TouristDes = () => {
                             <input
                                 id="uploadInput"
                                 type="file"
-                  accept="image/*"
+                                accept="image/*"
                                 className={classes.uploadInput}
                                 style={{ display: 'none' }}
                                 onChange={(e) => handleChange(e)}
@@ -432,45 +461,126 @@ const TouristDes = () => {
                         </div>
                     </div>
                 </Form>
-
             </Modal >
 
             <Modal
                 width={800}
-                title="Sửa thông tin Địa điểm du lịch"
+                title={t('update')}
                 open={showModalUpdate}
                 onCancel={onCloseModalUpdate}
                 footer={[]}
             >
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <div>
-                        <label style={{ padding: '2px 5px', border: '1px solid #FAF8F1', borderRadius: 5 }} htmlFor="uploadInput" className={classes.uploadButton}>
-                            Upload Image
-                        </label>
-                        <input
-                            id="uploadInput"
-                            type="file"
-                  accept="image/*"
-                            className={classes.uploadInput}
-                            style={{ display: 'none' }}
-                            onChange={(e) => handleChange(e)}
-                        />
-                    </div>
-                    <Avatar
-                        src={fileUploadLink ? fileUploadLink : destinationUpdateImage}
-                        alt="avatar"
-                        style={{ width: 200, height: 200 }}
-                    />
+                    <Form
+                        name="basic"
+                        labelAlign='left'
+                        form={form}
+                        labelCol={{ span: 5 }}
+                        wrapperCol={{ span: 19 }}
+                        initialValues={{ remember: true }}
+                        onFinish={onUpdatedestinationSubmit}
+                    >
 
-                    {error && <Text type="danger">{error}</Text>}
-                    <Button
-                        style={{
-                            backgroundColor: 'blue',
-                            width: '100%', float: 'right'
-                        }}
-                        htmlType="submit"
-                        onClick={onUpdatedestinationSubmit}
-                    >Sửa</Button>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <div>
+                                <label style={{ padding: '2px 20px', border: '1px solid #FAF8F1', borderRadius: 5 }} htmlFor="uploadInput" className={classes.uploadButton}>
+                                    Upload Image
+                                </label>
+                                <input
+                                    id="uploadInput"
+                                    type="file"
+                                    accept="image/*"
+                                    className={classes.uploadInput}
+                                    style={{ display: 'none' }}
+                                    onChange={(e) => handleChange(e)}
+                                />
+                            </div>
+                            <Avatar
+                                src={imageLink ? imageLink : showModalUpdate?.image ?? ''}
+                                alt="avatar"
+                                style={{ width: 200, height: 200 }}
+                            />
+
+                            <Form.Item label={t('name_dddl')} name='name'>
+                                <Input
+                                    type="text"
+                                    style={{ width: '100%' }}
+                                    className={classes['add-modal-input']}
+                                />
+                            </Form.Item>
+                            <Form.Item label={t('province')}
+                                rules={[
+                                    { required: true, message: t('must_choose') },
+                                ]}
+                                name='province'>
+                                <Select
+                                    type="text"
+                                    style={{ width: '100%' }}
+                                    options={Constants.vietnamProvinces}
+                                />
+                            </Form.Item>
+                            <Form.Item label="Nhập kinh độ" name='longitude'>
+                                <Input
+                                    type="text"
+                                    style={{ width: '100%' }}
+                                    className={classes['add-modal-input']}
+                                />
+                            </Form.Item>
+                            <Form.Item label="Nhập vĩ độ" name='latitude'>
+                                <Input
+                                    type="text"
+                                    style={{ width: '100%' }}
+                                    className={classes['add-modal-input']}
+                                />
+                            </Form.Item>
+
+                            <Form.Item label="Thời gian hoạt động" name="time"
+                            >
+                                <TimePicker.RangePicker
+                                    format='HH:mm'
+                                    placeholder={['Bắt đầu', 'Kết thúc']}
+                                />
+                            </Form.Item>
+
+                            <Form.Item label="Nhập vé vào cửa" name='price'>
+                                <Input
+                                    type="number"
+                                    style={{ width: '100%' }}
+                                    className={classes['add-modal-input']}
+                                />
+                            </Form.Item>
+
+                            <Form.Item label="Giới thiệu" name='experience'>
+                                {/* <TextArea
+                                placeholder='Giới thiệu về địa điểm...'
+                                autoSize={{ minRows: 3, maxRows: 20 }}
+                            // onChange={(e) => setEditValue(e.target.value)} value={editValue} 
+                            /> */}
+
+                                <ReactQuill
+                                    theme="snow"
+                                    value={content}
+                                    onChange={(e) => setContent(e)}
+                                    modules={modules}
+                                    formats={formats}
+                                    placeholder="Giới thiệu về địa điểm..."
+                                    className="bg-white rounded mt-5"
+                                />
+                            </Form.Item>
+
+                            <div className="w-full flex justify-end float-right">
+                                <Button
+                                    style={{
+                                        backgroundColor: 'blue',
+                                        width: '100%', float: 'right'
+                                    }}
+                                    htmlType="submit"
+                                    onClick={onUpdatedestinationSubmit}
+                                >{t('update')}</Button>
+                            </div>
+                        </div>
+                    </Form>
+
                 </div>
             </Modal >
 

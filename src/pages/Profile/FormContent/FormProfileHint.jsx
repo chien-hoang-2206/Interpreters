@@ -1,19 +1,16 @@
-import { EditOutlined, PlusOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Col, Row, Select } from "antd";
+import { Col, Row, Select } from "antd";
 import { useEffect, useLayoutEffect, useState } from "react";
 import classes from "./Form.module.css";
 import Message from "../../../components/UI/Message/Message";
-import ImageSlider from "../../../components/UI/ImageSlider/ImageSlider";
-import { GenderOptions } from "../../../utils/Enums";
 import HintFactories from "../../../services/HintFatories";
-import AccountFactories from "../../../services/AccountFactories";
 import { ToastNoti, ToastNotiError } from "../../../utils/Utils";
 import Constants from "../../../utils/constants";
 import CategoriesFactories from "../../../services/CategoryFactories";
 import axios from "axios";
+import AccountFactories from "../../../services/AccountFactories";
 
 export default function FormProfileHint(props) {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [user] = useState(JSON.parse(localStorage.getItem("user")));
   const [profile, setProfile] = useState();
   const [fields, setFields] = useState([]);
   const [showMessage, setShowMessage] = useState({
@@ -173,26 +170,26 @@ export default function FormProfileHint(props) {
         tiktok: profile?.tiktok,
         instagram: profile?.instagram,
       }
-      // const response = await AccountFactories.requestUpdate(user?.id, data);
-      // if (response?.status === 210) {
-      //   ToastNotiError(response?.message);
-      // }
-      // else if (response) {
-      //   ToastNoti();
-      // }
+      const response = await AccountFactories.requestUpdate(user?.id, data);
+      if (response?.status === 210) {
+        ToastNotiError(response?.message);
+      }
+      else if (response) {
+        ToastNoti();
+      }
     } catch (error) {
       console.log(error);
       ToastNotiError();
     }
   };
 
-  // useLayoutEffect(() => {
-  //   const fetchData = async () => {
-  //     const response = await CategoriesFactories.getListCategories();
-  //     setFields(response);
-  //   };
-  //   fetchData();
-  // }, []);
+  useLayoutEffect(() => {
+    const fetchData = async () => {
+      const response = await CategoriesFactories.getListCategories();
+      setFields(response);
+    };
+    fetchData();
+  }, []);
 
   const optionCategory = fields?.map((field) => {
     return {

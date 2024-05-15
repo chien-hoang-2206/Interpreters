@@ -5,13 +5,14 @@ import HintFactories from "../../../../services/HintFatories";
 import StarRating from "../../../../components/start-rating/StarRating";
 import { ToastNoti, ToastNotiError, convertStringToNumber, partStringToNumber as parseStringToNumber } from "../../../../utils/Utils";
 import AccountFactories from "../../../../services/AccountFactories";
+import { useTranslation } from "react-i18next";
 
 const HotHintAdmin = () => {
   const [namePgt, setNamePgt] = useState("");
   const [typeSearch, setTypeSearch] = useState(10);
   const [hotHints, setHotHintsList] = useState([]);
   const [loading, setLoading] = useState(true);
-
+const { t } = useTranslation()
   const fetchData = async (name, type) => {
     try {
       setLoading(true)
@@ -85,7 +86,7 @@ const HotHintAdmin = () => {
         </div>
     },
     {
-      title: "Tác vụ",
+      title: t('action'),
       key: "action",
       width: 300,
       render: (_, record) =>

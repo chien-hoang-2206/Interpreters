@@ -1,5 +1,4 @@
 import React from 'react'
-import ButtonRadius from '../UI/Button/ButtonRadius'
 import { useTranslation } from 'react-i18next'
 
 
@@ -11,7 +10,7 @@ const NotLogin = (props) => {
                 {t('login')}
             </button>
             <button className='mx-24px px-16px box-border h-8 rounded-8px bg-[#7733FF] px-2 rounded-md text-center flex flex-row align-middle items-center text-14px font-bold text-white hover:scale-105 transition' onClick={props.registerHandler}>
-                {t('resgister')}
+                {t('register')}
             </button>
         </div>
 

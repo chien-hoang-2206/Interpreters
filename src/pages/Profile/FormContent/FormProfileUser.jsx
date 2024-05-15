@@ -1,14 +1,12 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Col, Input, Row, Select } from "antd";
 
 import classes from "./Form.module.css";
 import Message from "../../../components/UI/Message/Message";
 import Constants from "../../../utils/constants";
-import CategoriesFactories from "../../../services/CategoryFactories";
-import AccountFactories from "../../../services/AccountFactories";
 import { ToastNoti, ToastNotiError } from "../../../utils/Utils";
-import HintFactories from "../../../services/HintFatories";
 import axios from "axios";
+import AccountFactories from "../../../services/AccountFactories";
 
 export default function FormProfileUser(props) {
   const [user] = useState(JSON.parse(localStorage.getItem("user")));
@@ -52,8 +50,8 @@ export default function FormProfileUser(props) {
     }
     else if (!formData.first_name) {
       errMsg = "Vui lòng nhập họ của bạn!";
-    } 
-    else if (!formData.phone ) {
+    }
+    else if (!formData.phone) {
       errMsg = "Vui lòng nhập số điện thoại của bạn!";
     }
     else if (!formData.province) {
@@ -69,7 +67,8 @@ export default function FormProfileUser(props) {
       errMsg = "Vui lòng chọn lĩnh vực hoạt động!";
     }
     else if (!validatePhoneNumber(formData?.phone)) {
-      errMsg = "Số điện thoại không hợp lệ!";}
+      errMsg = "Số điện thoại không hợp lệ!";
+    }
     if (errMsg) {
       createErrorMessage(errMsg);
       res = false;
@@ -96,13 +95,13 @@ export default function FormProfileUser(props) {
         ward: profile?.ward,
         listgame: profile?.listgame,
       }
-      // const response = await AccountFactories.requestUpdate(user?.id, data);
-      // if (response?.status === 210) {
-      //   ToastNotiError(response?.message);
-      // }
-      // else if (response) {
-      //   ToastNoti();
-      // }
+      const response = await AccountFactories.requestUpdate(user?.id, data);
+      if (response?.status === 210) {
+        ToastNotiError(response?.message);
+      }
+      else if (response) {
+        ToastNoti();
+      }
     } catch (error) {
       console.log(error);
       ToastNotiError();

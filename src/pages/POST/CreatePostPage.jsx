@@ -105,7 +105,7 @@ const CreatePostPage = () => {
 
     const { t } = useTranslation()
     return (
-        <div className="w-full container mx-auto py-8">
+        <div className="w-full container mx-auto py-8 px-[10%]">
             <h1 className="w-full text-4xl font-bold text-center mb-6">{t('add_post')}</h1>
             <div className="w-full flex flex-row gap-10 justify-between">
 

@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import fb from "../../assets/icon/icon-facebook.png";
 import yt from "../../assets/icon/icon-youtube.png";
 import isg from "../../assets/icon/icon-intagram.png";
-import tt from "../../assets/icon/icon-tiktok.png";
 import logo from "../../assets/logo/LogoPage.png";
 
 import classes from "./Footer.module.css";

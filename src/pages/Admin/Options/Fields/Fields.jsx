@@ -6,6 +6,7 @@ import { ToastNoti, ToastNotiError } from "../../../../utils/Utils";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { storage } from "../../../../firebase";
 import { v4 } from 'uuid';
+import { useTranslation } from "react-i18next";
 
 const { Text } = Typography;
 
@@ -15,7 +16,7 @@ const Fields = () => {
     const [openModalAdd, setOpenModalAdd] = useState(false)
     const [categoryAddName, setCategoryAddName] = useState()
     const [categoryUpdateId, setCategoryUpdateId] = useState()
-
+    const { t } = useTranslation()
     const [categoryUpdateName, setCategoryUpdateName] = useState()
     const [categoryUpdateImage, setcategotyUpdateImage] = useState()
     const [error, setError] = useState();
@@ -56,7 +57,7 @@ const Fields = () => {
             render: (text, data) => <Image src={text} className="name-title-table" style={{ width: 100, height: 100 }} />,
         },
         {
-            title: "Tác vụ",
+            title: t('action'),
             key: "action",
             render: (_, record) => (
                 <div className="btn-action-group" >
@@ -266,7 +267,7 @@ const Fields = () => {
                         <input
                             id="uploadInput"
                             type="file"
-                  accept="image/*"
+                            accept="image/*"
                             className={classes.uploadInput}
                             style={{ display: 'none' }}
                             onChange={(e) => handleChangeImage(e.target.files[0])}
@@ -313,7 +314,7 @@ const Fields = () => {
                         <input
                             id="uploadInput"
                             type="file"
-                  accept="image/*"
+                            accept="image/*"
                             className={classes.uploadInput}
                             style={{ display: 'none' }}
                             onChange={(e) => handleChangeImage(e.target.files[0])}

@@ -14,7 +14,6 @@ import { useTranslation } from "react-i18next";
 import { uploadFirebase } from "../../utils/FirebaseService";
 import { CameraOutlined } from "@ant-design/icons";
 import { Button } from "@nextui-org/react";
-import { ToastNotiError } from "../../utils/Utils";
 const { Text } = Typography;
 
 const RegisterInterpreters = (props) => {

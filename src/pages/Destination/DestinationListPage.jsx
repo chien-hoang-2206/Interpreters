@@ -13,7 +13,7 @@ const DestinationListPage = () => {
     const [province, setProvince] = useState();
     const { t } = useTranslation()
     const navigate = useNavigate()
-    const fetchData = async (Keyword) => {
+    const fetchData = async (province) => {
         setLoading(true)
         const response = await DestinationFactories.getListDestination({
             Province: province,
@@ -35,12 +35,23 @@ const DestinationListPage = () => {
                     <Select
                         placeholder={t('choose_province')}
                         size="middle "
+                        value={province}
                         className='w-60 mt-1'
                         options={Constants.vietnamProvinces}
                         onChange={(e) => setProvince(e)} />
                     <Button
                         color="primary"
-                        onClick={() => fetchData()}
+                        onClick={() => {
+                            setProvince()
+                            fetchData()
+                        }
+                        }
+                    >
+                        {t('default')}
+                    </Button>
+                    <Button
+                        color="primary"
+                        onClick={() => fetchData(province)}
                     >
                         {t('search')}
                     </Button>

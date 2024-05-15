@@ -4,12 +4,14 @@ import classes from "./AccountUser.module.css";
 import Constants from "../../../../utils/constants";
 import DropdownOperation from "../../../../components/Dropdown/DropdownOperation";
 import AccountFactories from "../../../../services/AccountFactories";
+import { useTranslation } from "react-i18next";
 
 
 const AccountUser = () => {
   const { Search } = Input;
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation()
 
   const fetchApiList = async (value) => {
     setLoading(true)
@@ -108,9 +110,9 @@ const AccountUser = () => {
       title: 'Khu vực',
       dataIndex: 'province',
       key: 'age',
-      width: 70,
+      width: 160,
       align: 'center',
-      sorter: (a, b) => a.age - b.age,
+      render: (data) => <div>{Constants.vietnamProvinces.find(i => i.value == data)?.label}</div>
     },
     {
       title: 'SĐT',
