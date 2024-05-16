@@ -108,9 +108,9 @@ const Chat = () => {
       const querySnapshot = await getDocs(notificationsQuery);
       const batch = writeBatch(db);
 
-      // querySnapshot.forEach((doc) => {
-      //   batch.update(doc.ref, { read: true });
-      // });
+      querySnapshot.forEach((doc) => {
+        batch.update(doc.ref, { read: true });
+      });
       await batch.commit();
       reloadMessengerList(); 
     } catch (e) {

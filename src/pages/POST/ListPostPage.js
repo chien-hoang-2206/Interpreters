@@ -4,6 +4,7 @@ import PostFactories from '../../services/PostFatories';
 import { getDate } from '../../utils/Utils';
 import { Link } from 'react-router-dom';
 import { Button, DatePicker, Input } from 'antd';
+import { CloseCircleOutlined } from '@ant-design/icons';
 
 const ListPostPage = () => {
     const [dataList, setdataList] = useState([]);
@@ -22,7 +23,9 @@ const ListPostPage = () => {
             // Handle errors here
         }
     };
-
+    useEffect(() => {
+        fetchData();
+    }, [keyword, monthSelect])
     useEffect(() => {
         fetchData();
     }, []);
@@ -39,10 +42,16 @@ const ListPostPage = () => {
                 <Input
                     placeholder={t('search')}
                     size="middle "
+                    value={keyword}
+                    addonAfter={
+                        <button onClick={() => { setKeyword() }}>
+                            <CloseCircleOutlined /></button>
+                    }
                     className='w-60'
                     onChange={(e) => handleOnChangeInput(e)} />
                 <DatePicker
                     className='w-30'
+                    placeholder={t('choose_date')}
                     onChange={(e) => handleOnChangeDate(e)}
                 />
                 <Button

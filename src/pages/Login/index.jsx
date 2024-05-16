@@ -41,7 +41,7 @@ const Login = (props) => {
   });
 
   useEffect(() => {
-    document.title = `HINT | Đăng nhập`
+    document.title = `HINT | ${t('login')}`
     return () => {
       document.title = 'HINT';
     };
@@ -236,7 +236,7 @@ const Login = (props) => {
             </label>
           </div>
           <div className="login-form__control">
-            <ButtonFull type="submit" disabled={loading}>Đăng nhập</ButtonFull>
+            <ButtonFull type="submit" disabled={loading}>{t('login')}</ButtonFull>
           </div>
         </form>
         <div className="login-form__control">

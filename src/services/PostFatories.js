@@ -4,8 +4,8 @@ import ApiOperation from "../adapter/ApiOperation";
 const PostFactories = {
   getListPost: async data => {
     let params = {};
-    if (data.user_id) {
-      params.user_id = data.user_id;
+    if (data.status) {
+      params.status = data.status;
     }
     if (data.Keyword) {
       params.Keyword = data.Keyword;

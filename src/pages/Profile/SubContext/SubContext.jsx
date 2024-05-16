@@ -8,7 +8,7 @@ import RequestBooking from "../FormContent/Book/RequestBooking";
 import FormProfileHint from "../FormContent/FormProfileHint";
 import ManagerPost from "../FormContent/ManagerPost/ManagerPost";
 
-const componentPgt = [
+const componentHint = [
   { key: "1", component: <FormProfileHint /> },
   { key: "sub1", component: <FormEmail /> },
   { key: "sub2", component: <FormPassword /> },
@@ -35,7 +35,7 @@ const SubContext = (props) => {
         Object.keys(props.changeContent).length === 0 && <FormProfileHint />}
 
       {props.user?.role_id === 2 &&
-        componentPgt.map((component) => {
+        componentHint.map((component) => {
           if (component.key === props.changeContent) return component.component;
         })}
 

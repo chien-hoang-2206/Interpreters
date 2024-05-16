@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { CameraOutlined } from '@ant-design/icons';
 import IMDefault from '../../assets/images/images_default.png'
 import { uploadFirebase } from '../../utils/FirebaseService';
+import { ToastNoti } from '../../utils/Utils';
 
 const PreviewContent = ({ content, title }) => {
     return (
@@ -53,6 +54,7 @@ const CreatePostPage = () => {
             const response = await PostFactories.createPost(newBlog);
             if (response.status === 200) {
                 navigate(`/post/${response.data.id}`)
+                ToastNoti(t('create_post_success'))
             }
             setLoading(false)
         } catch (error) {

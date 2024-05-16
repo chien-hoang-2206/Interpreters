@@ -26,9 +26,6 @@ const Feedback = ({ avatar, userName, comment, star, date, timeRental }) => {
                     <div className={styles.textDate}>
                         {date}
                     </div>
-                    <div className={styles.textTimeRental}>
-                        (Thuê {timeRental}h)
-                    </div>
                 </div>
                 <div className={styles.row3}>
                     <span>

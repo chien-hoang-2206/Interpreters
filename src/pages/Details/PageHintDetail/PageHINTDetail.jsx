@@ -9,11 +9,10 @@ import { Carousel, Pagination } from 'antd';
 import HintFactories from "../../../services/HintFatories";
 import { toast } from "react-toastify";
 import { convertStringToNumber, getDate } from "../../../utils/Utils";
-import { Avatar, Button, Image, Spacer, Spinner, Textarea, image } from "@nextui-org/react";
+import { Avatar, Button, Image, Spinner} from "@nextui-org/react";
 import BoxCustom from "../../../components/Box/BoxCustom";
 import { useTranslation } from "react-i18next";
 import { StarFilled } from "@ant-design/icons";
-import HintFeedback from "./HintFeedback";
 import BookingCreate from "../../Booking/BookingCreate";
 
 const PageInterpreterDetail = () => {

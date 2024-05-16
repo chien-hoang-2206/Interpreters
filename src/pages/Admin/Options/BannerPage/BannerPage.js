@@ -77,17 +77,13 @@ const BannerPage = (props) => {
                     </Button>
                     {/* <>
                         <Button style={{ margin: 'px', float: 'right' }}><div>
-                            <label style={{ padding: '2px 5px', border: '1px solid #FAF8F1', borderRadius: 5 }} htmlFor="uploadInput" className={'uploadButton'}>
+                            <label style={{ padding: '2px 5px', borderRadius: 5 }} htmlFor="uploadInput" className={'uploadButton'}>
                                 Sửa
                             </label>
                             <input
                                 id="uploadInput"
                                 type="file"
-                  accept="image/*"
-                  accept="image/*"
-                  accept="image/*"
-                  accept="image/*"
-                  accept="image/*"
+                                accept="image/*"
                                 style={{ display: 'none' }}
                                 onChange={(e) => handleChangeImage(e.target.files[0])}
                             />

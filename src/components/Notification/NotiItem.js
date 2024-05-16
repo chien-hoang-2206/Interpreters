@@ -58,9 +58,9 @@ export default function NotiItem({ noti, onClickBookingId = () => { } }) {
         className={classes["item-btn"]}
       >
         {(noti?.type === 1 || noti?.type === 2) && <>
-          <Button type='default' onClick={() => handleNavigate()}>
+          {/* <Button type='default' onClick={() => handleNavigate()}>
             Nhắn  tin ngay
-          </Button>
+          </Button> */}
           <Button type='primary'
             style={{
               backgroundColor: 'transparent'

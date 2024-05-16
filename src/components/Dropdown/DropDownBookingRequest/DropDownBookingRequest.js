@@ -10,6 +10,7 @@ import { createNotification, sendMessage } from '../../../services/ChatService';
 import { AuthContext } from '../../../context/auth.context';
 import PaymentFactories from '../../../services/PaymentFactories';
 import HintFactories from '../../../services/HintFatories';
+import { useTranslation } from 'react-i18next';
 const { confirm } = Modal;
 const destroyAll = () => {
     Modal.destroyAll();
@@ -90,11 +91,11 @@ const DropDownBookingRequest = ({ status, booking, icon, options, id, onFetchDat
 
 
     useOnClickOutside(dropRef, handleClickOutside);
-
+    const { t } = useTranslation()
     const showConfirmDone = () => {
         confirm({
             icon: <ExclamationCircleOutlined />,
-            content: <Button onClick={destroyAll}>Bạn xác nhận hoàn thành yêu cầu booking?</Button>,
+            content: <div >{t('confirm_success')}</div>,
             onOk() {
                 fetchDataUpdateBooking(id, 4)
                 onFetchData();
@@ -107,7 +108,7 @@ const DropDownBookingRequest = ({ status, booking, icon, options, id, onFetchDat
     const showConfirm = () => {
         confirm({
             icon: <ExclamationCircleOutlined />,
-            content: <div >Bạn chấp nhận yêu cầu booking?</div>,
+            content: <div >{t('confirm_accept')}</div>,
             onOk() {
                 fetchDataUpdateBooking(id, 2)
                 onFetchData();
@@ -120,7 +121,7 @@ const DropDownBookingRequest = ({ status, booking, icon, options, id, onFetchDat
     const showConfirmDenied = () => {
         confirm({
             icon: <ExclamationCircleOutlined />,
-            content: <div>Bạn chắc chặn muốn hủy yêu cầu booking ?</div>,
+            content: <div>{t('confirm_denied')}</div>,
             onOk() {
                 fetchDataUpdateBooking(id, 3)
                 onFetchData();

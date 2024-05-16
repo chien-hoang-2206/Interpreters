@@ -30,25 +30,6 @@ const DetailPostPage = () => {
         }
     }
 
-    // const fetchDataCmt = async (id) => {
-    //     try {
-    //         const commentsQuery = query(collection(db, 'comments'), where('postId', '==', parseInt(id)));
-    //         // Lắng nghe sự kiện realtime từ Firestore
-    //         const unsubscribe = onSnapshot(commentsQuery, (snapshot) => {
-    //             const commentsData = snapshot.docs.map(doc => doc.data());
-    //             console.log("🚀 ~ unsubscribe ~ commentsData:", commentsData)
-    //             if (commentsData) {
-    //                 setComments(commentsData);
-    //             }
-    //         });
-
-    //         // Hủy lắng nghe khi component unmount
-    //         return unsubscribe;
-    //     } catch (error) {
-    //         console.error('Error fetching comments:', error);
-    //     }
-    // };
-
     const fetchDataCmt = useCallback((id) => {
         // Đảm bảo người dùng đã đăng nhập và có đối tượng user
         if (user) {
@@ -135,49 +116,54 @@ const DetailPostPage = () => {
                     ))}
                 </div>
 
-                <span className=" mt-10 text-2xl font-bold text-blue-500 uppercase">{t('comment')}</span>
-                <Divider />
-                <div className='flex flex-col gap-5'>
-                    {user &&
-                        <div className='mt-1'>
-                            <div className='flex flex-row gap-2 mt-1 p-1'>
-                                <img style={{ borderRadius: 20, width: 30, height: 30 }} className='object-cover' src={user?.avatar} />
-                                <div className='w-full'>
-                                    <Textarea
-                                        className='w-full'
-                                        radius='md'
-                                        classNames={'mb-3 bg-[transparent]'}
-                                        placeholder={t('add_comment')}
-                                        value={newCmt}
-                                        endContent={
-                                            <div className='flex flex-col items-end justify-end h-full '>
-                                                <Button className='absolute bottom-2' onClick={() => handleAddComment()}>
-                                                    <i class="fas fa-paper-plane"></i>
-                                                </Button>
-                                            </div>
-                                        }
-                                        onChange={(e) => setNewCmt(e.target.value)}
-                                    />
+                {data?.status === 20 &&
+                    <>
+                        <span className=" mt-10 text-2xl font-bold text-blue-500 uppercase">{t('comment')}</span>
+                        <Divider />
+                        <div className='flex flex-col gap-5'>
+                            {user &&
+                                <div className='mt-1'>
+                                    <div className='flex flex-row gap-2 mt-1 p-1'>
+                                        <img style={{ borderRadius: 20, width: 30, height: 30 }} className='object-cover' src={user?.avatar} />
+                                        <div className='w-full'>
+                                            <Textarea
+                                                className='w-full'
+                                                radius='md'
+                                                classNames={'mb-3 bg-[transparent]'}
+                                                placeholder={t('add_comment')}
+                                                value={newCmt}
+                                                endContent={
+                                                    <div className='flex flex-col items-end justify-end h-full '>
+                                                        <Button className='absolute bottom-2' onClick={() => handleAddComment()}>
+                                                            <i class="fas fa-paper-plane"></i>
+                                                        </Button>
+                                                    </div>
+                                                }
+                                                onChange={(e) => setNewCmt(e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
-                    }
+                            }
 
-                    {comments?.map((i, dnx) => (
-                        <div key={dnx} className='flex flex-row gap-2 mt-1 p-1'>
-                            <img style={{ borderRadius: 20, width: 30, height: 30 }} className='object-cover' src={i?.avatar} />
-                            <div className='flex flex-col gap-1  border rounded-md bg-gray-100 w-full p-2'>
-                                <div className='flex flex-row justify-between'>
-                                    <span className='text-left w-full text-sm text-blac font-bold'>{i.userName} </span>
-                                    <span className='text-xs text-right min-w-[100px]'>{getDate(i.createdAt, 12)}</span>
+                            {comments?.map((i, dnx) => (
+                                <div key={dnx} className='flex flex-row gap-2 mt-1 p-1'>
+                                    <img style={{ borderRadius: 20, width: 30, height: 30 }} className='object-cover' src={i?.avatar} />
+                                    <div className='flex flex-col gap-1  border rounded-md bg-gray-100 w-full p-2'>
+                                        <div className='flex flex-row justify-between'>
+                                            <span className='text-left w-full text-sm text-blac font-bold'>{i.userName} </span>
+                                            <span className='text-xs text-right min-w-[100px]'>{getDate(i.createdAt, 12)}</span>
+                                        </div>
+                                        <h3 className="text-sm font-mono  ">{i.content}</h3>
+                                    </div>
+
                                 </div>
-                                <h3 className="text-sm font-mono  ">{i.content}</h3>
-                            </div>
-
+                            ))}
                         </div>
-                    ))}
-                </div>
+                    </>
+                }
+
             </div>
         </div>
     );

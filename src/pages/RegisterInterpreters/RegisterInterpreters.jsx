@@ -23,26 +23,27 @@ const RegisterInterpreters = (props) => {
   const [price, setPrice] = useState({
     individual1: 0,
     individual2: 0,
-    group1: 0,
     group2: 0,
     group3: 0,
   })
   const [error, setError] = useState()
   const [step, setStep] = useState(0)
+  console.log("🚀 ~ RegisterInterpreters ~ step:", step)
   const [loading, setLoading] = useState(true);
 
   const { t } = useTranslation()
   const [TouristDes, setTouristDes] = useState()
 
   function checkPrice() {
-    // const arePricesNullOrZero = Object.values(price).some(value => value === null || value === 0);
-    // if (arePricesNullOrZero) {
-    //   setError({
-    //     price: 'Nhập đầy đủ các đơn giá'
-    //   })
-    //   return false
-    // } else {
-    // }
+    const arePricesNullOrZero = Object.values(price).some(value => value === null || value === 0);
+    console.log("🚀 ~ checkPrice ~ arePricesNullOrZero:", arePricesNullOrZero)
+    if (arePricesNullOrZero) {
+      setError({
+        price: t('input_price_full')
+      })
+      return false
+    } else {
+    }
     return true
   }
 
@@ -127,7 +128,7 @@ const RegisterInterpreters = (props) => {
         categories: selectedCards,
         personal_price_session: price.individual1,
         personal_price_day: price.individual2,
-        group_price_avge: price.group1,
+        group_price_avge: price?.group1,
         group_price_session: price.group2,
         group_price_day: price.group3,
         destination_id: selectedCardsDes,
@@ -416,8 +417,8 @@ const RegisterInterpreters = (props) => {
                   style={{ display: 'none' }}
                   onChange={(e) => handleChange(e)}
                 />
-                <Button className="w-fit px-0 pr-3" color="primary" endContent={<CameraOutlined />}>
-                  <label htmlFor="uploadInput" className='w-44'>
+                <Button className="w-fit px-0 pr-3 py-0" color="primary" htmlFor="uploadInput" endContent={<CameraOutlined />}>
+                  <label htmlFor="uploadInput" className='w-44 '>
                     {t('upload_image')}
                   </label>
                 </Button>
@@ -471,23 +472,37 @@ const RegisterInterpreters = (props) => {
                 color='primary'
                 onClick={handleBackStep}
               >{t('back')}</Button>}
-            {(step == 1 || step == 4) &&
+            {(step == 1 && selectedCards?.length > 0) &&
               <Button
                 color='primary'
                 style={{
                   height: 35, width: 100
                 }}
-                onClick={handleNextStep1}>Tiếp tục</Button>}
-            {step === 4 && <Button
-              color='success'
+                onClick={handleNextStep1}>{t('continue')}</Button>}
+            {(step === 2) &&
+              <Button
+                color='primary'
+                style={{
+                  height: 35, width: 100
+                }}
+                onClick={handleNextStep1} >{t('continue')}</Button>}
+            {(step === 3) && <Button
+              color='primary'
               style={{
                 height: 35, width: 100
               }}
-              disabled={imageList.length == 0}
-              onClick={handleNextStepSubmit} >Gửi yêu cầu</Button>}
+              onClick={handleNextStep1} >{t('continue')}</Button>}
+            {step === 4 && imageList?.length > 0 && <Button
+              color='success'
+              style={{
+                height: 35, width: 100,
+                color: '#fff',
+              }}
+              disabled={imageList?.length == 0}
+              onClick={()=>handleNextStepSubmit()} >{t('send_rq')}</Button>}
             {step === 6 &&
               <Button color='secondary'
-                size={'small'} onClick={navigateHome} >Trang chủ</Button>}
+                size={'small'} onClick={navigateHome} >{t('HomePage')}</Button>}
           </div>
 
         </div>

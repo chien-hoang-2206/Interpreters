@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 import BookingFactories from '../../../../services/BookingFactories';
-import { ToastNotiError } from '../../../../utils/Utils';
+import { ToastNotiError, convertStringToNumber } from '../../../../utils/Utils';
 import { Spin } from 'antd';
+import { useTranslation } from 'react-i18next';
+import { Card, CardBody } from '@nextui-org/react';
 Chart.register(...registerables);
 
 const ChartYear = (props) => {
@@ -11,12 +13,16 @@ const ChartYear = (props) => {
     const [barData1, setBarData1] = useState();
     const [barData2, setBarData2] = useState();
     const [barData3, setBarData3] = useState();
+    const [total, setTotal] = useState();
     const [loading, setLoading] = useState(true);
+
+    const { t } = useTranslation()
     const fetchDataYear = async (year, month) => {
         try {
             const response = await BookingFactories.getBookingChart(year, month);
             if (response?.status === 200) {
                 const responseData = response?.data
+                setTotal(response.total[0])
                 let labels;
                 if (month) {
                     labels = responseData.map(item => `Ngày ${item.day}`);
@@ -29,7 +35,7 @@ const ChartYear = (props) => {
                     labels: labels,
                     datasets: [
                         {
-                            label: "Số lần được booking",
+                            label: t('quantity_booking_chart'),
                             backgroundColor: "rgb(54, 162, 235)",
                             data: bookingData
                         },
@@ -39,7 +45,7 @@ const ChartYear = (props) => {
                     labels: labels,
                     datasets: [
                         {
-                            label: "Tổng doanh thu (VND)",
+                            label: t('total_money'),
                             backgroundColor: "rgb(255, 99, 132)",
                             data: totalPriceData
                         }
@@ -59,14 +65,14 @@ const ChartYear = (props) => {
             if (response?.status === 200) {
                 const responseData = response?.data
                 const labels = responseData.map(item => `${item.user_name}`);
-                const totalTime = responseData.map(item => parseInt(item.total_duration_minutes, 10));
+                const totalBooking = responseData.map(item => parseInt(item.total_bookings));
                 const barData3 = {
                     labels: labels,
                     datasets: [
                         {
-                            label: "Top Interpreters Có số giờ booking cao nhất",
+                            label: t('top_hint'),
                             backgroundColor: "rgb(75, 192, 192)", // Teal
-                            data: totalTime
+                            data: totalBooking
                         }
                     ]
                 };
@@ -128,10 +134,6 @@ const ChartYear = (props) => {
             callbacks: {
                 label: function (tooltipItem, data) {
                     let label = data.datasets[tooltipItem.datasetIndex].label || '';
-                    if (label) {
-                        label += ': ';
-                    }
-                    label += ' h'
                     return label;
                 }
             }
@@ -140,12 +142,11 @@ const ChartYear = (props) => {
             tooltip: {
                 callbacks: {
                     label: function (context) {
-                        let label = context.dataset.label || '';
+                        let label = t('quantity_booking');
                         if (label) {
                             label += ': ';
                         }
                         label += (context.raw);
-                        label += ' h';
                         return label;
                     }
                 }
@@ -198,8 +199,8 @@ const ChartYear = (props) => {
     return (
         <>
             {loading ? <Spin /> :
-                <div style={{ display: 'flex', flexDirection: 'row', width: '100%', gap: 40 }}>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className='w-full' style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
+                    <div className='w-full' style={{ display: 'flex', flexDirection: 'column' }}>
                         {barData1?.labels &&
                             <Bar
                                 style={{ height: '40vh' }}
@@ -216,15 +217,37 @@ const ChartYear = (props) => {
                         }
 
                     </div>
-                    {barData3?.labels &&
-                        <div>
-                            <Bar
-                                style={{ height: '40vh' }}
-                                data={barData3}
-                                options={options3}
-                            />
+                    <div className='w-full' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                        <div className='min-h-[30vh] mt-3 w-full flex gap-5 justify-end'>
+                            <Card
+                                className='h-32'
+                            >
+                                <CardBody>
+                                    <b className='text-right text-xl'> {t('count_quantity')}</b>
+                                    <p className="text-bold text-right text-blue-500 text-5xl">{total?.total}</p>
+                                </CardBody>
+                            </Card>
+                            <Card
+                                className='h-32'
+                            >
+                                <CardBody>
+                                    <b className='text-right text-xl'> {t('money')}</b>
+                                    <p className="text-bold text-right text-blue-500 text-5xl">{convertStringToNumber(total?.total_price)}</p>
+                                </CardBody>
+                            </Card>
                         </div>
-                    }
+                        <div>
+                            {barData3?.labels &&
+                                <div>
+                                    <Bar
+                                        style={{ height: '40vh' }}
+                                        data={barData3}
+                                        options={options3}
+                                    />
+                                </div>
+                            }
+                        </div>
+                    </div>
                 </div>
             }
 

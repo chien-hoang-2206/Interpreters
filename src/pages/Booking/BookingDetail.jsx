@@ -8,6 +8,7 @@ import BookingFactories from "../../services/BookingFactories";
 import { createNotification, sendMessage, sendNewMessageToExistingUser, sendNewMessageToNewUser } from "../../services/ChatService";
 import PaymentFactories from "../../services/PaymentFactories";
 import HintFactories from "../../services/HintFatories";
+import { useTranslation } from "react-i18next";
 
 const BookingDetail = (props) => {
   const { bookingId, isHaveComment } = props;
@@ -54,7 +55,7 @@ const BookingDetail = (props) => {
       if (response?.status === 200) {
         toast.success('Chấp nhận yêu cầu booking thành công.')
         createNotification(booking?.user_id,
-           2,
+          2,
           booking?.id,
           "Interpreters đã chấp nhận yêu cầu booking của bạn", "Liên hệ với Interpreters để biết thêm chi tiết.",
           booking?.user_id,
@@ -87,7 +88,7 @@ const BookingDetail = (props) => {
           booking?.user_id,
           booking?.pgt_id);
       }
-      await PaymentFactories.updateMoneyToAccId(10,booking?.user_id,booking?.price);
+      await PaymentFactories.updateMoneyToAccId(10, booking?.user_id, booking?.price);
       onCloseModal();
     } catch (error) {
       toast.error('Hệ thống lỗi, vui lòng thử lại sau.')
@@ -97,12 +98,12 @@ const BookingDetail = (props) => {
   const [valueRate, setValueRate] = useState();
   const [valueComment, setValueComment] = useState();
   const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
-
+  const { t } = useTranslation()
   async function submitComment() {
     try {
-      const response = await BookingFactories.updateBooking(bookingId, 5, valueRate, valueComment,booking?.pgt_id,booking?.price,user.userName);
+      const response = await BookingFactories.updateBooking(bookingId, 5, valueRate, valueComment, booking?.pgt_id, booking?.price, user.userName);
       if (response?.status === 200) {
-        ToastNoti();
+        ToastNoti(t('thanks_comment'));
         setBooking(response?.data);
       }
       else {
@@ -117,7 +118,7 @@ const BookingDetail = (props) => {
     <Modal
       width={600}
       open={props.open}
-      title="Thông tin lượt thuê"
+      title={t('booking_info')}
       destroyOnClose={true}
       onCancel={onCloseModal}
       footer=""
@@ -134,27 +135,27 @@ const BookingDetail = (props) => {
           autoComplete="off"
           onFinish={onAcceptSubmit}
         >
-          <Form.Item label="Người thuê"> <span style={{ float: 'right' }}> {booking?.user_name}  </span> </Form.Item>
-          <Form.Item label="Trạng thái"       >
-            {booking?.status === 1 && <span style={{ color: 'green', float: 'right' }} > Chờ xác nhận</span>}
-            {booking?.status === 2 && <span style={{ color: 'blue', float: 'right' }} > {user?.id === booking?.user_id ? 'Interpreters' : 'Bạn'} đã chấp nhận yêu cầu booking này</span>}
-            {booking?.status === 3 && <span style={{ float: 'right', color: 'red' }} > {user?.id === booking?.user_id ? 'Interpreters' : 'Bạn'} đã từ chối yêu cầu booking này</span>}
-            {(booking?.status === 4 || booking?.status === 5) && <span style={{ float: 'right', color: 'green' }} > Hoàn thành</span>}
+          <Form.Item label={t('per_booking')}> <span style={{ float: 'right' }}> {booking?.user_name}  </span> </Form.Item>
+          <Form.Item label={t('status')}      >
+            {booking?.status === 1 && <span style={{ color: 'green', float: 'right' }} >{t('pending')}</span>}
+            {booking?.status === 2 && <span style={{ color: 'blue', float: 'right' }} > {user?.id === booking?.user_id ? 'Interpreters' : 'Bạn'} {t('accept_bk')}</span>}
+            {booking?.status === 3 && <span style={{ float: 'right', color: 'red' }} > {user?.id === booking?.user_id ? 'Interpreters' : 'Bạn'} {t('denided_bk')}</span>}
+            {(booking?.status === 4 || booking?.status === 5) && <span style={{ float: 'right', color: 'green' }} > {t('success')}</span>}
           </Form.Item>
-          <Form.Item label="Ngày" >
+          <Form.Item label={t('date')}>
             <Input
               style={{ width: '100%', textAlign: 'right', }}
               value={dateBooking}
             />
           </Form.Item>
 
-          <Form.Item label="Thời gian" >
+          <Form.Item label={t('time')} >
             <Input
               style={{ width: '100%', textAlign: 'right', }}
               value={booking?.time}
             />
           </Form.Item>
-          <Form.Item label="Tổng tiền">
+          <Form.Item label={t('total_money_booking')}>
             <Input
               style={{ width: '100%', textAlign: 'right', }}
               value={convertStringToNumber(booking?.price)}
@@ -165,21 +166,21 @@ const BookingDetail = (props) => {
           {isHaveComment ? <>
             <Form.Item label="Đánh giá">
               <span style={{ float: 'right' }}>
-                <Rate tooltips={desc} onChange={setValueRate} value={ ( booking?.status !== 4 &&  booking?.rate)  ?booking?.rate : valueRate} />
-                {valueRate ? <span className="ant-rate-text">{desc[valueRate - 1]}</span> : ''}
+                <Rate tooltips={desc} onChange={setValueRate} value={(booking?.status !== 4 && booking?.rate) ? booking?.rate : valueRate} />
+                {/* {valueRate ? <span className="ant-rate-text">{desc[valueRate - 1]}</span> : ''} */}
               </span>
             </Form.Item>
-            <Form.Item label="Nhận xét">
+            <Form.Item label={t('review')}>
               <TextArea
                 rows={2}
-                placeholder="Nếu nhận xét của bạn ..."
+                placeholder={t('enter_commnet')}
                 value={booking?.comment ? booking?.comment : valueComment}
                 onChange={(e) => setValueComment(e.target.value)}
               />
               <div style={{ display: 'flex', gap: 20, float: 'right', marginTop: 20 }}>
                 {booking?.status === 4 &&
                   <Button onClick={(e) => submitComment()} type="primary" >
-                    Xác nhận hoàn thành
+                    {t('cf_success')}
                   </Button>
                 }
               </div>
@@ -187,7 +188,7 @@ const BookingDetail = (props) => {
           </>
             : <>
               <Form.Item
-                label="Ghi chú"
+                label={t('note')}
               >
                 <TextArea
                   rows={2}
@@ -198,10 +199,10 @@ const BookingDetail = (props) => {
                 {booking?.status === 1 &&
                   <div style={{ display: 'flex', gap: 20, float: 'right', marginTop: 20 }}>
                     <Button type="link" htmlType="button" onClick={deniedBooking}>
-                      Từ chối yêu cầu
+                      {t('denided_rq')}
                     </Button>
                     <Button type="primary" htmlType="submit">
-                      Chấp nhận
+                      {t('accept')}
                     </Button>
                   </div>}
               </Form.Item>
