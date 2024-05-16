@@ -209,7 +209,7 @@ const RegisterInterpreters = (props) => {
           </div>
           {step === 0 && <>
             <div className={styles.listCard}>
-              <h1 className="text-2xl my-4 text-center" style={{ padding: '0px 21%' }}>Chọn địa điểm du lịch</h1>
+              <h1 className="text-2xl my-4 text-center" style={{ padding: '0px 21%' }}>{t('choose_des')}</h1>
               <div className="flex w-full justify-between flex-wrap gap-10" >
                 {TouristDes?.map((item) => (
                   <div className="">
@@ -229,7 +229,7 @@ const RegisterInterpreters = (props) => {
           </>}
           {step === 1 && <>
             <div className={styles.listCard}>
-              <h1 className="text-2xl text-center" style={{ padding: '0px 21%' }}>Chọn lĩnh vực bạn  muốn tham gia</h1>
+              <h1 className="text-2xl text-center" style={{ padding: '0px 21%' }}>{t('choose_field')}</h1>
               <div className="flex w-full justify-between flex-wrap " >
                 {categoryList?.map((item) => (
                   <div className="">
@@ -403,7 +403,7 @@ const RegisterInterpreters = (props) => {
 
           {step === 4 && <div className={styles.price}>
             <h1 className="font-bold text-xl">
-              Cung cấp hình ảnh cho minh chứng Văn bằng chứng chỉ của bạn
+              {t('provide_image')}
             </h1>
             <div className="flex flex-row gap-4 w-full justify-between">
 
@@ -412,14 +412,13 @@ const RegisterInterpreters = (props) => {
                   id="uploadInput"
                   type="file"
                   accept="image/*"
-                  accept="image/*"
                   className='uploadInput'
                   style={{ display: 'none' }}
                   onChange={(e) => handleChange(e)}
                 />
                 <Button className="w-fit px-0 pr-3" color="primary" endContent={<CameraOutlined />}>
                   <label htmlFor="uploadInput" className='w-44'>
-                    Đính kèm ảnh
+                    {t('upload_image')}
                   </label>
                 </Button>
                 <div className="fllex flex-col gap-10 my-20 ">
@@ -459,7 +458,7 @@ const RegisterInterpreters = (props) => {
           {step === 5 && <div className={styles.price}>
             {loading ? <Spin></Spin> :
               <h1>
-                Gửi yêu cầu thanh công, admin đang duyệt yêu cầu của bạn.
+                {t('send_suscess_rq')}
               </h1>
             }
           </div>
@@ -471,8 +470,8 @@ const RegisterInterpreters = (props) => {
                 variant='light'
                 color='primary'
                 onClick={handleBackStep}
-              >Quay lại</Button>}
-            {(step < 4) &&
+              >{t('back')}</Button>}
+            {(step == 1 || step == 4) &&
               <Button
                 color='primary'
                 style={{

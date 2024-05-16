@@ -36,8 +36,8 @@ const Chat = () => {
   };
   useEffect(() => {
     async function fetchdata() {
-      // const resp = await PgtFactories.getPGTDetail(id);
-      // setSecondUserInfo(resp[0]);
+      const resp = await HintFactories.getHINTDetail(id);
+      setSecondUserInfo(resp[0]);
     }
     if (id) {
       fetchdata();
@@ -108,9 +108,9 @@ const Chat = () => {
       const querySnapshot = await getDocs(notificationsQuery);
       const batch = writeBatch(db);
 
-      querySnapshot.forEach((doc) => {
-        batch.update(doc.ref, { read: true });
-      });
+      // querySnapshot.forEach((doc) => {
+      //   batch.update(doc.ref, { read: true });
+      // });
       await batch.commit();
       reloadMessengerList(); 
     } catch (e) {

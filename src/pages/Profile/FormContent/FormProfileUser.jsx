@@ -7,6 +7,7 @@ import Constants from "../../../utils/constants";
 import { ToastNoti, ToastNotiError } from "../../../utils/Utils";
 import axios from "axios";
 import AccountFactories from "../../../services/AccountFactories";
+import HintFactories from "../../../services/HintFatories";
 
 export default function FormProfileUser(props) {
   const [user] = useState(JSON.parse(localStorage.getItem("user")));
@@ -18,11 +19,11 @@ export default function FormProfileUser(props) {
   });
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   const response = await PgtFactories.getPGTDetail(user?.id);
-    //   setProfile(response[0]);
-    // };
-    // fetchData();
+    const fetchData = async () => {
+      const response = await HintFactories.getHINTDetail(user?.id);
+      setProfile(response[0]);
+    };
+    fetchData();
   }, []);
 
   const changeMessage = () => {

@@ -27,7 +27,7 @@ const HintFactories = {
   },
   getHINTFeedbackList: async data => {
     return ApiOperation.request({
-      url: `${ApiConstants.PGT_FEEDBACK}/${data}`,
+      url: `${ApiConstants.HINT_FEEDBACK}/${data}`,
       method: "GET",
     });
   },

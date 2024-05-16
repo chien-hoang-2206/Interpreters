@@ -28,7 +28,7 @@ const DropDownBookingRequest = ({ status, booking, icon, options, id, onFetchDat
     const [userBookingAvatar, setUserBookingAvatar] = useState();
     useEffect(() => {
         async function fetchdata() {
-            const resp = await HintFactories.getPGTDetail(booking?.user_id);
+            const resp = await HintFactories.getHINTDetail(booking?.user_id);
             setUserBookingAvatar(resp[0]?.avatar);
         }
         if (booking?.user_id) {
@@ -42,39 +42,39 @@ const DropDownBookingRequest = ({ status, booking, icon, options, id, onFetchDat
             if (response?.status === 200) {
                 toast.success('Cập nhật yêu cầu booking thành công.')
                 if (type === 2) {
-                    // createNotification(
-                    //     user_id,
-                    //     2,
-                    //     id,
-                    //     "Interpreters đã chấp nhận yêu cầu booking của bạn", "Liên hệ với Interpreters để biết thêm chi tiết.",
-                    //     booking?.user_id,
-                    //     booking?.pgt_id,
-                    // );
+                    createNotification(
+                        user_id,
+                        2,
+                        id,
+                        "Interpreters đã chấp nhận yêu cầu booking của bạn", "Liên hệ với Interpreters để biết thêm chi tiết.",
+                        booking?.user_id,
+                        booking?.pgt_id,
+                    );
 
-                    // sendMessage(
-                    //     user?.id,
-                    //     parseInt(user_id),
-                    //     user?.userName,
-                    //     booking?.user_name,
-                    //     user?.avatar,
-                    //     userBookingAvatar,
-                    //     'Xin chào bạn! Cảm ơn bạn đã sử dụng dịch vụ của mình. Nếu bạn có bất kỳ câu hỏi hoặc yêu cầu gì, đừng ngần ngại nói cho tôi biết. Mình luôn sẵn sàng hỗ trợ bạn một cách tốt nhất.',
-                    //     booking?.user_id,
-                    //     booking?.pgt_id,
-                    //     user?.id
-                    // );
+                    sendMessage(
+                        user?.id,
+                        parseInt(user_id),
+                        user?.userName,
+                        booking?.user_name,
+                        user?.avatar,
+                        userBookingAvatar,
+                        'Xin chào bạn! Cảm ơn bạn đã sử dụng dịch vụ của mình. Nếu bạn có bất kỳ câu hỏi hoặc yêu cầu gì, đừng ngần ngại nói cho tôi biết. Mình luôn sẵn sàng hỗ trợ bạn một cách tốt nhất.',
+                        booking?.user_id,
+                        booking?.pgt_id,
+                        user?.id
+                    );
                 }
                 else if (type === 3) {
-                    // createNotification(
-                    //     user_id, 2, id,
-                    //     "Interpreters đã từ chối yêu cầu booking của bạn", "Liên hệ với Interpreters để biết thêm chi tiết.",
-                    //     booking?.user_id,
-                    //     booking?.pgt_id,
-                    // );
+                    createNotification(
+                        user_id, 2, id,
+                        "Interpreters đã từ chối yêu cầu booking của bạn", "Liên hệ với Interpreters để biết thêm chi tiết.",
+                        booking?.user_id,
+                        booking?.pgt_id,
+                    );
                     const resp = await PaymentFactories.updateMoneyToAccId(10, user_id, booking?.price);
                 }
                 else if (type === 4) {
-                    // createNotification(user_id, 5, id, "Lượt booking đã hoàn thành", "Vui lòng đánh giá cho Interpreters.");
+                    createNotification(user_id, 5, id, "Lượt booking đã hoàn thành", "Vui lòng đánh giá cho Interpreters.");
                 }
                 onFetchData();
             }

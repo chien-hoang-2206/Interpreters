@@ -8,20 +8,31 @@ import { getStorage } from "firebase/storage";
 //     authDomain: "pgt-capton2.firebaseapp.com",
 //     projectId: "pgt-capton2",
 //     storageBucket: "pgt-capton2.appspot.com",
-    
+
 //     messagingSenderId: "670609171389",
 //     appId: "1:670609171389:web:a75d0682ff10681980a8d4"
 // };
 
+
 const firebaseConfig = {
-    apiKey: "AIzaSyDvPZ-ME9NtX5STf9re9HV9cybfSYrpFp4",
-    authDomain: "hint-20c72.firebaseapp.com",
-    projectId: "hint-20c72",
-    storageBucket: "hint-20c72.appspot.com",
-    messagingSenderId: "492885275134",
-    appId: "1:492885275134:web:373b00370c9754af1410af",
-    measurementId: "G-ZQG00BZJSW"
+    apiKey: "AIzaSyDpTeJlncdCdwwUb4l6BGViT4UZ1DgZuo8",
+    authDomain: "testdemo-29c75.firebaseapp.com",
+    projectId: "testdemo-29c75",
+    storageBucket: "testdemo-29c75.appspot.com",
+    messagingSenderId: "881083929137",
+    appId: "1:881083929137:web:a6fcf6743a6765bb9e7b10"
   };
+
+// firebase
+// const firebaseConfig = {
+//     apiKey: "AIzaSyDvPZ-ME9NtX5STf9re9HV9cybfSYrpFp4",
+//     authDomain: "hint-20c72.firebaseapp.com",
+//     projectId: "hint-20c72",
+//     storageBucket: "hint-20c72.appspot.com",
+//     messagingSenderId: "492885275134",
+//     appId: "1:492885275134:web:373b00370c9754af1410af",
+//     measurementId: "G-ZQG00BZJSW"
+// };
 
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);

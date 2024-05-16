@@ -57,7 +57,7 @@ const ProfileUser = () => {
     }, [user?.id])
     const fetchData = async () => {
         try {
-            const response = await HintFactories.getPGTDetail(user?.id);
+            const response = await HintFactories.getHINTDetail(user?.id);
             setUserInfo(response[0]);
         } catch (error) {
             toast.error('Hệ thống lỗi, vui lòng thử lại sau')

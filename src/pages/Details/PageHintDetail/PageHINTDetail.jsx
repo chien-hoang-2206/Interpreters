@@ -30,6 +30,25 @@ const PageInterpreterDetail = () => {
   const [loading, setLoading] = useState();
 
 
+  async function fetchFeedbackData(id) {
+    try {
+      const resp = await HintFactories.getHINTFeedbackList(id);
+      if (resp.status === 200) {
+        setDataFeedback(resp.data);
+        setRate(resp.rate)
+      }
+    } catch (error) {
+
+    }
+  }
+
+  useEffect(() => {
+    if (id) {
+      fetchFeedbackData(id);
+    }
+  }, [id])
+
+
   useEffect(() => {
     window.scroll(0, 0)
     const fetchData = async () => {
@@ -136,7 +155,7 @@ const PageInterpreterDetail = () => {
       {open === true &&
         <BookingCreate
           data={hintInfo ?? ''}
-          onCancelOpenHandler={()=> setOpen()}
+          onCancelOpenHandler={() => setOpen()}
           open={open}
         />
       }
@@ -339,7 +358,24 @@ const PageInterpreterDetail = () => {
                       title='Đánh giá'
                       description={
                         <>
-                          {renderFeedBack}
+                          {dataFeedback?.map((item, index) => (
+                            <Feedback
+                              key={index}
+                              avatar={item?.avatar}
+                              userName={item?.user_name}
+                              comment={item?.comment}
+                              star={item?.rate}
+                              timeRental={1}
+                              date={getDate(item?.date)}
+                            />
+                          ))}
+
+                          <div className={styles.boxPagination} >
+                            <Pagination
+                              defaultCurrent={1}
+                              total={dataFeedback?.length}
+                            />
+                          </div>
                         </>
                       }
                     />

@@ -4,6 +4,7 @@ const ApiConstants = {
     BOOKING_USER: `/booking/user`,
     Destination: `/destination`,
     BOOKING_Hint: `/booking/hint`,
+    HINT_FEEDBACK: `/hint/feedback`,
 
     PAYMENT_URL: 'payment/create_payment_url',
     PAYMENT_USER: 'payment/user',
@@ -15,7 +16,6 @@ const ApiConstants = {
     BOOKING_CHART: `/booking/chart`,
     BOOKING_TOP: `/booking/top`,
     BOOKING_TIME: `/booking/time`,
-    HINT_FEEDBACK: `/hint/feedback`,
     Interpreters: `/hint`,
     BANNER: `/banner`,
     ACCOUNT: '/account',

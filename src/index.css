@@ -19,12 +19,14 @@ body {
 .slick-slider .slick-arrow {
   background: rgba(50, 100, 150, .4) !important;
   width: 20px !important;
+  color: #fff !important;
   height:40px !important;
   border-radius: 8px !important;
 }
 
 .carousel-custom .ant-carousel .ant-carousel .slick-slider button {
   background-color: #1890ff;
+  color: #fff !important;
 }
 body::-webkit-scrollbar {
   width: 10px;
@@ -123,15 +125,17 @@ html {
 
 
 .btn{
-  background: #81c8f7 !important
+  background: #81c8f7 !important;
+  color: white !important;
 }
 
 .ant-btn{
   background: #81c8f7 !important;
-  color: white;
+  color: white !important;
 }
 
 .btn-action-group{
+  color: white !important;
   display: flex;
   flex-direction: row;
   gap: 10,
