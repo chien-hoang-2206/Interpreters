@@ -87,7 +87,7 @@ const Booking = () => {
       dataIndex: "booking_date",
       key: "created_at",
       width: 160,
-      render: (text, data) => <div>{getDate(text, 1)}</div>,
+      render: (text, data) => <div>{getDate(data?.created_at, 1)}</div>,
     },
     {
       title: "Ngày booking",

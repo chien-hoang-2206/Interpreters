@@ -45,7 +45,7 @@ const ProfileUser = () => {
 
     async function fetchFeedbackData(id) {
         try {
-            const resp = await HintFactories.getPGTFeedbackList(id);
+            const resp = await HintFactories.getHINTFeedbackList(id);
             if (resp.status === 200) {
                 setDataFeedback(resp.data);
                 setRate(resp.rate)
@@ -60,7 +60,7 @@ const ProfileUser = () => {
     }, [user?.id])
     const fetchData = async () => {
         try {
-            const response = await HintFactories.getPGTDetail(user?.id);
+            const response = await HintFactories.getHINTDetail(user?.id);
             setUserInfo(response[0]);
         } catch (error) {
             toast.error('Hệ thống lỗi, vui lòng thử lại sau')

@@ -52,48 +52,24 @@ const BookingCreate = (props) => {
     }
   }, [watchtypeTravel, watchtNumberPerson, watchtTimeBooking, watchtDateBooking]);
 
-
   const [errorMessage, setErrorMessage] = useState('');
   const [errorDate, setErrorDate] = useState(false);
-
-  // const checkDateBooking = (value) => {
-  //   setErrorDate(false);
-  //   const now = new Date();
-  //   const bookingDate = new Date(dateBooking);
-
-  //   if (bookingDate) {
-  //     const timeDiff = bookingDate - now;
-  //     const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
-  //     if (daysDiff >= 15) {
-  //       setErrorDate(true)
-  //       // return Promise.reject(new Error('Ngày đặt phải nằm trong 15 ngày kể từ ngày hiện tại'));
-
-  //     } else if (daysDiff < -1) {
-  //       setErrorDate(true)
-  //       return Promise.reject(new Error('Không thể chọn ngày trong quá khứ'));
-  //     }
-  //     else {
-  //       return Promise.resolve();
-  //     }
-  //   }
-  //   else {
-  //     return Promise.reject(new Error('Bắt buộc chọn ngày'));
-  //   }
-  // };
 
 
   const requestBooking = async (data) => {
     try {
       const response = await BookingFactories.requestBooking(data);
       if (response.status === 200) {
-        // createNotification(hint?.id, 1,
-        //   response?.data[0].id, "Bạn có yêu cầu booking mới",
-        //   "Vui lòng xác nhận yêu cầu booking trong vòng 5 phút.",
-        //   data?.userId,
-        //   hint?.id
-        // );
-        toast.success('Tạo lượt booking thành công, Interpreters sẽ phàn hồi lại trong 5 phút.',
+        createNotification(
+          hint?.id,
+          1,
+          response?.data[0].id,
+          t('new_rq'),
+          t('accept_in'),
+          user?.id,
+          hint?.id
         );
+        toast.success(t('t_success_in'));
         props.onCancelOpenHandler();
       }
       else if (response.status === 201) {

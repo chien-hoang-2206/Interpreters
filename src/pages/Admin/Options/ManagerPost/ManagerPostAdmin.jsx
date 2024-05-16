@@ -99,8 +99,14 @@ const ManagerPostAdmin = () => {
                     <Button onClick={() => handletoPreview(data.id)} size='small' color="primary" danger>
                         {t('preview')}
                     </Button>
-                    <Button onClick={() => handleChangeStatus(data.id)} size='small' color="success" danger>
-                        {t('post')}
+                    <Button
+                        color='success'
+                        style={{
+                            color: '#fff'
+                        }}
+                        onClick={() => handleChangeStatus(data.id)}
+                    >
+                       {t('post')}
                     </Button>
                     <Button onClick={() => handleDelete(data.id)} size='small' color="danger" danger>
                         {t('Delete')}

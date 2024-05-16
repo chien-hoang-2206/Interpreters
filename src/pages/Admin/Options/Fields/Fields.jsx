@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Image, Input, Modal, Typography, Button, Avatar } from "antd";
+import { Table, Image, Input, Modal, Typography, Avatar, Space } from "antd";
 import classes from './Fields.module.css'
 import CategoriesFactories from "../../../../services/CategoryFactories";
 import { ToastNoti, ToastNotiError } from "../../../../utils/Utils";
@@ -7,6 +7,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { storage } from "../../../../firebase";
 import { v4 } from 'uuid';
 import { useTranslation } from "react-i18next";
+import { Button } from "@nextui-org/react";
 
 const { Text } = Typography;
 
@@ -62,20 +63,17 @@ const Fields = () => {
             render: (_, record) => (
                 <div className="btn-action-group" >
                     <Button
-                        style={{ marginRight: 10, background: '#81c8f7' }}
+                        color="danger"
                         onClick={() => onDeleteFiledHandler(record?.id)}
                     >
-                        Xóa
+                        {t('Delete')}
                     </Button>
+                    <div className="ml-2"></div>
                     <Button
-                        type='default'
-                        style={{
-                            color: 'red',
-                            background: 'transparent',
-                        }}
+                        color='primary'
                         onClick={() => onUpdateCategory(record)}
                     >
-                        Sửa
+                        {t('edit')}
                     </Button>
                 </div>
             ),
@@ -100,11 +98,11 @@ const Fields = () => {
 
     const onDeleteFiledHandler = async (id) => {
         try {
-            // const resp = await CategoriesFactories.deleteCategory(id);
-            // if (resp.status) {
-            //     ToastNoti();
-            //     fetchData();
-            // }
+            const resp = await CategoriesFactories.deleteCategory(id);
+            if (resp.status) {
+                ToastNoti();
+                fetchData();
+            }
         } catch (error) {
             ToastNotiError();
         }
@@ -240,18 +238,16 @@ const Fields = () => {
                         background: '#81c8f7'
                     }} onClick={onOpenModalAddField} >Thêm lĩnh vực</Button>
             </div>
-            <div className="booking-table">
-                <Table
-                    columns={columns}
-                    dataSource={fields ?? []}
-                    loading={loading}
-                    pagination={{
-                        defaultPageSize: 10,
-                        showSizeChanger: true,
-                        pageSizeOptions: ["1", "5", "10", "20"],
-                    }}
-                />
-            </div>
+            <Table
+                columns={columns}
+                dataSource={fields ?? []}
+                loading={loading}
+                pagination={{
+                    defaultPageSize: 10,
+                    showSizeChanger: true,
+                    pageSizeOptions: ["1", "5", "10", "20"],
+                }}
+            />
             <Modal
                 width={800}
                 title="Thêm lĩnh vực"

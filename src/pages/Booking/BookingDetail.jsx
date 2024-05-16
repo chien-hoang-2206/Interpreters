@@ -16,22 +16,22 @@ const BookingDetail = (props) => {
   const [userBookingAvatar, setUserBookingAvatar] = useState();
 
   useEffect(() => {
-    // async function fetchdata() {
-    //   const resp = await PgtFactories.getPGTDetail(booking?.user_id);
-    //   setUserBookingAvatar(resp[0]?.avatar);
-    // }
-    // if (booking?.user_id) {
-    //   fetchdata();
-    // }
+    async function fetchdata() {
+      const resp = await HintFactories.getHINTDetail(booking?.user_id);
+      setUserBookingAvatar(resp[0]?.avatar);
+    }
+    if (booking?.user_id) {
+      fetchdata();
+    }
   }, [booking?.user_id])
 
 
   const fetchData = async (bookingId) => {
     try {
-      // const response = await BookingFactories.getBookingDetail(bookingId);
-      // if (response?.status === 200) {
-      //   setBooking(response?.data);
-      // }
+      const response = await BookingFactories.getBookingDetail(bookingId);
+      if (response?.status === 200) {
+        setBooking(response?.data);
+      }
     } catch (error) {
       // Handle errors here
     }
@@ -53,13 +53,13 @@ const BookingDetail = (props) => {
       const response = await BookingFactories.updateBooking(bookingId, 2);
       if (response?.status === 200) {
         toast.success('Chấp nhận yêu cầu booking thành công.')
-        // createNotification(booking?.user_id,
-        //    2,
-        //   booking?.id,
-        //   "Interpreters đã chấp nhận yêu cầu booking của bạn", "Liên hệ với Interpreters để biết thêm chi tiết.",
-        //   booking?.user_id,
-        //   booking?.pgt_id,
-        // );
+        createNotification(booking?.user_id,
+           2,
+          booking?.id,
+          "Interpreters đã chấp nhận yêu cầu booking của bạn", "Liên hệ với Interpreters để biết thêm chi tiết.",
+          booking?.user_id,
+          booking?.pgt_id,
+        );
         sendMessage(
           user?.id,
           parseInt(booking?.user_id),
@@ -100,14 +100,14 @@ const BookingDetail = (props) => {
 
   async function submitComment() {
     try {
-      // const response = await BookingFactories.updateBooking(bookingId, 5, valueRate, valueComment,booking?.pgt_id,booking?.price,user.userName);
-      // if (response?.status === 200) {
-      //   ToastNoti();
-      //   setBooking(response?.data);
-      // }
-      // else {
-      //   ToastNotiError();
-      // }
+      const response = await BookingFactories.updateBooking(bookingId, 5, valueRate, valueComment,booking?.pgt_id,booking?.price,user.userName);
+      if (response?.status === 200) {
+        ToastNoti();
+        setBooking(response?.data);
+      }
+      else {
+        ToastNotiError();
+      }
     } catch (error) {
       ToastNotiError();
     }
@@ -151,7 +151,7 @@ const BookingDetail = (props) => {
           <Form.Item label="Thời gian" >
             <Input
               style={{ width: '100%', textAlign: 'right', }}
-              value={`${getTime(booking?.time_from)} - ${getTime(booking?.time_to)}`}
+              value={booking?.time}
             />
           </Form.Item>
           <Form.Item label="Tổng tiền">
@@ -191,6 +191,7 @@ const BookingDetail = (props) => {
               >
                 <TextArea
                   rows={2}
+                  disabled
                   placeholder=""
                   value={booking?.note}
                 />

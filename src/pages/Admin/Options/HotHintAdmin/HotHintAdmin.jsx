@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input, Select, Table } from "antd";
+import { Input, Select, Table } from "antd";
 import "./styles.css";
 import HintFactories from "../../../../services/HintFatories";
 import StarRating from "../../../../components/start-rating/StarRating";
 import { ToastNoti, ToastNotiError, convertStringToNumber, partStringToNumber as parseStringToNumber } from "../../../../utils/Utils";
 import AccountFactories from "../../../../services/AccountFactories";
 import { useTranslation } from "react-i18next";
+import { Button } from "@nextui-org/react";
 
 const HotHintAdmin = () => {
   const [namePgt, setNamePgt] = useState("");
   const [typeSearch, setTypeSearch] = useState(10);
   const [hotHints, setHotHintsList] = useState([]);
   const [loading, setLoading] = useState(true);
-const { t } = useTranslation()
+  const { t } = useTranslation()
   const fetchData = async (name, type) => {
     try {
       setLoading(true)
-      const response = await HintFactories.getListPGT(type, name);
+      const response = await HintFactories.getListHINT(type, name);
       setHotHintsList(response);
       setLoading(false)
     } catch (error) {
@@ -93,11 +94,6 @@ const { t } = useTranslation()
         <div className="action-btn" >
           <Button
             type='primary'
-            style={{
-              background: 'transparent',
-              border: '1px solod red',
-              color: 'red'
-            }}
             onClick={() => record?.hot_hint ? handleDeleteHotPgt(record) : handleAddHotPgt(record)}
           >
             {record?.hot_hint ? 'Xóa nổi bật' : 'Thêm nổi bật'}
@@ -180,24 +176,22 @@ const { t } = useTranslation()
               label: 'Chưa nổi bật'
             },
           ]}
+          className="h-full"
           value={typeSearch}
           onChange={(e) => setTypeSearch(e)}
           style={{ minWidth: 180 }}
         />
         <Button
-          type='default'
-          style={{
-            // backgroundColor: 'transparent'
-          }}
+          color='default'
           onClick={handleReset}
         >
-          Mặc định
+          {t('default')}
         </Button>
         <Button
-          type='primary'
+          color='primary'
           onClick={handleSearch}
         >
-          Tìm kiếm
+          {t('search')}
         </Button>
       </div>
       <div className="booking-table">

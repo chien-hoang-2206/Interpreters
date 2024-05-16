@@ -1,5 +1,8 @@
 {
   "view_all": "Xem tất cả",
+  "new_rq": "Bạn có yêu cầu booking mới",
+  "accept_in": "Vui lòng xác nhận yêu cầu booking mới.",
+  "t_success_in": "Tạo lượt booking thành công, Interpreters sẽ phàn hồi sớm.",
   "add_dddl": "Thêm địa điểm du lịch",
   "name_dddl": "Tên điểm du lịch",
   "dddl": "Địa điểm du lịch",
@@ -15,6 +18,7 @@
   "gender": "Giới tính",
   "des_popular": "Địa điểm du lịch phổ biến",
   "lat": "Kinh độ",
+  "edit": "Sửa",
   "long": "Vĩ độ",
   "travelGroup": "Du lịch theo nhóm",
   "travelOlone": "Du lịch cá nhân",

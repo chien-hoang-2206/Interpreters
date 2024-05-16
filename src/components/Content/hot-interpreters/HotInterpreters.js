@@ -13,7 +13,7 @@ const HotInterpreters = ({ id, serchValue }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await HintFactories.getListPGT(10, serchValue, id);
+                const response = await HintFactories.getListHINT(10, serchValue, id);
                 setDataList(response);
             } catch (error) {
                 // Handle errors here

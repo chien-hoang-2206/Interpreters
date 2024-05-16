@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Image, Input, Modal, Typography, Button, Avatar, Form, TimePicker, Select } from "antd";
+import { Table, Image, Input, Modal, Typography, Avatar, Form, TimePicker, Select } from "antd";
 import classes from './TouristDes.module.css'
 import { ToastNoti, ToastNotiError, convertStringToNumber, getDate } from "../../../../utils/Utils";
 import DestinationFactories from "../../../../services/DestinationFatories";
@@ -8,6 +8,7 @@ import Constants from "../../../../utils/constants";
 import ReactQuill from "react-quill";
 import { uploadFirebase } from "../../../../utils/FirebaseService";
 import dayjs from "dayjs";
+import { Button } from "@nextui-org/react";
 
 const { Text } = Typography;
 
@@ -90,7 +91,7 @@ const TouristDes = () => {
                         {t('Delete')}
                     </Button> */}
                     <Button
-                        type='default'
+                        color='success'
                         style={{
                             color: '#fff'
                         }}
@@ -310,29 +311,25 @@ const TouristDes = () => {
             <div className="booking-search">
                 <Input
                     placeholder={t('search')}
-                    size="middle "
+                    size="small"
                     value={inputSearch}
                     onKeyDown={(e) => handleKeyDown(e)}
                     onChange={(e) => handleOnChangeInput(e)}
                 />
                 <Button
-                    type='default'
-                    style={{
-                        backgroundColor: 'transparent'
-                    }}
+                    color='default'
                     onClick={handleReset}
                 >
                     {t('default')}
                 </Button>
                 <Button
-                    type='primary'
+                    color='primary'
                     onClick={handleSearch}
                 >
                     {t('search')}
                 </Button>
-                <Button type='primary'
-                    style={{
-                    }}
+                <Button
+                    color='primary'
                     onClick={onOpenModalAddField}
                 >{t('add_dddl')}</Button>
             </div>
@@ -366,9 +363,11 @@ const TouristDes = () => {
 
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <div>
-                            <label style={{ padding: '2px 20px', border: '1px solid #FAF8F1', borderRadius: 5 }} htmlFor="uploadInput" className={classes.uploadButton}>
-                                Upload Image
-                            </label>
+                            <Button color="primary" className="p-0 mb-2">
+                                <label style={{ padding: '2px 20px' }} htmlFor="uploadInput" className={classes.uploadButton}>
+                                    Upload Image
+                                </label>
+                            </Button>
                             <input
                                 id="uploadInput"
                                 type="file"
@@ -483,9 +482,12 @@ const TouristDes = () => {
 
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                             <div>
-                                <label style={{ padding: '2px 20px', border: '1px solid #FAF8F1', borderRadius: 5 }} htmlFor="uploadInput" className={classes.uploadButton}>
-                                    Upload Image
-                                </label>
+                                <Button color="primary" className="p-0 mb-2">
+                                    <label style={{ padding: '2px 20px' }} htmlFor="uploadInput" className={classes.uploadButton}>
+                                        Upload Image
+                                    </label>
+                                </Button>
+
                                 <input
                                     id="uploadInput"
                                     type="file"

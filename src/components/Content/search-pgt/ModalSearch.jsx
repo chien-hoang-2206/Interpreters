@@ -40,7 +40,7 @@ const ModalSearch = () => {
 
   const fetchData = async (keyword, category) => {
     try {
-      const response = await HintFactories.getListPGT(20, keyword, category);
+      const response = await HintFactories.getListHINT(20, keyword, category);
       console.log("🚀 ~ fetchData ~ response:", response)
       setPgtList(response);
     } catch (error) {

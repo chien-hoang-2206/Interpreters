@@ -30,7 +30,7 @@ export default function FormProfileHint(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await HintFactories.getPGTDetail(user?.id);
+      const response = await HintFactories.getHINTDetail(user?.id);
       setProfile(response[0]);
     };
     fetchData();

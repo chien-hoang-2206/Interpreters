@@ -130,3 +130,9 @@ html {
   background: #81c8f7 !important;
   color: white;
 }
+
+.btn-action-group{
+  display: flex;
+  flex-direction: row;
+  gap: 10,
+}

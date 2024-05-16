@@ -2,23 +2,22 @@
 import { addDoc, collection, getDocs, onSnapshot, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
 import { db } from "../firebase";
 
-export const createNotification = async (data) => {
+export const createNotification = async (
+    toUserId,
+    type,
+    action_id,
+    title,
+    body,
+    user_id,
+    hint_id,
+) => {
     // type :
     // 1 : có yêu cầu booking mới 
-    // 2 : pgt chấp nhận / từ chối yêu cầu booking
+    // 2 : hint chấp nhận / từ chối yêu cầu booking
     // 3 : admin  chấp nhận yêu cầu pgt
     // 4 : admin  từ chối  yêu cầu pgt
     // 5 : hoàn thành  yêu cầu pgt
     // 6 : user thanh toán thành công  yêu cầu pgt
-    const {
-        toUserId,
-        type,
-        action_id,
-        title,
-        body,
-        user_id,
-        pgt_id
-    } = data
     try {
         await addDoc(collection(db, "notifications"), {
             toUserId: toUserId,
@@ -28,7 +27,7 @@ export const createNotification = async (data) => {
             type: type,
             action_id: action_id,
             read: false,
-            pgt_id: pgt_id ?? 0,
+            hint_id: hint_id ?? 0,
             user_id: user_id ?? 0,
         });
     } catch (e) {

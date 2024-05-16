@@ -11,7 +11,7 @@ const HintFeedback = (props) => {
 
     async function fetchFeedbackData(id) {
         try {
-            const resp = await HintFactories.getPGTFeedbackList(id);
+            const resp = await HintFactories.getHINTFeedbackList(id);
             if (resp.status === 200) {
                 setDataList(resp.hintInfo);
                 // setRate(resp.rate)

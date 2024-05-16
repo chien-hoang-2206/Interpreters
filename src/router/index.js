@@ -100,7 +100,7 @@ const Router = () => {
         <Route
           path="chat"
           element={
-            <LayoutHeader>
+            <LayoutHeader isHaveFooter={false}>
               <ProtectedRoute Component={Chat} />
             </LayoutHeader>}
         />

@@ -22,6 +22,7 @@ import CategoriesFactories from "../../services/CategoryFactories";
 import Cookies from 'js-cookie';
 import { MessageContext } from "../../context/Message.context";
 import { MessageOutlined, NotificationOutlined } from "@ant-design/icons";
+import { Badge } from "@nextui-org/react";
 const Header = (props) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -228,23 +229,40 @@ const Header = (props) => {
             registerHandler={registerHandler}
           />
         )}
-        {user && <Notification countNotification={countNotification} />}
-        {countNotification > 0 && (
-          <span className={"noti-badge"}>{countNotification}</span>
-        )}
+        {user &&
+          <>
+            {countNotification > 0 ?
+              <Badge content={countNotification} shape="circle" color="primary">
+                <Notification countNotification={countNotification}
+                />
+              </Badge>
+
+              : <>
+                <Notification countNotification={countNotification}
+                />
+              </>}
+          </>
+        }
         {user && (
           <div className="icon-room-guest">
-            <Tooltip title="Nhắn tin" >
-              <button
-                onClick={() => navigator('/chat')}
-                className={({ isActive }) => (isActive ? "active" : undefined)}
-              >
-                <MessageOutlined />
-                {countNotification > 0 && (
-                  <span className={"noti-badge"}>{countMes}</span>
-                )}
-              </button>
-            </Tooltip>
+            {countMes > 0 ?
+              <Badge content={countMes} shape="circle" color="primary">
+                <button
+                  onClick={() => navigator('/chat')}
+                  className={({ isActive }) => (isActive ? "active" : undefined)}
+                >
+                  <MessageOutlined />
+                </button>
+              </Badge>
+
+              : <>
+                <button
+                  onClick={() => navigator('/chat')}
+                  className={({ isActive }) => (isActive ? "active" : undefined)}
+                >
+                  <MessageOutlined />
+                </button>
+              </>}
           </div>
         )}
         {user && (

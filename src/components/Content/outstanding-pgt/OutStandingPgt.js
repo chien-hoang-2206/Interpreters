@@ -6,7 +6,7 @@ const OutStandingPGT = () => {
     const [pgtList, setPgtList] = useState([]);
     useLayoutEffect(() => {
         const fetchData = async () => {
-            // const response = await PgtFactories.getListPGT(20);
+            // const response = await PgtFactories.getListHINT(20);
             // setPgtList(response);
         };
         fetchData();

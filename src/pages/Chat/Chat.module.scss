@@ -1,10 +1,9 @@
 .messenger {
   width: 100%;
-  height: calc(100vh - 58px);
-  overflow: hidden;
+  height: calc(100vh - 50px);
   border: 1px solid var(--base-line-light, #EDEEF3);
   background: var(--base-on-background, #FFF);
-
+  overflow: hidden;
   .sidebar {
     height: 100%;
     border-right: 2px solid rgb(187 185 185);

@@ -2,7 +2,7 @@ import ApiConstants from "../adapter/ApiConstants";
 import ApiOperation from "../adapter/ApiOperation";
 
 const HintFactories = {
-  getListPGT: async ( Type = 10  , KeyWord, Category) => {
+  getListHINT: async ( Type = 10  , KeyWord, Category) => {
     let params = {} ; 
     if (KeyWord){
       params.KeyWord = KeyWord;
@@ -19,13 +19,13 @@ const HintFactories = {
       params: params, 
     });
   },
-  getPGTDetail: async data => {
+  getHINTDetail: async data => {
     return ApiOperation.request({
       url: `${ApiConstants.Interpreters}/${data}`,
       method: "GET",
     });
   },
-  getPGTFeedbackList: async data => {
+  getHINTFeedbackList: async data => {
     return ApiOperation.request({
       url: `${ApiConstants.PGT_FEEDBACK}/${data}`,
       method: "GET",
