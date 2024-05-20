@@ -174,7 +174,6 @@ export const onSignUpPhoneNumberOtp = async (phone) => {
     const formatPh = '+' + phone;
     signInWithPhoneNumber(auth, formatPh, appVerifier)
         .then((confirmationResult) => {
-            console.log("🚀 ~ .then ~ confirmationResult:", confirmationResult)
             window.confirmationResult = confirmationResult;
         })
         .catch((error) => {

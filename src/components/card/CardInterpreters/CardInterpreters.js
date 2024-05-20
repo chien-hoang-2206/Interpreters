@@ -14,6 +14,7 @@ const Chanel = ({ item }) => {
 
 const CardInterpreters = (props) => {
     const data = props.data;
+    console.log("🚀 ~ CardInterpreters ~ data:", data)
     const navigate = useNavigate();
     const handleClickCard = () => {
         navigate(`/hint/${data?.id}`);
@@ -25,8 +26,15 @@ const CardInterpreters = (props) => {
                     <img className='card_imgage' alt='card__view__data' src={data?.avatar} />
                 </div>
             </div>
-            <div className="card__content">
-                <span className="channel__video__name">{data?.username}</span>
+            <div className="card__content w-full">
+                <div className='flex flex-row justify-between w-full'>
+                    <span className="channel__video__name  w-3/4">{data?.username}</span>
+                    <div className="channel__views w-1/4 float-right ">
+                        {data?.listcategories?.slice(0, 4).map((item, index) => (
+                            <Chanel item={item} key={index} />
+                        ))}
+                    </div>
+                </div>
                 <div className='flex flex-row gap-1 justify-between'>
                     <span className="text-sm font-bold channel__text_short">{`Lượt thuê ${data?.booking ?? 0}`}</span>
                     <span className="channel__text_short">
@@ -36,13 +44,8 @@ const CardInterpreters = (props) => {
                 <div className="channel__data">
                     <div className="channel__data__text">
                         <div className="channel__subdata">
-                            <div className="channel__views">
-                                {data?.listgame?.slice(0, 4).map((item, index) => (
-                                    <Chanel item={item} key={index} />
-                                ))}
-                            </div>
+
                         </div>
-                        {/* <FontAwesomeIcon icon="fa-sharp" /> */}
                         <p className="channel__star">{data?.star} <span className='channel__cmt'>({data?.comment})</span></p>
                     </div>
                 </div>

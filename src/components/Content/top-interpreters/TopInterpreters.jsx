@@ -4,15 +4,16 @@ import CardTopInterpreters from '../../card/CardTopInterpreters/CardTopInterpret
 import { useTranslation } from 'react-i18next';
 import { ToastNotiError } from '../../../utils/Utils';
 import BookingFactories from '../../../services/BookingFactories';
+import { Skeleton } from '@nextui-org/react';
 const TopInterpreters = () => {
     const { t } = useTranslation();
-    const [DataList, setDataList] = useState();
-   
+    const [DataList, setDataList] = useState([]);
+
     const fetchApiList = async () => {
         try {
             const year = (new Date()).getFullYear();
             const month = (new Date()).getMonth() + 1;
-            const response = await BookingFactories.getBookingTopPgt(year, month );
+            const response = await BookingFactories.getBookingTopPgt(year, month);
             if (response?.status === 200) {
                 setDataList(response.data);
             } else {
@@ -37,6 +38,28 @@ const TopInterpreters = () => {
                             <CardTopInterpreters key={i} data={item} />
                         );
                     })}
+                    {DataList?.length === 0 &&
+                        <>
+                            <div className="max-w-[500px] w-full flex items-center gap-3">
+                                <div>
+                                    <Skeleton className="flex rounded-full w-12 h-12" />
+                                </div>
+                                <div className="w-full flex flex-col gap-2">
+                                    <Skeleton className="h-3 w-3/5 rounded-lg" />
+                                    <Skeleton className="h-3 w-4/5 rounded-lg" />
+                                </div>
+                            </div>
+                            <div className="max-w-[500px] w-full flex items-center gap-3">
+                                <div>
+                                    <Skeleton className="flex rounded-full w-12 h-12" />
+                                </div>
+                                <div className="w-full flex flex-col gap-2">
+                                    <Skeleton className="h-3 w-3/5 rounded-lg" />
+                                    <Skeleton className="h-3 w-4/5 rounded-lg" />
+                                </div>
+                            </div>
+                        </>
+                    }
                 </div>
 
 

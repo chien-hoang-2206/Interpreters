@@ -10,6 +10,9 @@ const DestinationFactories = {
     if (data.Type) {
       params.Type = data.Type;
     }
+    if (data.Keyword) {
+      params.Keyword = data.Keyword;
+    }
     return ApiOperation.request({
       url: ApiConstants.Destination,
       method: "GET",

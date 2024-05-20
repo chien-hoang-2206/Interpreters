@@ -72,7 +72,6 @@ const TabAll = ({ selectedCategory, selectedDate }) => {
       const updatedData1 = fetchData(selectedCategory, selectedDate); // Gọi hàm fetchData với các tham số tương ứng.
       const updatedData2 = fetchData(selectedCategory, selectedDate);
       const updatedData3 = fetchData(selectedCategory, selectedDate);
-      console.log("🚀 ~ file: TabAll.js:62 ~ useEffect ~ selectedDate:", selectedDate)
       setBarData1(updatedData1);
       setBarData2(updatedData2);
       setBarData3(updatedData3);

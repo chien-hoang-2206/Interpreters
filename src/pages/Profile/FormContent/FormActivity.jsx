@@ -14,7 +14,6 @@ export default function FormActivity() {
     const fetchData = async () => {
       try {
         const response = await BookingFactories.getListBookingForUser(user?.id);
-        console.log("🚀 ~ fetchData ~ response:", response)
         setDataTable(response.data);
       } catch (error) {
         // Handle errors here

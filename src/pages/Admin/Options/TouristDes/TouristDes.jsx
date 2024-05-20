@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Image, Input, Modal, Typography, Avatar, Form, TimePicker, Select } from "antd";
+import { Table, Image, Input, Modal, Typography, Avatar, Form, TimePicker, Select, InputNumber } from "antd";
 import classes from './TouristDes.module.css'
 import { ToastNoti, ToastNotiError, convertStringToNumber, getDate } from "../../../../utils/Utils";
 import DestinationFactories from "../../../../services/DestinationFatories";
@@ -9,8 +9,6 @@ import ReactQuill from "react-quill";
 import { uploadFirebase } from "../../../../utils/FirebaseService";
 import dayjs from "dayjs";
 import { Button } from "@nextui-org/react";
-
-const { Text } = Typography;
 
 const TouristDes = () => {
 
@@ -108,7 +106,6 @@ const TouristDes = () => {
     const [inputSearch, setInputSearch] = useState("");
     const [form] = Form.useForm();
     const [openModalAdd, setOpenModalAdd] = useState(false)
-    const [destinationAddName, setDestinationAddName] = useState()
     const [destinationUpdateId, setDestinationUpdateId] = useState()
     const [destinationUpdateName, setDestinationUpdateName] = useState()
     const [destinationUpdateImage, setDestinationUpdateImage] = useState()
@@ -132,14 +129,16 @@ const TouristDes = () => {
 
     const fetchData = async (Keyword) => {
         setLoading(true)
-        const response = await DestinationFactories.getListDestination({});
+        const response = await DestinationFactories.getListDestination({
+            Keyword: Keyword
+        });
         setTouristDes(response);
         setLoading(false)
     };
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        fetchData(inputSearch);
+    }, [inputSearch]);
 
 
 
@@ -226,36 +225,40 @@ const TouristDes = () => {
     }
 
     const onUpdatedestinationSubmit = async (data) => {
-        setLoading(true)
-        try {
-            let url = showModalUpdate.image
-            if (fileUpload) {
-                url = await uploadFirebase(fileUpload);
+        if (data) {
+            setLoading(true)
+            try {
+                let url = showModalUpdate.image
+                if (fileUpload) {
+                    url = await uploadFirebase(fileUpload);
+                }
+                const newData = {
+                    name: data?.name,
+                    image: url,
+                    latitude: data?.latitude,
+                    province: data?.province,
+                    longitude: data?.longitude,
+                    time_start: dayjs(data?.time[0]).format('YYYY-MM-DDTHH:mm:ss'),
+                    time_end: dayjs(data?.time[1]).format('YYYY-MM-DDTHH:mm:ss'),
+                    price: data?.price,
+                    experience: data.experience
+                }
+                const resp = await DestinationFactories.updateDestination(destinationUpdateId, newData);
+                if (resp?.status === 200) {
+                    ToastNoti();
+                    setImageLinK()
+                    onCloseModalUpdate()
+                    setFileUpload()
+                } else {
+                    setFileUpload()
+                    ToastNotiError('resp?.message');
+                }
+            } catch (error) {
+                ToastNotiError();
             }
-            const newData = {
-                name: data?.name,
-                image: url,
-                latitude: data?.latitude,
-                province: data?.province,
-                longitude: data?.longitude,
-                time_start: data?.time[0],
-                time_end: data?.time[1],
-                price: data?.price,
-                experience: data.experience
-            }
-            const resp = await DestinationFactories.updateDestination(destinationUpdateId, newData);
-            if (resp?.status === 200) {
-                ToastNoti();
-                setImageLinK()
-                onCloseModalUpdate()
-                setFileUpload()
-            } else {
-                setFileUpload()
-                ToastNotiError('resp?.message');
-            }
-        } catch (error) {
-            ToastNotiError();
         }
+
+
     }
 
 
@@ -425,10 +428,16 @@ const TouristDes = () => {
                         </Form.Item>
 
                         <Form.Item label="Nhập vé vào cửa" name='price'>
-                            <Input
+                            {/* <Input
                                 type="number"
                                 style={{ width: '100%' }}
                                 className={classes['add-modal-input']}
+                            /> */}
+                            <InputNumber
+                                addonAfter="VND"
+                                style={{ width: '100%' }}
+                                formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                parser={value => value.replace(/\$\s?|(,*)/g, '')}
                             />
                         </Form.Item>
 
@@ -463,7 +472,7 @@ const TouristDes = () => {
             </Modal >
 
             <Modal
-                width={800}
+                width={1200}
                 title={t('update')}
                 open={showModalUpdate}
                 onCancel={onCloseModalUpdate}
@@ -480,14 +489,8 @@ const TouristDes = () => {
                         onFinish={onUpdatedestinationSubmit}
                     >
 
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <div>
-                                <Button color="primary" className="p-0 mb-2">
-                                    <label style={{ padding: '2px 20px' }} htmlFor="uploadInput" className={classes.uploadButton}>
-                                        Upload Image
-                                    </label>
-                                </Button>
-
+                        <div className="flex flex-row gap-5">
+                            <div className="flex flex-col items-center w-1/5">
                                 <input
                                     id="uploadInput"
                                     type="file"
@@ -496,91 +499,109 @@ const TouristDes = () => {
                                     style={{ display: 'none' }}
                                     onChange={(e) => handleChange(e)}
                                 />
+                                <Avatar
+                                    src={imageLink ? imageLink : showModalUpdate?.image ?? ''}
+                                    alt="avatar"
+                                    style={{ width: 150, height: 150 }}
+                                />
+                                <Button color="primary" className="p-0 mb-2">
+                                    <label style={{ padding: '2px 20px' }} htmlFor="uploadInput" className={classes.uploadButton}>
+                                        Upload Image
+                                    </label>
+                                </Button>
                             </div>
-                            <Avatar
-                                src={imageLink ? imageLink : showModalUpdate?.image ?? ''}
-                                alt="avatar"
-                                style={{ width: 200, height: 200 }}
-                            />
+                            <div className="flex flex-col w-4/5">
+                                <Form.Item label={t('name_dddl')} name='name'>
+                                    <Input
+                                        type="text"
+                                        style={{ width: '100%' }}
+                                        className={classes['add-modal-input']}
+                                    />
+                                </Form.Item>
+                                <Form.Item label={t('province')}
+                                    rules={[
+                                        { required: true, message: t('must_choose') },
+                                    ]}
+                                    name='province'>
+                                    <Select
+                                        type="text"
+                                        style={{ width: '100%' }}
+                                        options={Constants.vietnamProvinces}
+                                    />
+                                </Form.Item>
+                                <Form.Item label="Nhập kinh độ" name='longitude'>
+                                    <Input
+                                        type="text"
+                                        style={{ width: '100%' }}
+                                        className={classes['add-modal-input']}
+                                    />
+                                </Form.Item>
+                                <Form.Item label="Nhập vĩ độ" name='latitude'>
+                                    <Input
+                                        type="text"
+                                        style={{ width: '100%' }}
+                                        className={classes['add-modal-input']}
+                                    />
+                                </Form.Item>
 
-                            <Form.Item label={t('name_dddl')} name='name'>
-                                <Input
-                                    type="text"
-                                    style={{ width: '100%' }}
-                                    className={classes['add-modal-input']}
-                                />
-                            </Form.Item>
-                            <Form.Item label={t('province')}
-                                rules={[
-                                    { required: true, message: t('must_choose') },
-                                ]}
-                                name='province'>
-                                <Select
-                                    type="text"
-                                    style={{ width: '100%' }}
-                                    options={Constants.vietnamProvinces}
-                                />
-                            </Form.Item>
-                            <Form.Item label="Nhập kinh độ" name='longitude'>
-                                <Input
-                                    type="text"
-                                    style={{ width: '100%' }}
-                                    className={classes['add-modal-input']}
-                                />
-                            </Form.Item>
-                            <Form.Item label="Nhập vĩ độ" name='latitude'>
-                                <Input
-                                    type="text"
-                                    style={{ width: '100%' }}
-                                    className={classes['add-modal-input']}
-                                />
-                            </Form.Item>
 
-                            <Form.Item label="Thời gian hoạt động" name="time"
-                            >
-                                <TimePicker.RangePicker
-                                    format='HH:mm'
-                                    placeholder={['Bắt đầu', 'Kết thúc']}
-                                />
-                            </Form.Item>
+                                <Form.Item label="Thời gian hoạt động" name="time"
+                                >
+                                    <TimePicker.RangePicker
+                                        format='HH:mm'
+                                        placeholder={['Bắt đầu', 'Kết thúc']}
+                                    />
+                                </Form.Item>
 
-                            <Form.Item label="Nhập vé vào cửa" name='price'>
-                                <Input
-                                    type="number"
-                                    style={{ width: '100%' }}
-                                    className={classes['add-modal-input']}
-                                />
-                            </Form.Item>
+                                <Form.Item label="Nhập vé vào cửa" name='price'>
+                                    <InputNumber
+                                        addonAfter="VND"
+                                        style={{ width: '100%' }}
+                                        formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                    />
+                                </Form.Item>
 
-                            <Form.Item label="Giới thiệu" name='experience'>
-                                {/* <TextArea
+                                <Form.Item label="Giới thiệu" name='experience'>
+                                    {/* <TextArea
                                 placeholder='Giới thiệu về địa điểm...'
                                 autoSize={{ minRows: 3, maxRows: 20 }}
                             // onChange={(e) => setEditValue(e.target.value)} value={editValue} 
                             /> */}
 
-                                <ReactQuill
-                                    theme="snow"
-                                    value={content}
-                                    onChange={(e) => setContent(e)}
-                                    modules={modules}
-                                    formats={formats}
-                                    placeholder="Giới thiệu về địa điểm..."
-                                    className="bg-white rounded mt-5"
-                                />
-                            </Form.Item>
+                                    <ReactQuill
+                                        theme="snow"
+                                        value={content}
+                                        onChange={(e) => setContent(e)}
+                                        modules={modules}
+                                        formats={formats}
+                                        placeholder="Giới thiệu về địa điểm..."
+                                        className="bg-white rounded mt-5"
+                                    />
+                                </Form.Item>
 
-                            <div className="w-full flex justify-end float-right">
-                                <Button
-                                    style={{
-                                        backgroundColor: 'blue',
-                                        width: '100%', float: 'right'
-                                    }}
-                                    htmlType="submit"
-                                    onClick={onUpdatedestinationSubmit}
-                                >{t('update')}</Button>
+                                <div className="w-full flex justify-end float-right gap-5">
+                                    <Button
+                                        color="danger"
+                                        style={{
+                                            color: 'white',
+                                            width: '150px', float: 'right'
+                                        }}
+                                        onClick={onCloseModalUpdate}
+                                    >{t('cancel')}</Button>
+                                    <Button
+                                        color="success"
+                                        style={{
+                                            color: 'white',
+                                            width: '150px', float: 'right'
+                                        }}
+                                        type="submit"
+                                    >{t('update')}</Button>
+                                </div>
                             </div>
+
                         </div>
+
                     </Form>
 
                 </div>

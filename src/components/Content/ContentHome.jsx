@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import BannerFactories from "../../services/BannerFactories";
 import DestinationFactories from "../../services/DestinationFatories";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, CardFooter, Image } from "@nextui-org/react";
+import { Button, Card, CardFooter, Image, Skeleton } from "@nextui-org/react";
 const ContentHome = (props) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
@@ -63,10 +63,15 @@ const ContentHome = (props) => {
         <div className='w-full py-5 xl:w-[1120px] ' >
           <Banner data={data} />
         </div>
+        
         <div className='w-full py-5 xl:w-[1120px]' >
           <span className="text-2xl font-bold ">{t('des_popular')}</span>
-          <div className="flex flex- gap-4 mt-4 xl:w-[1120px] overflow-auto p-2">
-            {TouristDes?.map(item => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 overflow-auto p-2">
+
+
+
+
+            {TouristDes?.slice(0, 5)?.map(item => (
               <Card
                 isFooterBlurred
                 key={item.id}
@@ -78,7 +83,7 @@ const ContentHome = (props) => {
                   className="object-cover w-[600px] h-52"
                   src={item.image}
                 />
-                <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_1px)] shadow-small ml-1 z-10">
                   <p className="text-tiny text-white/80">{item.name}</p>
                   <Button onClick={() => navigate(`/destination/${item.id}`)} className="text-tiny text-white bg-black/20" variant="flat" color="default" radius="lg" size="sm">
                     Chi tiết

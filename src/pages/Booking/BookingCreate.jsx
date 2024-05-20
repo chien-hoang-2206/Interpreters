@@ -17,7 +17,6 @@ import TextArea from "antd/es/input/TextArea";
 const BookingCreate = (props) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const hint = props.data;
-  console.log("🚀 ~ BookingCreate ~ hint:", hint)
   const onCloseModal = () => {
     props.onCancelOpenHandler();
   };

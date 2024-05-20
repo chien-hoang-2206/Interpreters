@@ -28,7 +28,6 @@ const RegisterInterpreters = (props) => {
   })
   const [error, setError] = useState()
   const [step, setStep] = useState(0)
-  console.log("🚀 ~ RegisterInterpreters ~ step:", step)
   const [loading, setLoading] = useState(true);
 
   const { t } = useTranslation()
@@ -36,7 +35,6 @@ const RegisterInterpreters = (props) => {
 
   function checkPrice() {
     const arePricesNullOrZero = Object.values(price).some(value => value === null || value === 0);
-    console.log("🚀 ~ checkPrice ~ arePricesNullOrZero:", arePricesNullOrZero)
     if (arePricesNullOrZero) {
       setError({
         price: t('input_price_full')
@@ -157,7 +155,6 @@ const RegisterInterpreters = (props) => {
         setLoading(false)
       }
     } catch (error) {
-      console.log("🚀 ~ onSubmit ~ error:", error)
       setLoading(false)
     }
   }

@@ -55,7 +55,6 @@ const PageInterpreterDetail = () => {
       try {
         setLoading(true)
         const response = await PgtFactories.getPGTDetail(id);
-        console.log("🚀 ~ fetchData ~ response:", response)
         setHintInfo(response[0]);
         setStatusHint(response[0].status);
         setLoading(true)

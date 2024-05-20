@@ -201,7 +201,7 @@ const ProfileUser = () => {
     };
 
     const handleChageUserName = () => {
-        setUserName(userInfo.user_name);
+        setUserName(userInfo?.user_name);
         setEditUserName(!editUserName);
     };
 

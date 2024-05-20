@@ -64,19 +64,36 @@ const Login = (props) => {
   };
 
   function checkUserValidation() {
-    if (!userInput.email) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!userInput.email || !emailRegex.test(userInput.email)) {
       setCheck({
         status: true,
         type: "error",
-        content: `Email không được để trống, hãy nhập email`,
+        content: t('Validate_email')
       });
       return false;
     }
+    else if (!userInput.email) {
+      setCheck({
+        status: true,
+        type: "error",
+        content: t('Validate_email'),
+      });
+      return false;
+    }
+    // else if (userInput?.email?.length < 15 ) {
+    //   setCheck({
+    //     status: true,
+    //     type: "error",
+    //     content: `Email không hợp lệ`,
+    //   });
+    //   return false;
+    // }
     else if (userInput.email.indexOf('@') < 0 || userInput.email.indexOf('.com') < 0) {
       setCheck({
         status: true,
         type: "error",
-        content: `Cấu trúc email không đúng xin hãy nhập lại, vs dụ: "abc@kolgo.com"`,
+        content: t('Validate_email'),
       });
       return false;
     }
@@ -84,7 +101,7 @@ const Login = (props) => {
       setCheck({
         status: true,
         type: "error",
-        content: `Mật khẩu không được để trống, hãy nhập mật khẩu`,
+        content: t('Validate_pass1'),
       });
       return false;
     }
@@ -103,7 +120,6 @@ const Login = (props) => {
           content: response?.error,
         });
         setLoading(false)
-
       }
       else if (response?.user?.role_id !== 3) {
         setProfileForUser(response?.user);
