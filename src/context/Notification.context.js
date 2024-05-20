@@ -12,20 +12,20 @@ export const NotificationProvider = ({ children }) => {
     const startNotificationListener = useCallback(() => {
         // Đảm bảo người dùng đã đăng nhập và có đối tượng user
         if (user) {
-            // const notificationsQuery = query(
-            //     collection(db, "notifications"),
-            //     where("toUserId", "==", parseInt(user.id)),
-            //     // orderBy("createdAt", "desc") // Sắp xếp từ mới đến cũ
-            // );
-            // // Lắng nghe thay đổi và cập nhật state
-            // return onSnapshot(notificationsQuery, (querySnapshot) => {
-            //     const updatedNotifications = querySnapshot.docs.map(doc => ({
-            //         ...doc.data(),
-            //         id: doc.id
-            //     }));
-            //     const sortedNotifications = updatedNotifications.sort(compareTimestamps);
-            //     setNotifications(sortedNotifications);
-            // });
+            const notificationsQuery = query(
+                collection(db, "notifications"),
+                where("toUserId", "==", parseInt(user.id)),
+                // orderBy("createdAt", "desc") // Sắp xếp từ mới đến cũ
+            );
+            // Lắng nghe thay đổi và cập nhật state
+            return onSnapshot(notificationsQuery, (querySnapshot) => {
+                const updatedNotifications = querySnapshot.docs.map(doc => ({
+                    ...doc.data(),
+                    id: doc.id
+                }));
+                const sortedNotifications = updatedNotifications.sort(compareTimestamps);
+                setNotifications(sortedNotifications);
+            });
         } else {
             setNotifications([]);
             return undefined;

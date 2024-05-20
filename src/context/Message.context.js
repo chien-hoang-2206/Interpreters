@@ -18,33 +18,33 @@ export const MessageProvider = ({ children }) => {
 
   const startMessengerListListener = useCallback(async () => {
     if (user) {
-      // const messagesRef = collection(db, "chats");
+      const messagesRef = collection(db, "chats");
 
-      // const firstUserMessagesQuery = query(
-      //   messagesRef,
-      //   where("firstUserId", "==", userId)
-      // );
+      const firstUserMessagesQuery = query(
+        messagesRef,
+        where("firstUserId", "==", userId)
+      );
 
-      // const secondUserMessagesQuery = query(
-      //   messagesRef,
-      //   where("secondUserId", "==", userId)
-      // );
+      const secondUserMessagesQuery = query(
+        messagesRef,
+        where("secondUserId", "==", userId)
+      );
 
-      // const [firstUserMessages, secondUserMessages] = await Promise.all([
-      //   getDocs(firstUserMessagesQuery),
-      //   getDocs(secondUserMessagesQuery),
-      // ]);
+      const [firstUserMessages, secondUserMessages] = await Promise.all([
+        getDocs(firstUserMessagesQuery),
+        getDocs(secondUserMessagesQuery),
+      ]);
 
-      // const combinedMessages = [];
-      // firstUserMessages.forEach((doc) => {
-      //   combinedMessages.push({ ...doc.data(), id: doc.id });
-      // });
-      // secondUserMessages.forEach((doc) => {
-      //   combinedMessages.push({ ...doc.data(), id: doc.id });
-      // });
+      const combinedMessages = [];
+      firstUserMessages.forEach((doc) => {
+        combinedMessages.push({ ...doc.data(), id: doc.id });
+      });
+      secondUserMessages.forEach((doc) => {
+        combinedMessages.push({ ...doc.data(), id: doc.id });
+      });
 
-      // const sortedMessages = combinedMessages.sort((a, b) => b?.updatedAt?.seconds - a?.updatedAt?.seconds);
-      // setMessengerList(sortedMessages);
+      const sortedMessages = combinedMessages.sort((a, b) => b?.updatedAt?.seconds - a?.updatedAt?.seconds);
+      setMessengerList(sortedMessages);
     } else {
       setMessengerList([]);
     }
