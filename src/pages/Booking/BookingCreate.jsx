@@ -23,11 +23,13 @@ const BookingCreate = (props) => {
   const { t } = useTranslation()
   const [form] = Form.useForm();
   const watchtypeTravel = Form.useWatch('typeTravel', form);
+  console.log("🚀 ~ BookingCreate ~ watchtypeTravel:", watchtypeTravel)
   const watchtNumberPerson = Form.useWatch('numberPerson', form);
   const watchtDateBooking = Form.useWatch('dateBooking', form);
   const watchtTimeBooking = Form.useWatch('timeBooking', form);
   const watchtCost = Form.useWatch('Cost', form);
   const watchtPrice = Form.useWatch('price', form);
+
 
 
   useEffect(() => {
@@ -37,13 +39,13 @@ const BookingCreate = (props) => {
   }, [watchtNumberPerson, watchtypeTravel]);
 
   useEffect(() => {
-    if (parseInt(watchtypeTravel) == 1 && watchtNumberPerson && watchtDateBooking) {
+    if (parseInt(watchtypeTravel) == 1 && watchtNumberPerson ) {
       const basePrice = parseInt(watchtTimeBooking) == 7 ? hint?.price?.group_price_day : hint?.price?.group_price_session
       const newValue = watchtNumberPerson * basePrice
       form.setFieldValue('Cost', parseInt(newValue))
       form.setFieldValue('price', parseInt(basePrice))
     }
-    else if (parseInt(watchtypeTravel) == 2) {
+    else  {
       const basePrice = parseInt(watchtTimeBooking) == 7 ? hint?.price?.personal_price_day : hint?.price?.personal_price_session
       const newValue = 1 * basePrice
       form.setFieldValue('price', parseInt(basePrice))
@@ -52,8 +54,6 @@ const BookingCreate = (props) => {
   }, [watchtypeTravel, watchtNumberPerson, watchtTimeBooking, watchtDateBooking]);
 
   const [errorMessage, setErrorMessage] = useState('');
-  const [errorDate, setErrorDate] = useState(false);
-
 
   const requestBooking = async (data) => {
     try {
@@ -152,8 +152,8 @@ const BookingCreate = (props) => {
             <Radio.Group
               defaultValue={2}
             >
-              <Radio value={1}>Du lịch theo nhóm</Radio>
-              <Radio value={2}>Du lịch cá nhân</Radio>
+              <Radio value={1}>{t('booking_gr')}</Radio>
+              <Radio value={2}>{t('booking_per')}</Radio>
             </Radio.Group>
           </Form.Item>
 

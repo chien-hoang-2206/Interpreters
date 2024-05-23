@@ -9,7 +9,7 @@ import { Carousel, Pagination } from 'antd';
 import HintFactories from "../../../services/HintFatories";
 import { toast } from "react-toastify";
 import { convertStringToNumber, getDate } from "../../../utils/Utils";
-import { Avatar, Button, Image, Spinner} from "@nextui-org/react";
+import { Avatar, Button, Image, Spinner } from "@nextui-org/react";
 import BoxCustom from "../../../components/Box/BoxCustom";
 import { useTranslation } from "react-i18next";
 import { StarFilled } from "@ant-design/icons";
@@ -193,11 +193,14 @@ const PageInterpreterDetail = () => {
                             </span>
                             <span className='font-bold text-2xl text-center flex flex-col gap-2 text-blue2'>
                               <Button color='success' style={{ color: 'white' }} disabled>
-                                {statusHint === 1 ? 'Đang làm việc' : 'Đang tạm nghỉ'}
+                                {statusHint === 1 ? t('working') : t('pendding')}
                               </Button>
-                              <Button onClick={() => bookingHandler()} className="bg-gradient-to-tr from-pink-300 to-blue-700 text-white shadow-lg">
-                                Đặt lịch
-                              </Button>
+
+                              {statusHint === 1 &&
+                                <Button onClick={() => bookingHandler()} className="bg-gradient-to-tr from-pink-300 to-blue-700 text-white shadow-lg">
+                                  {t('booking')}
+                                </Button>
+                              }
                             </span>
                           </div>
                         </div>
@@ -210,14 +213,14 @@ const PageInterpreterDetail = () => {
                   title='Giá dịch vụ'
                   description={
                     <>
-                      <div className='mt-[-30px] flex flex-col w-[300px]'>
+                      <div className='mt-[0px] flex flex-col w-[300px]'>
                         <div className="flex w-full flex-col gap-4 justify-center items-center">
                           <div className="flex flex-col flex-start w-full gap-2">
                             <ul className='font-bold ' >
-                              Cá nhân
+                              {t('for_per')}
                               <li className='ml-2 text-gray-500 flex justify-between'>
                                 <span>
-                                  Theo buổi:
+                                  {t('for_mor')}:
                                 </span>
                                 <span className=" font-medium  text-yellow-400">
                                   {convertStringToNumber(hintInfo?.price?.personal_price_session)}
@@ -225,7 +228,7 @@ const PageInterpreterDetail = () => {
                               </li>
                               <li className='text-gray-500  ml-2  flex justify-between'>
                                 <span>
-                                  Theo ngày:
+                                {t('for_day')}:
                                 </span>
                                 <span className=" font-medium  text-yellow-400">
                                   {convertStringToNumber(hintInfo?.price?.personal_price_day)}
@@ -234,10 +237,10 @@ const PageInterpreterDetail = () => {
                             </ul>
 
                             <ul className='font-bold ' >
-                              Theo nhóm
+                            {t('for_group')}
                               <li className='text-gray-500 ml-2  flex justify-between'>
                                 <span>
-                                  Theo buổi:
+                                {t('for_mor')}:
                                 </span>
                                 <span className=" font-medium  text-yellow-400">
                                   {convertStringToNumber(hintInfo?.price?.group_price_session)}/{t('personal')}
@@ -245,7 +248,7 @@ const PageInterpreterDetail = () => {
                               </li>
                               <li className='text-gray-500  ml-2 flex justify-between'>
                                 <span>
-                                  Theo ngày:
+                                {t('for_day')}:
                                 </span>
                                 <span className=" font-medium ml-2 text-yellow-400">
                                   {convertStringToNumber(hintInfo?.price?.group_price_day)}/{t('personal')}
@@ -267,19 +270,19 @@ const PageInterpreterDetail = () => {
                   <div className="flex flex-col justify-start w-full ">
                     <BoxCustom
                       alignTitle='center'
-                      title='Tổng quan'
+                      title={t('overview')}
                       description={
                         <div className="flex flex-row justify-around w-full p-5 pt-0" >
                           <div className="flex flex-col gap-1 w-44"  >
-                            <span className="font-bold text-xl text-[#354052]">LƯỢT THUÊ</span>
+                            <span className="font-bold text-xl text-[#354052]">{t('count_booking')}</span>
                             <span className='font=bold text-xl'>{dataFeedback?.length ?? 0}</span>
                           </div>
                           <div className="flex flex-col gap-1 w-60"  >
-                            <span className="font-bold text-xl text-[#354052]">TỶ LỆ HOÀN THÀNH</span>
+                            <span className="font-bold text-xl text-[#354052]">{t('rate_booking')}</span>
                             <span className='font=bold text-xl'>{parseInt(rate ?? 100) ?? ''}%</span>
                           </div>
                           <div className="flex flex-col gap-1 w-44"  >
-                            <span className="font-bold text-xl text-[#354052]">ĐÁNH GIÁ</span>
+                            <span className="font-bold text-xl text-[#354052]">{t('cmt_booking')}</span>
                             <span className='font=bold text-xl mr-1'>{hintInfo?.star ?? 0}
                               <StarFilled className='text-yellow-500 ml-1' />
                             </span>
@@ -295,7 +298,7 @@ const PageInterpreterDetail = () => {
                     {/* <span className="text-3xl text-blue font-bold"> Các dịch vụ</span> */}
                     <div className="flex flex-col justify-start w-full">
                       <BoxCustom
-                        title='Các ngôn ngữ phiên dịch'
+                        title={t('lan_booking')}
                         description={
                           <div className="flex flex-wrap gap-12 p-5 pt-0 justify-center items-center bg-[#fff]">
                             {hintInfo?.listgame?.map((item, index) => (
@@ -316,7 +319,7 @@ const PageInterpreterDetail = () => {
                   <div>
                     {/* <span className="text-3xl mb-3 text-blue font-bold"> Giới thiệu</span> */}
                     <BoxCustom
-                      title='Giới thiệu'
+                      title={t('intro')}
                       alignTitle='center'
                       description={
                         <div className="whitespace-pre-line min-h-32" >
@@ -328,7 +331,7 @@ const PageInterpreterDetail = () => {
 
                   <div className="carousel-custom ">
                     <BoxCustom
-                      title='Hình ảnh tại nơi làm việc'
+                      title={t('photo_working')}
                       description={
                         <div className="flex flex-wrap gap-12 p-5 pt-0 justify-center items-center bg-[#fff]">
                           <Carousel
@@ -354,7 +357,7 @@ const PageInterpreterDetail = () => {
                   <div className="w-full">
                     <BoxCustom
                       alignTitle='center'
-                      title='Đánh giá'
+                      title={t('review')} 
                       description={
                         <>
                           {dataFeedback?.map((item, index) => (

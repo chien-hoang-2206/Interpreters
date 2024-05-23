@@ -13,7 +13,7 @@ const TopInterpreters = () => {
         try {
             const year = (new Date()).getFullYear();
             const month = (new Date()).getMonth() + 1;
-            const response = await BookingFactories.getBookingTopPgt(year, month);
+            const response = await BookingFactories.getBookingTopHINT(year, month);
             if (response?.status === 200) {
                 setDataList(response.data);
             } else {

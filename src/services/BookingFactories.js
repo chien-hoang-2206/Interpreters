@@ -45,11 +45,11 @@ const BookingFactories = {
       data: data,
     });
   },
-  updateBooking: async (id, type, rate, comment, pgt_id, amount, userName) => {
+  updateBooking: async (id, type, rate, comment, hint_id, amount, userName) => {
     const data = {
       rate: rate,
       comment: comment,
-      pgt_id: pgt_id,
+      hint_id: hint_id,
       amount: amount,
       user_name: userName,
     }
@@ -93,7 +93,7 @@ const BookingFactories = {
       params: params,
     });
   },
-  getBookingTopPgt: async (year, month, date) => {
+  getBookingTopHINT: async (year, month, date) => {
     let params = {
     };
     if (year) {

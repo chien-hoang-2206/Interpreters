@@ -8,9 +8,9 @@ import i18n from '../trans/i18n'
 
 export const convertStringToNumber = (value, delimiter = '.') => {
     if (value || value === 0) {
-        return `${value.toString().replace(regex.formatMoney, delimiter)} đ`
+        return `${value.toString().replace(regex.formatMoney, delimiter)} vnđ`
     }
-    return '0 đ'
+    return '0 vnđ'
 }
 export const compareTimestamps = (a, b) => b.createdAt?.toDate().getTime() - a.createdAt?.toDate().getTime();
 

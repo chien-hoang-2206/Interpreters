@@ -61,7 +61,7 @@ const ChartYear = (props) => {
 
     const fetchDataTop = async (year, month) => {
         try {
-            const response = await BookingFactories.getBookingTopPgt(year, month);
+            const response = await BookingFactories.getBookingTopHINT(year, month);
             if (response?.status === 200) {
                 const responseData = response?.data
                 const labels = responseData.map(item => `${item.user_name}`);

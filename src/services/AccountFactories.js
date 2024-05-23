@@ -37,7 +37,7 @@ const AccountFactories = {
       data: data
     });
   },
-  updateStatusRequestPgt: async (id,Type) => {
+  updateStatusRequestHINT: async (id,Type) => {
     let params = {};
     if (Type){
       params.Type = Type;

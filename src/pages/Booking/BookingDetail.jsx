@@ -17,12 +17,12 @@ const BookingDetail = (props) => {
   const [userBookingAvatar, setUserBookingAvatar] = useState();
 
   useEffect(() => {
-    async function fetchdata() {
-      const resp = await HintFactories.getHINTDetail(booking?.user_id);
+    async function fetchdata(id) {
+      const resp = await HintFactories.getHINTDetail(id);
       setUserBookingAvatar(resp[0]?.avatar);
     }
     if (booking?.user_id) {
-      fetchdata();
+      fetchdata(booking?.user_id);
     }
   }, [booking?.user_id])
 
@@ -128,14 +128,16 @@ const BookingDetail = (props) => {
         <Form
           name="basic"
           labelAlign='left'
-          labelCol={{ span: 5 }}
-          wrapperCol={{ span: 19 }}
-          style={{ maxWidth: 600 }}
+          labelCol={{ span: 7 }}
+          wrapperCol={{ span: 18 }}
+          style={{ maxWidth: 700 }}
           initialValues={{ remember: true }}
           autoComplete="off"
           onFinish={onAcceptSubmit}
         >
           <Form.Item label={t('per_booking')}> <span style={{ float: 'right' }}> {booking?.user_name}  </span> </Form.Item>
+          <Form.Item label={t('destination')}> <span style={{ float: 'right' }}> {booking?.destination}  </span> </Form.Item>
+          <Form.Item label={t('quantity')}> <span style={{ float: 'right' }}> {booking?.quantity}  </span> </Form.Item>
           <Form.Item label={t('status')}      >
             {booking?.status === 1 && <span style={{ color: 'green', float: 'right' }} >{t('pending')}</span>}
             {booking?.status === 2 && <span style={{ color: 'blue', float: 'right' }} > {user?.id === booking?.user_id ? 'Interpreters' : 'Bạn'} {t('accept_bk')}</span>}
@@ -143,28 +145,20 @@ const BookingDetail = (props) => {
             {(booking?.status === 4 || booking?.status === 5) && <span style={{ float: 'right', color: 'green' }} > {t('success')}</span>}
           </Form.Item>
           <Form.Item label={t('date')}>
-            <Input
-              style={{ width: '100%', textAlign: 'right', }}
-              value={dateBooking}
-            />
+            <span style={{ float: 'right' }}>{dateBooking}</span>
           </Form.Item>
 
+
           <Form.Item label={t('time')} >
-            <Input
-              style={{ width: '100%', textAlign: 'right', }}
-              value={booking?.time}
-            />
+            <span style={{ float: 'right' }}>{booking?.time}</span>
           </Form.Item>
           <Form.Item label={t('total_money_booking')}>
-            <Input
-              style={{ width: '100%', textAlign: 'right', }}
-              value={convertStringToNumber(booking?.price)}
-            />
+            <span style={{ float: 'right' }}>{convertStringToNumber(booking?.cost)}</span>
           </Form.Item>
 
 
           {isHaveComment ? <>
-            <Form.Item label="Đánh giá">
+            <Form.Item label={t('review')}>
               <span style={{ float: 'right' }}>
                 <Rate tooltips={desc} onChange={setValueRate} value={(booking?.status !== 4 && booking?.rate) ? booking?.rate : valueRate} />
                 {/* {valueRate ? <span className="ant-rate-text">{desc[valueRate - 1]}</span> : ''} */}
@@ -194,7 +188,7 @@ const BookingDetail = (props) => {
                   rows={2}
                   disabled
                   placeholder=""
-                  value={booking?.note}
+                  value={booking?.description}
                 />
                 {booking?.status === 1 &&
                   <div style={{ display: 'flex', gap: 20, float: 'right', marginTop: 20 }}>

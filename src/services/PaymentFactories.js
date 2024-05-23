@@ -46,7 +46,7 @@ const PaymentFactories = {
   },
   updateMoneyToAccId: async (type, id, amount) => {
     // type == 10 , hoàn tiền
-    // type == 20 , cộng tiền cho acc pgt
+    // type == 20 , cộng tiền cho acc hint
     const data = {
       type: type,
       amount: amount,
