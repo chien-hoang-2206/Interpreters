@@ -93,9 +93,9 @@ const Router = () => {
         <Route
           path="user-home"
           element={
-            <LayoutSideBar>
+            <LayoutHeader>
               <ProfileUser />
-            </LayoutSideBar>}
+            </LayoutHeader>}
         />
         <Route
           path="chat"

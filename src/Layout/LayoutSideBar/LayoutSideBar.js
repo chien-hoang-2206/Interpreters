@@ -12,7 +12,6 @@ const LayoutSideBar = ({ children }) => {
         <div>
             <Header />
             <div style={{ display: 'flex' }}>
-                <SideBar />
                 <div className={`${styles.container} ${styles[isCollapse ? 'Collapse' : '']}`} >
                     {children}
                 </div>

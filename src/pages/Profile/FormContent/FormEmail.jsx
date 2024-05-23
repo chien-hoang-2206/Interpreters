@@ -53,18 +53,17 @@ export default function FormEmail(props) {
   const submitHandler = async (event) => {
     event.preventDefault();
     if (!validateFormData(email)) return;
-    console.log(email);
     try {
       const data = {
         email: email,
       }
-      // const response = await AccountFactories.requestUpdate(user?.id, data);
-      // if (response?.status === 200) {
-      //   ToastNoti();
-      //   setEmail(email);
-      //   localStorage.setItem("user", JSON.stringify({ ...user, email }));
-      //   window.dispatchEvent(new Event('storage'))
-      // }
+      const response = await AccountFactories.requestUpdate(user?.id, data);
+      if (response?.status === 200) {
+        ToastNoti();
+        setEmail(email);
+        localStorage.setItem("user", JSON.stringify({ ...user, email }));
+        window.dispatchEvent(new Event('storage'))
+      }
     } catch (error) {
       console.log(error);
       toast.error('Hệ thống lỗi.')
@@ -81,7 +80,7 @@ export default function FormEmail(props) {
           content={showMessage.content}
           changeMessage={changeMessage}
         />
-        <h1>Email</h1>
+        <h1>Đổi Email</h1>
         <form className={classes.form} onSubmit={submitHandler}>
           <Row className={classes.form_control}>
             <Col span={4}>Email:</Col>

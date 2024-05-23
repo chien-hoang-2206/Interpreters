@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { Col, Row } from "antd";
+import { Col, Input, Row } from "antd";
 
 import classes from "./Form.module.css";
 import Message from "../../../components/UI/Message/Message";
 import AccountFactories from "../../../services/AccountFactories";
 import { ToastNoti, ToastNotiError } from "../../../utils/Utils";
-import { toast } from "react-toastify";
+import { Button } from "@nextui-org/react";
 export default function FormPassword(props) {
   const user = JSON.parse(localStorage.getItem("user"));
-  const [passwordInput, setPasswordInput] = useState({});
   const [showMessage, setShowMessage] = useState({
     status: false,
     type: "",
@@ -23,65 +22,41 @@ export default function FormPassword(props) {
     });
   };
 
-  const createErrorMessage = (msg) => {
-    setShowMessage({ status: true, type: "error", content: msg });
-  };
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const createSuccessMessage = (msg) => {
-    setShowMessage({ status: true, type: "success", content: msg });
-  };
-
-  const inputChangeHandler = (event) => {
-    setPasswordInput((prevState) => {
-      return {
-        ...prevState,
-        [event.target.name]: event.target.value,
-      };
-    });
-  };
-
-  const validateFormData = (userInput) => {
-    let res = true;
-    let errMsg = "";
-    if (!userInput.oldPassword) {
-      errMsg = "Vui lòng nhập mật khẩu hiện tại!";
-    } else if (!userInput.newPassword) {
-      errMsg = "Vui lòng nhập mật khẩu mới!";
-    } else if (userInput.oldPassword === userInput.newPassword) {
-      errMsg = "Mật khẩu hiện tại và mật khẩu mới phải khác nhau!";
-    } else if (!userInput.resetPassword) {
-      errMsg = "Vui lòng nhập lại mật khẩu mới!";
-    } else if (userInput.newPassword !== userInput.resetPassword) {
-      errMsg = "Mật khẩu mới và Nhập lại mật khẩu phải giống nhau!";
+  const submitHandler = async () => {
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      ToastNotiError('Nhập tất cả dữ liệu.');
+      return;
     }
-    if (errMsg) {
-      createErrorMessage(errMsg);
-      res = false;
+    if (newPassword !== confirmPassword) {
+      ToastNotiError('Nhập lại mật khẩu không đúng.');
+      return;
     }
-    return res;
-  };
-
-  const submitHandler = async (event) => {
-    event.preventDefault();
-    if (!validateFormData(passwordInput)) return;
     try {
-      const data = {
-        password: passwordInput?.oldPassword,
-        new_password: passwordInput?.newPassword,
+      try {
+        const data = {
+          password: oldPassword,
+          new_password: newPassword,
+        }
+        const response = await AccountFactories.requestUpdate(user?.id, data);
+        if (response?.status === 200) {
+          ToastNoti();
+          setNewPassword()
+          setOldPassword()
+          setConfirmPassword()
+        }
+        else if (response?.status === 210) {
+          ToastNotiError(response?.message);
+        }
+      } catch (error) {
+        ToastNotiError(error?.response?.data.message);
       }
-      // const response = await AccountFactories.requestUpdate(user?.id, data);
-      // if (response?.status === 200) {
-      //   ToastNoti();
-      // }
-      // else if (response?.status === 210) {
-      //   ToastNotiError(response?.message);
-      // }
     } catch (error) {
-      console.log(error);
-      toast.error('Hệ thống lỗi.')
     }
   };
-
   return (
     <Row>
       <Col span={16}>
@@ -110,13 +85,12 @@ export default function FormPassword(props) {
           <Row className={classes.form_control}>
             <Col span={7}>Mật khẩu hiện tại:</Col>
             <Col span={17}>
-              <input
-                placeholder="Nhập mật khẩu hiện tại"
-                className={classes.input_profile}
-                name="oldPassword"
+              <Input.Password
+                placeholder="Mật khẩu cũ"
+                value={oldPassword}
                 type="password"
-                onChange={inputChangeHandler}
-                autoComplete="new-password"
+                onChange={e => setOldPassword(e.target.value)}
+                style={{ marginBottom: 16 }}
               />
             </Col>
           </Row>
@@ -124,35 +98,37 @@ export default function FormPassword(props) {
           <Row className={classes.form_control}>
             <Col span={7}>Mật khẩu mới:</Col>
             <Col span={17}>
-              <input
-                placeholder="Nhập mật khẩu mới"
-                className={classes.input_profile}
-                name="newPassword"
+
+              <Input.Password
+                placeholder="Mật khẩu mới"
+                value={newPassword}
                 type="password"
-                onChange={inputChangeHandler}
+                onChange={e => setNewPassword(e.target.value)}
+                style={{ marginBottom: 16 }}
               />
+
             </Col>
           </Row>
 
           <Row className={classes.form_control}>
             <Col span={7}>Nhập lại mật khẩu:</Col>
             <Col span={17}>
-              <input
-                placeholder="Nhập lại mật khẩu"
-                className={classes.input_profile}
+              <Input.Password
+                onChange={e => setConfirmPassword(e.target.value)}
+                placeholder="Nhập lại mật khẩu mới"
+                value={confirmPassword}
                 name="resetPassword"
                 type="password"
-                onChange={inputChangeHandler}
+                style={{ marginBottom: 16 }}
               />
             </Col>
           </Row>
 
+
           <Row>
             <Col offset={4}></Col>
             <Col span={16}>
-              <button className={classes.btnSubmit} type="submit">
-                Cập nhật
-              </button>
+              <Button onClick={submitHandler}>  Cập nhật</Button>
             </Col>
           </Row>
         </form>

@@ -15,7 +15,6 @@ const Chanel = ({ item }) => {
 
 const CardInterpreters = (props) => {
     const data = props.data;
-    console.log("🚀 ~ CardInterpreters ~ data:", data)
     const navigate = useNavigate();
     const handleClickCard = () => {
         navigate(`/hint/${data?.id}`);

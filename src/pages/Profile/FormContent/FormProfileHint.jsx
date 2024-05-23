@@ -6,8 +6,8 @@ import HintFactories from "../../../services/HintFatories";
 import { ToastNoti, ToastNotiError } from "../../../utils/Utils";
 import Constants from "../../../utils/constants";
 import CategoriesFactories from "../../../services/CategoryFactories";
-import axios from "axios";
 import AccountFactories from "../../../services/AccountFactories";
+import { getDistricts, getProvinces, getWards } from "../../../utils/Location/location";
 
 export default function FormProfileHint(props) {
   const [user] = useState(JSON.parse(localStorage.getItem("user")));
@@ -200,7 +200,7 @@ export default function FormProfileHint(props) {
 
 
 
-  const [provinces, setProvinces] = useState([]);
+  const [provinces, setProvincesList] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState();
@@ -208,68 +208,40 @@ export default function FormProfileHint(props) {
   const [SelectedWard, setSelectedWard] = useState("");
 
   useEffect(() => {
-    if (profile?.ward) {
-      setSelectedProvince(profile.province);
-      setSelectedDistrict(profile.district);
-      setSelectedWard(profile.ward);
+    async function fetchData() {
+      try {
+        const provinces = await getProvinces();
+        setProvincesList(provinces);
+      } catch (error) {
+        console.error("Error fetching provinces:", error);
+      }
     }
-  }, [profile?.ward])
-
-  // Gọi API để lấy danh sách tỉnh
-  useEffect(() => {
-    axios
-      .get("https://provinces.open-api.vn/api/p/")
-      .then((response) => {
-        const newList = response?.data?.map((item) => ({
-          label: item.name,
-          value: item.code,
-        }))
-        setProvinces(newList);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    fetchData();
   }, []);
-
-
-  // Gọi API để lấy danh sách quận dựa trên tỉnh đã chọn
   useEffect(() => {
-    if (selectedProvince) {
-      axios
-        .get(`https://provinces.open-api.vn/api/p/${selectedProvince}?depth=2`)
-        .then((response) => {
-          const newList = response?.data?.districts.map((item) => ({
-            label: item.name,
-            value: item.code,
-          }))
-          setDistricts(newList);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      setDistricts([]);
+    async function fetchDataDistrict() {
+      try {
+        const districtList = await getDistricts(selectedProvince);
+        setDistricts(districtList);
+      } catch (error) {
+        console.error("Error fetching provinces:", error);
+      }
     }
+    fetchDataDistrict();
   }, [selectedProvince]);
-  // Gọi API để lấy danh sách huyện dựa trên quận đã chọn
+
   useEffect(() => {
-    if (selectedDistrict) {
-      axios
-        .get(`https://provinces.open-api.vn/api/d/${selectedDistrict}?depth=2`)
-        .then((response) => {
-          const newList = response?.data?.wards.map((item) => ({
-            label: item.name,
-            value: item.code,
-          }))
-          setWards(newList);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      setWards([]);
+    async function fetchDataDistrict() {
+      try {
+        const list = await getWards(selectedDistrict);
+        setWards(list);
+      } catch (error) {
+        console.error("Error fetching provinces:", error);
+      }
     }
+    fetchDataDistrict();
   }, [selectedDistrict]);
+
 
   return (
     <form className={classes.form} onSubmit={submitHandler}>
@@ -410,7 +382,7 @@ export default function FormProfileHint(props) {
             </Col>
           </Row>
 
-          <Row className={classes.form_control}>
+          {/* <Row className={classes.form_control}>
             <Col span={6}>Facebook url </Col>
             <Col span={18}>
               <input
@@ -440,20 +412,6 @@ export default function FormProfileHint(props) {
             </Col>
           </Row>
 
-          <Row className={classes.form_control}>
-            <Col span={6}>Instagram url </Col>
-            <Col span={18}>
-              <input
-                placeholder="Link kênh Instargram cá nhân"
-                onChange={(e) => inputChangeHandler(e, 'instagram')}
-                value={profile?.instagram}
-                className={classes.input_profile}
-                defaultValue={profile?.instagram}
-                name="instagram"
-                type="url"
-              />
-            </Col>
-          </Row>
 
           <Row className={classes.form_control}>
             <Col span={6}>TikTok url </Col>
@@ -468,7 +426,7 @@ export default function FormProfileHint(props) {
                 type="url"
               />
             </Col>
-          </Row>
+          </Row> */}
 
           <Row>
             <Col offset={4}></Col>

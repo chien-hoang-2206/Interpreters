@@ -222,7 +222,6 @@
     }
 
     .boxContainer {
-      width: 80%;
       height: auto;
       border-radius: 15px;
       padding: 10px;
@@ -301,9 +300,12 @@
 .imageList {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-start;
   gap: 20px;
   row-gap: 53px;
-  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #354052;
+  border-radius: 12px;
   width: 130%;
 }
 

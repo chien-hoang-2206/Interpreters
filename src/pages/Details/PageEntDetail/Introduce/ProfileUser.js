@@ -39,6 +39,13 @@ const ProfileUser = () => {
     const [editUserName, setEditUserName] = useState();
     const [userName, setUserName] = useState();
     const [pricePgt, setPricePgt] = useState();
+
+    const [price, setPrice] = useState({
+        individual1: 0,
+        individual2: 0,
+        group2: 0,
+        group3: 0,
+    })
     const { isCollapse } = useContext(CollapseContext)
     const [dataFeedback, setDataFeedback] = useState();
     const [rate, setRate] = useState();
@@ -75,6 +82,12 @@ const ProfileUser = () => {
     useEffect(() => {
         setPricePgt(userInfo?.price)
     }, [userInfo?.price]);
+
+    function handleChangePrice(field, e) {
+        let newPrice = { ...price }
+        newPrice[field] = e
+        setPrice(newPrice)
+    }
 
     const renderFeedBack = () => {
         const onShowSizeChange = (current, pageSize) => {
@@ -141,11 +154,7 @@ const ProfileUser = () => {
                         key: '1',
                         label: 'Giới thiệu',
                         children: <IntroduceHint id={user?.id} canEdit introduction={userInfo?.introduction} />,
-                    }, {
-                        key: '2',
-                        label: 'Đánh giá',
-                        children: renderFeedBack(),
-                    }
+                    },
 
                 ])
         } else {
@@ -186,7 +195,13 @@ const ProfileUser = () => {
     };
 
     const onSubmitChangePrice = () => {
-        const data = { price: pricePgt, }
+        const data = {
+            personal_price_session: price.individual1,
+            personal_price_day: price.individual2,
+            group_price_avge: price?.group1,
+            group_price_session: price.group2,
+            group_price_day: price.group3,
+        }
         fetchDataUpdate(data)
         setEditPrice(!editPrice);
     };
@@ -197,7 +212,13 @@ const ProfileUser = () => {
         setEditUserName(!editUserName);
     };
     const handleChagePrice = () => {
-        setEditPrice(!editPrice);
+        setPrice({
+            individual1: userInfo?.price?.personal_price_session,
+            individual2: userInfo?.price?.personal_price_day,
+            group2: userInfo?.price?.group_price_session,
+            group3: userInfo?.price?.group_price_day,
+        })
+        setEditPrice(true)
     };
 
     const handleChageUserName = () => {
@@ -272,49 +293,6 @@ const ProfileUser = () => {
         setFileList(newList)
     };
 
-    const handleCancel = () => setPreviewOpen(false);
-    const uploadButton = (
-        <div>
-            <PlusOutlined />
-            <div
-                style={{
-                    marginTop: 8,
-                }}
-            >
-                Upload
-            </div>
-        </div>
-    );
-    const handlePreview = async (file) => {
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
-        }
-        setPreviewImage(file.url || file.xhr || file.preview);
-        setPreviewOpen(true);
-    };
-
-
-    function beforeUpload(file) {
-        const isImage = file.type.indexOf('image/') === 0;
-        if (!isImage) {
-            ToastNotiError('You can only upload image file!');
-        }
-
-        // You can remove this validation if you want
-        const isLt5M = file.size / 1024 / 1024 < 5;
-        if (!isLt5M) {
-            ToastNotiError('Image must smaller than 5MB!');
-        }
-        return isImage && isLt5M;
-    }
-
-    const handleChange = async ({ fileList: newFileList }) => {
-        setFileList(newFileList);
-    };
-    const handleRemote = (value) => {
-        // xoas anh link firebase 
-        // xoas link anh trong csdl
-    };
 
     const customUpload = async ({ onError, onSuccess, file }) => {
         try {
@@ -368,7 +346,7 @@ const ProfileUser = () => {
                     <div className={styles.profile}>
                         <div className={styles.stickyProfile}>
                             <div className={styles.profileContainer}>
-                                <div>
+                                <div className='shadow-lg   before:bg-white/10 border-white/20 border-1  border-solid border-blue-800 '>
                                     <label style={{ padding: '2px 5px', border: '1px solid #FAF8F1', borderRadius: 5 }} htmlFor="uploadInput" className={styles.uploadButton}>
                                         Upload Image
                                     </label>
@@ -400,10 +378,7 @@ const ProfileUser = () => {
                             {editListImage ?
                                 <>
                                     <div className={styles.dropzone} >
-                                        <div {...getRootProps()} >
-                                            <input {...getInputProps()} />
-                                            <Button style={{ background: '#fff', color: 'blue' }}>Chọn ảnh</Button>
-                                        </div>
+
                                         <div className={styles.imageList}  >
                                             {fileList.map((image, index) => (
                                                 <div key={index} className={styles.imgContainer} >
@@ -416,12 +391,16 @@ const ProfileUser = () => {
                                                 </div>
                                             ))}
                                         </div>
-                                        <Button
-                                            style={{
-                                                marginLeft: 70, marginTop: 70,
-                                            }}
-                                            type='default'
-                                            onClick={handleSaveImage}>Lưu</Button>
+                                        <div className='flex flex-row justify-evenly'>
+
+                                            <div {...getRootProps()} >
+                                                <input {...getInputProps()} />
+                                                <Button style={{ background: '#fff', color: 'blue' }}>Thêm ảnh</Button>
+                                            </div>
+                                            <Button
+                                                type='default'
+                                                onClick={handleSaveImage}>Lưu</Button>
+                                        </div>
                                     </div>
                                 </>
                                 :
@@ -467,14 +446,6 @@ const ProfileUser = () => {
                             </div>
 
                             <div className={styles.properties}>
-                                {/* <div className={styles.boxPropertie}>
-                                    <span className={styles.namePropertie}>
-                                        SỐ NGƯỜI THEO DÕI
-                                    </span>
-                                    <span className={styles.number}>
-                                        {userInfo?.follower ?? 0} người
-                                    </span>
-                                </div> */}
                                 {user?.role_id === 2 &&
                                     <>
                                         <div className={styles.boxPropertie}>
@@ -491,7 +462,7 @@ const ProfileUser = () => {
                                                 TỶ LỆ HOÀN THÀNH
                                             </span>
                                             <span className={styles.number}>
-                                                {rate ?? 100} %
+                                                {rate?.toFixed(2) ?? 100} %
                                             </span>
                                         </div>
                                     </>}
@@ -512,15 +483,17 @@ const ProfileUser = () => {
                     {user?.role_id === 2 &&
                         <div className={styles.contact}>
                             <div className={styles.stickyBox}>
-                                <div className={''}>
+                                <div className={'w-[420px]'}>
                                     <div className={styles.edit}>
                                         <BoxCustom
                                             title='Giá dịch vụ'
                                             description={
                                                 <>
-                                                    <div className='mt-[-30px] flex flex-col w-[300px]'>
+                                                    <div className='mt-[-30px] flex flex-col w-full'>
+
                                                         <div className="flex w-full flex-col gap-4 justify-center items-center">
                                                             <div className="flex flex-col flex-start w-full gap-2">
+
                                                                 <ul className='font-bold ' >
                                                                     Cá nhân
                                                                     <li className='ml-2 text-gray-500 flex justify-between'>
@@ -528,7 +501,25 @@ const ProfileUser = () => {
                                                                             Theo buổi:
                                                                         </span>
                                                                         <span className=" font-medium  text-yellow-400">
-                                                                            {convertStringToNumber(userInfo?.price?.personal_price_session)}
+                                                                            {editPrice ?
+                                                                                <div>
+                                                                                    <InputNumber
+                                                                                        addonAfter="VND"
+                                                                                        style={{ width: '230px' }}
+                                                                                        value={price?.individual1}
+                                                                                        onChange={(value) => handleChangePrice('individual1', value)}
+                                                                                        formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                                                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                                                                    />
+
+                                                                                </div>
+                                                                                :
+                                                                                <>
+                                                                                    <p>{convertStringToNumber(userInfo?.price?.personal_price_session)}</p>
+                                                                                </>
+                                                                            }
+
+
                                                                         </span>
                                                                     </li>
                                                                     <li className='text-gray-500  ml-2  flex justify-between'>
@@ -536,7 +527,23 @@ const ProfileUser = () => {
                                                                             Theo ngày:
                                                                         </span>
                                                                         <span className=" font-medium  text-yellow-400">
-                                                                            {convertStringToNumber(userInfo?.price?.personal_price_day)}
+                                                                            {editPrice ?
+                                                                                <div>
+                                                                                    <InputNumber
+                                                                                        addonAfter="VND"
+                                                                                        style={{ width: '230px' }}
+                                                                                        value={price?.individual2}
+                                                                                        onChange={(value) => handleChangePrice('individual2', value)}
+                                                                                        formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                                                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                                                                    />
+
+                                                                                </div>
+                                                                                :
+                                                                                <>
+                                                                                    <p>{convertStringToNumber(userInfo?.price?.personal_price_day)}</p>
+                                                                                </>
+                                                                            }
                                                                         </span>
                                                                     </li>
                                                                 </ul>
@@ -548,7 +555,23 @@ const ProfileUser = () => {
                                                                             Theo buổi:
                                                                         </span>
                                                                         <span className=" font-medium  text-yellow-400">
-                                                                            {convertStringToNumber(userInfo?.price?.group_price_session)}/{t('personal')}
+                                                                            {editPrice ?
+                                                                                <div>
+                                                                                    <InputNumber
+                                                                                        addonAfter="VND"
+                                                                                        style={{ width: '230px' }}
+                                                                                        value={price?.group2}
+                                                                                        onChange={(value) => handleChangePrice('group2', value)}
+                                                                                        formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                                                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                                                                    />
+
+                                                                                </div>
+                                                                                :
+                                                                                <>
+                                                                                    <p>{convertStringToNumber(userInfo?.price?.group_price_session)}</p>
+                                                                                </>
+                                                                            }
                                                                         </span>
                                                                     </li>
                                                                     <li className='text-gray-500  ml-2 flex justify-between'>
@@ -556,47 +579,55 @@ const ProfileUser = () => {
                                                                             Theo ngày:
                                                                         </span>
                                                                         <span className=" font-medium ml-2 text-yellow-400">
-                                                                            {convertStringToNumber(userInfo?.price?.group_price_day)}/{t('personal')}
+                                                                            {editPrice ?
+                                                                                <div>
+                                                                                    <InputNumber
+                                                                                        addonAfter="VND"
+                                                                                        style={{ width: '230px' }}
+                                                                                        value={price?.group3}
+                                                                                        onChange={(value) => handleChangePrice('group3', value)}
+                                                                                        formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                                                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                                                                    />
+
+                                                                                </div>
+                                                                                :
+                                                                                <>
+                                                                                    <p>{convertStringToNumber(userInfo?.price?.group_price_day)}</p>
+                                                                                </>
+                                                                            }
                                                                         </span>
                                                                     </li>
                                                                 </ul>
+
+                                                                {editPrice ?
+                                                                    <div className={'w-full justify-evenly mt-5 flex'}>
+                                                                        <Button onClick={handleChagePrice} >Hủy</Button>
+                                                                        <Button onClick={onSubmitChangePrice}>Lưu</Button>
+                                                                    </div>
+                                                                    :
+                                                                    <div className='mt-3 w-full'>
+                                                                        <Button className='float-right ' onClick={handleChagePrice} >
+                                                                            <EditFilled width={50} />
+                                                                        </Button>
+                                                                    </div>
+                                                                }
+
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </>}
                                         />
                                     </div>
-                                    {/* {editPrice ?
-                                        <div>
-                                            <InputNumber
-                                                addonAfter="VND"
-                                                style={{ width: '100%' }}
-                                                // placeholder={pricePgt}
-                                                value={pricePgt}
-                                                onChange={(e) => setPricePgt(e)}
-                                                formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                                parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                            />
-                                            <div className={styles.editbtn}>
-                                                <Button onClick={handleChagePrice} >Hủy</Button>
-                                                <Button onClick={onSubmitChangePrice}>Lưu</Button>
-                                            </div>
-                                        </div>
-                                        :
-                                        <>
-                                            <p>{convertStringToNumber(pricePgt) ?? ''}/h</p>
-                                            <EditFilled width={50} onClick={handleChagePrice} />
-                                        </>
 
-                                    } */}
                                 </div>
 
-                        </div>
+                            </div>
                         </div>
                     }
-            </div>
-        </main >
-            
+                </div>
+            </main >
+
         </>
     );
 };
