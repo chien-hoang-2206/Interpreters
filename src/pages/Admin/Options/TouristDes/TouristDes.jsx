@@ -419,7 +419,10 @@ const TouristDes = () => {
                             />
                         </Form.Item>
 
-                        <Form.Item label="Thời gian hoạt động" name="time"
+                        <Form.Item  label="Thời gian hoạt động" name="time"
+                            rules={[
+                                { required: true, message: t('must_choose') },
+                            ]}
                         >
                             <TimePicker.RangePicker
                                 format='HH:mm'
