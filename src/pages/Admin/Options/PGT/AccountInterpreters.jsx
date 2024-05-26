@@ -11,7 +11,7 @@ import CategoriesFactories from "../../../../services/CategoryFactories";
 import { useTranslation } from "react-i18next";
 
 const AccountInterpreters = () => {
-  const [pgtList, setPgtList] = useState([]);
+  const [hintList, seHintList] = useState([]);
   const [valueSearch, setValueSearch] = useState([]);
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation()
@@ -22,7 +22,7 @@ const AccountInterpreters = () => {
       setLoading(true)
       const response = await AccountFactories.getListAccount(value, 20);
       if (response && response.data) {
-        setPgtList(response.data);
+        seHintList(response.data);
       } else {
         toast.error('Hệ thống lỗi')
         console.error("API response does not contain expected data:", response);
@@ -224,7 +224,7 @@ const AccountInterpreters = () => {
         <div className={classes["rowContent"]}>
           <Table
             columns={columns}
-            dataSource={pgtList ?? []}
+            dataSource={hintList ?? []}
             loading={loading}
           // scroll={{
           //   y: 'calc(100vh - 220px)'

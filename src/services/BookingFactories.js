@@ -75,7 +75,7 @@ const BookingFactories = {
       method: "GET",
     });
   },
-  getBookingChart: async (year, month, date) => {
+  getBookingChart: async (year, month, hint) => {
     let params = {
     };
     if (year) {
@@ -84,8 +84,8 @@ const BookingFactories = {
     if (month) {
       params.Month = month;
     }
-    if (date) {
-      params.Date = date;
+    if (hint) {
+      params.HintId = hint;
     }
     return ApiOperation.request({
       url: `${ApiConstants.BOOKING_CHART}`,
@@ -93,7 +93,7 @@ const BookingFactories = {
       params: params,
     });
   },
-  getBookingTopHINT: async (year, month, date) => {
+  getBookingTopHINT: async (year, month, hint) => {
     let params = {
     };
     if (year) {
@@ -102,8 +102,8 @@ const BookingFactories = {
     if (month) {
       params.Month = month;
     }
-    if (date) {
-      params.Date = date;
+    if (hint) {
+      params.HintId = hint;
     }
     return ApiOperation.request({
       url: `${ApiConstants.BOOKING_TOP}`,

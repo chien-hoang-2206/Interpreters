@@ -9,7 +9,7 @@ import { Card, CardBody } from '@nextui-org/react';
 Chart.register(...registerables);
 
 const ChartYear = (props) => {
-    const { year, month } = props;
+    const { year, month, chooseHint } = props;
     const [barData1, setBarData1] = useState();
     const [barData2, setBarData2] = useState();
     const [barData3, setBarData3] = useState();
@@ -17,9 +17,9 @@ const ChartYear = (props) => {
     const [loading, setLoading] = useState(true);
 
     const { t } = useTranslation()
-    const fetchDataYear = async (year, month) => {
+    const fetchDataYear = async (year, month ,chooseHint) => {
         try {
-            const response = await BookingFactories.getBookingChart(year, month);
+            const response = await BookingFactories.getBookingChart(year, month,chooseHint);
             if (response?.status === 200) {
                 const responseData = response?.data
                 setTotal(response.total[0])
@@ -59,9 +59,9 @@ const ChartYear = (props) => {
         }
     };
 
-    const fetchDataTop = async (year, month) => {
+    const fetchDataTop = async (year, month,chooseHint) => {
         try {
-            const response = await BookingFactories.getBookingTopHINT(year, month);
+            const response = await BookingFactories.getBookingTopHINT(year, month,chooseHint);
             if (response?.status === 200) {
                 const responseData = response?.data
                 const labels = responseData.map(item => `${item.user_name}`);
@@ -86,9 +86,9 @@ const ChartYear = (props) => {
     };
     useEffect(() => {
         setLoading(true);
-        fetchDataYear(year, month);
-        fetchDataTop(year, month);
-    }, [year, month]);
+        fetchDataYear(year, month,chooseHint);
+        fetchDataTop(year, month,chooseHint);
+    }, [year, month, chooseHint]);
 
     const options1 = {
         scales: {

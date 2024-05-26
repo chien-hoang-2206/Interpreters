@@ -23,7 +23,6 @@ const BookingCreate = (props) => {
   const { t } = useTranslation()
   const [form] = Form.useForm();
   const watchtypeTravel = Form.useWatch('typeTravel', form);
-  console.log("🚀 ~ BookingCreate ~ watchtypeTravel:", watchtypeTravel)
   const watchtNumberPerson = Form.useWatch('numberPerson', form);
   const watchtDateBooking = Form.useWatch('dateBooking', form);
   const watchtTimeBooking = Form.useWatch('timeBooking', form);
@@ -39,13 +38,13 @@ const BookingCreate = (props) => {
   }, [watchtNumberPerson, watchtypeTravel]);
 
   useEffect(() => {
-    if (parseInt(watchtypeTravel) == 1 && watchtNumberPerson ) {
+    if (parseInt(watchtypeTravel) == 1 && watchtNumberPerson) {
       const basePrice = parseInt(watchtTimeBooking) == 7 ? hint?.price?.group_price_day : hint?.price?.group_price_session
       const newValue = watchtNumberPerson * basePrice
       form.setFieldValue('Cost', parseInt(newValue))
       form.setFieldValue('price', parseInt(basePrice))
     }
-    else  {
+    else {
       const basePrice = parseInt(watchtTimeBooking) == 7 ? hint?.price?.personal_price_day : hint?.price?.personal_price_session
       const newValue = 1 * basePrice
       form.setFieldValue('price', parseInt(basePrice))
@@ -100,15 +99,7 @@ const BookingCreate = (props) => {
       destination: hint.destination,
       note: data.note,
       typeTravel: parseInt(data.typeTravel) == 1 ? t('travelGroup') : t('travelOlone'),
-    }
-    if (parseInt(data.timeBooking) == 3) {
-      newData.time = t('hire_morning')
-    }
-    if (parseInt(data.timeBooking) == 4) {
-      newData.time = t('hire_afternoon')
-    }
-    if (parseInt(data.timeBooking) == 7) {
-      newData.time = t('hire_day')
+      time: watchtTimeBooking ?? 3
     }
     if (user?.id === hint?.id) {
       ToastNotiError('Không thể tự tạo booking cho bản thân')
@@ -177,8 +168,6 @@ const BookingCreate = (props) => {
           <Form.Item label="Thời gian thuê" name='timeBooking'>
             <Radio.Group
               defaultValue={3}
-            // onChange={(value) => setTypeTime(value?.target?.value)}
-            // value={}
             >
               <Radio value={3}>Thuê buổi sáng </Radio>
               <Radio value={4}>Thuê buổi chiều </Radio>
@@ -199,23 +188,6 @@ const BookingCreate = (props) => {
               disabledDate={disabledDate}
               style={{ width: '100%' }} />
           </Form.Item>
-
-
-          {/* <Form.Item label="Thời gian" name="timefrom"
-          // rules={[{ required: true, message: 'Bắt buộc chọn giờ' }]}
-          >
-            <Space.Compact block >
-              <TimePicker.RangePicker
-                format='HH:mm'
-                placeholder={['Bắt đầu', 'Kết thúc']}
-                disabled
-                onChange={(e) => setRangeTimeBooking(e)}
-                value={rangeTimeBooking}
-              />
-            </Space.Compact>
-            {errorMessage !== '' && <span style={{ color: 'red' }}> {errorMessage}</span>}
-          </Form.Item> */}
-
 
           <Form.Item
             label="Ghi chú"
